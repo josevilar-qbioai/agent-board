@@ -4,10 +4,11 @@
   "version": "0.17.0",
   "author": {
     "name": "Jose Antonio Vilar",
-    "url": "https://github.com/QMetrika-Labs"
+    "email": "qmetrika@proton.me",
+    "url": "https://github.com/josevilar-qbioai"
   },
-  "homepage": "https://github.com/QMetrika-Labs/agent-board",
-  "repository": "https://github.com/QMetrika-Labs/agent-board",
+  "homepage": "https://github.com/josevilar-qbioai/agent-board",
+  "repository": "https://github.com/josevilar-qbioai/agent-board",
   "license": "MIT",
   "keywords": [
     "dynamic-workflow",

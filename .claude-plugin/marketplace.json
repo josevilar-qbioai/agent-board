@@ -1,6 +1,6 @@
 {
   "name": "agent-board",
-  "owner": { "name": "Jose Antonio Vilar", "url": "https://github.com/QMetrika-Labs" },
+  "owner": { "name": "Jose Antonio Vilar", "url": "https://github.com/josevilar-qbioai" },
   "plugins": [
     {
       "name": "agent-board",

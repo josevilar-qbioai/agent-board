@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: "🔒 Reportar una vulnerabilidad de seguridad"
-    url: https://github.com/QMetrika-Labs/agent-board/security/advisories/new
+    url: https://github.com/josevilar-qbioai/agent-board/security/advisories/new
     about: "No abras un issue público. Ver SECURITY.md."
   - name: "📄 Modelo de amenazas"
-    url: https://github.com/QMetrika-Labs/agent-board/blob/main/THREAT_MODEL.md
+    url: https://github.com/josevilar-qbioai/agent-board/blob/main/THREAT_MODEL.md
     about: "Vías de bypass de la puerta y sus mitigaciones."

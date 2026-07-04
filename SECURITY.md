@@ -8,7 +8,7 @@ se pueda esquivar. Nos tomamos los reportes en serio.
 **No abras un issue público.** Usa uno de estos canales privados:
 
 - GitHub → pestaña **Security** → *Report a vulnerability* (advisory privado).
-- O correo a **javsprivate@gmail.com** con el asunto `[security] agent-board`.
+- O correo a **qmetrika@proton.me** con el asunto `[security] agent-board`.
 
 Incluye: descripción, impacto, pasos para reproducir y versión afectada
 (`.claude-plugin/plugin.json` → `version`). Intentaremos responder en un plazo

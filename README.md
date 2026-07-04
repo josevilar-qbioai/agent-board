@@ -13,7 +13,7 @@ pero el núcleo (tablero + broker + puerta) es **agnóstico de runtime** y de do
 lo pilotas desde LangGraph, CrewAI, AutoGen, OpenAI Agents SDK o tu propio bucle, y lo
 adaptas a tu proyecto editando `config.json`.
 
-[![CI](https://github.com/QMetrika-Labs/agent-board/actions/workflows/validate.yml/badge.svg)](https://github.com/QMetrika-Labs/agent-board/actions/workflows/validate.yml)
+[![CI](https://github.com/josevilar-qbioai/agent-board/actions/workflows/validate.yml/badge.svg)](https://github.com/josevilar-qbioai/agent-board/actions/workflows/validate.yml)
 ![Claude Code plugin](https://img.shields.io/badge/claude--code-plugin-blue)
 ![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)
 ![sin dependencias](https://img.shields.io/badge/deps-0%20(stdlib)-brightgreen)
@@ -109,7 +109,7 @@ agent-board/
 ## Instalación
 
 ```bash
-/plugin marketplace add https://github.com/QMetrika-Labs/agent-board
+/plugin marketplace add https://github.com/josevilar-qbioai/agent-board
 /plugin install agent-board@agent-board
 /reload-plugins
 ```
@@ -135,7 +135,7 @@ Lo de lectura corre solo (auto mode); cualquier operación con efectos cae en
    el marketplace:
    ```json
    {
-     "extraKnownMarketplaces": { "agent-board": { "source": { "type": "git", "url": "https://github.com/QMetrika-Labs/agent-board" } } },
+     "extraKnownMarketplaces": { "agent-board": { "source": { "type": "git", "url": "https://github.com/josevilar-qbioai/agent-board" } } },
      "enabledPlugins": ["agent-board@agent-board"]
    }
    ```

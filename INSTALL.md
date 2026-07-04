@@ -4,7 +4,7 @@ Plugin de [Claude Code](https://www.claude.com/product/claude-code) para supervi
 gobernar agentes. **Cero dependencias**: solo Python 3.8+ (todo stdlib). No hay que
 instalar nada más.
 
-> Si tu handle de GitHub no es `QMetrika-Labs`, cambia esa cadena en
+> Si tu handle de GitHub no es `josevilar-qbioai`, cambia esa cadena en
 > `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` y `README.md`
 > (búscala y reemplázala). Es lo único específico del repo.
 
@@ -38,11 +38,11 @@ propio repo):
 
 ## Opción B — Desde GitHub (para compartir/equipo)
 
-1. Sube este repo a `https://github.com/QMetrika-Labs/agent-board` (o tu handle).
+1. Sube este repo a `https://github.com/josevilar-qbioai/agent-board` (o tu handle).
 2. En Claude Code:
 
 ```text
-/plugin marketplace add https://github.com/QMetrika-Labs/agent-board
+/plugin marketplace add https://github.com/josevilar-qbioai/agent-board
 /plugin install agent-board@agent-board
 /reload-plugins
 ```
@@ -52,7 +52,7 @@ propio repo):
 ```json
 {
   "extraKnownMarketplaces": {
-    "agent-board": { "source": { "type": "git", "url": "https://github.com/QMetrika-Labs/agent-board" } }
+    "agent-board": { "source": { "type": "git", "url": "https://github.com/josevilar-qbioai/agent-board" } }
   },
   "enabledPlugins": ["agent-board@agent-board"]
 }

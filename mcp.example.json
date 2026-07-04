@@ -1,0 +1,17 @@
+{
+  "//": "Plantilla. Copiala a .mcp.json en la raiz del plugin y deja SOLO los servidores que uses.",
+  "//principio": "Un servidor = un dominio de funcionalidad. Nombra los servidores por dominio: notify, data, deploy, <tu-dominio>.",
+  "mcpServers": {
+    "ejemplo_local": {
+      "//": "Modo 1: servidor propio que viaja con el plugin (sin secretos aqui; usa env del usuario).",
+      "command": "python",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/server.py"],
+      "env": { "MCP_USER_ROLE": "viewer" }
+    },
+    "ejemplo_http": {
+      "//": "Modo 2: servidor ya desplegado como servicio.",
+      "type": "http",
+      "url": "https://tu-servidor/<dominio>"
+    }
+  }
+}

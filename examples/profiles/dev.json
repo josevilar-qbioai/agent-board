@@ -1,0 +1,11 @@
+{
+  "label": "Desarrollo de software",
+  "units": ["Auditoría", "Desarrollo", "Docs", "QA"],
+  "specialists": [
+    { "id": "auditor",     "label": "Auditor",         "color": "#f2a73c", "role": "read",   "unit": "Auditoría",  "model": "mistral-local",    "jobs": ["Auditar dependencias con CVEs", "Inventariar feature flags", "Escanear secretos hardcodeados"] },
+    { "id": "explorer",    "label": "Explorer",        "color": "#74a4f7", "role": "read",   "unit": "Auditoría",  "model": "gemini-2.0-flash", "jobs": ["Triar y deduplicar issues", "Mapear arquitectura y módulos"] },
+    { "id": "implementer", "label": "Implementer",     "color": "#33d1c9", "role": "effect", "unit": "Desarrollo", "model": "gpt-4o",           "jobs": ["Migrar IO síncrono a async", "Rate limiting en endpoint público", "Borrar ramas obsoletas (>90 días)"] },
+    { "id": "documenter",  "label": "Documenter",      "color": "#6cc4ff", "role": "write",  "unit": "Docs",       "model": "sonnet",           "jobs": ["Documentar la migración", "Actualizar el CHANGELOG"] },
+    { "id": "verifier",    "label": "Verifier",        "color": "#9a8cf2", "role": "verify", "unit": "QA",         "model": "sonnet" }
+  ]
+}

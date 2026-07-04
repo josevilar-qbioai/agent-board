@@ -1,0 +1,18 @@
+{
+  "_comment": "Tabla de precios por modelo para el control de coste (cost.py). price_eur_per_mtok = euros por 1.000.000 de tokens (precio combinado in/out, ilustrativo: ajústalo a tus tarifas). class = 'local' (cómputo propio, ~gratis) o 'foundational' (API de pago, caro). El tablero y el broker usan esta tabla para medir el WIP y las cuotas en EUROS, no en tokens a secas.",
+  "default": { "price_eur_per_mtok": 5.0, "class": "foundational" },
+  "models": {
+    "opus":          { "price_eur_per_mtok": 15.0, "class": "foundational" },
+    "gpt-4o":        { "price_eur_per_mtok": 5.0,  "class": "foundational" },
+    "sonnet":        { "price_eur_per_mtok": 3.0,  "class": "foundational" },
+    "haiku":         { "price_eur_per_mtok": 0.8,  "class": "foundational" },
+    "gemini":          { "price_eur_per_mtok": 0.3,  "class": "foundational" },
+    "gemini-flash":    { "price_eur_per_mtok": 0.15, "class": "foundational" },
+    "gemini-2.0-flash":{ "price_eur_per_mtok": 0.12, "class": "foundational" },
+    "gpt-4o-mini":     { "price_eur_per_mtok": 0.5,  "class": "foundational" },
+    "mistral-local": { "price_eur_per_mtok": 0.0,  "class": "local" },
+    "llama-local":   { "price_eur_per_mtok": 0.0,  "class": "local" },
+    "qwen-local":    { "price_eur_per_mtok": 0.0,  "class": "local" },
+    "local":         { "price_eur_per_mtok": 0.0,  "class": "local" }
+  }
+}

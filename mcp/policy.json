@@ -1,0 +1,39 @@
+{
+  "default": "ask",
+  "rules": [
+    { "tool": "get_*",     "decision": "allow" },
+    { "tool": "list_*",    "decision": "allow" },
+    { "tool": "search_*",  "decision": "allow" },
+    { "tool": "read_*",    "decision": "allow" },
+
+    { "tool": "write_docs",     "decision": "allow" },
+    { "tool": "update_readme",  "decision": "allow" },
+    { "tool": "write_changelog","decision": "allow" },
+
+    { "tool": "mcp__*__purge_*",  "decision": "deny" },
+    { "tool": "mcp__*__delete_*", "decision": "ask", "deny_if": [{ "field": "count", "op": ">", "value": 50 }] },
+    { "tool": "mcp__*__get_*",    "decision": "allow" },
+    { "tool": "mcp__*__list_*",   "decision": "allow" },
+    { "tool": "mcp__*__search_*", "decision": "allow" },
+
+    { "tool": "mcp__notify__*",   "decision": "allow" },
+    { "tool": "mcp__data__*",     "decision": "ask" },
+    { "tool": "mcp__deploy__*",   "decision": "ask" },
+
+    { "tool": "Write",  "decision": "ask" },
+    { "tool": "Edit",   "decision": "ask" },
+    { "tool": "Bash",   "decision": "ask" },
+    { "tool": "purge_*","decision": "deny" }
+  ],
+
+  "quotas": [
+    { "name": "borrados-por-hora", "tool": "mcp__*__delete_*", "key": ["agent", "tool"],
+      "window": 3600, "limit": 100, "amount_field": "count", "on_exceed": "deny" },
+    { "name": "deploys-por-hora",  "tool": "mcp__deploy__*",   "key": ["workflow"],
+      "window": 3600, "limit": 5,  "on_exceed": "ask" },
+
+    { "name": "coste-fundacional-por-hora", "tool": "*", "key": ["workflow"],
+      "window": 3600, "limit": 5.0, "amount_field": "cost_eur",
+      "match_class": "foundational", "on_exceed": "ask" }
+  ]
+}

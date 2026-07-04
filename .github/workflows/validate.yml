@@ -1,0 +1,33 @@
+name: validate
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Validar JSON
+        run: python3 -c "import json,glob; [json.load(open(f)) for f in glob.glob('**/*.json', recursive=True)]; print('JSON OK')"
+      - name: Validar configuración (perfiles, política, modelos)
+        run: python3 scripts/validate_config.py
+      - name: Compilar fuentes Python
+        run: python3 -m py_compile hooks/broker.py hooks/hook.py mcp/agentboard_gate.py mcp/canonical.py mcp/quota.py mcp/audit.py mcp/cost.py client/agentboard_client.py client/providers.py examples/multi_model_orchestrator.py
+      - name: Auto-comprobaciones de modulos
+        run: |
+          python3 mcp/canonical.py
+          python3 mcp/quota.py
+          python3 mcp/audit.py
+          python3 mcp/cost.py
+      - name: Lint - toda tool con efectos esta decorada (#5)
+        run: python3 tests/test_decorated.py
+      - name: Tests de binding de aprobacion (ADR-0007)
+        run: python3 tests/test_binding.py
+      - name: Tests de cuotas agregadas (ADR-0008)
+        run: python3 tests/test_quota.py
+      - name: Tests de auditoria hash-chain (ADR-0006)
+        run: python3 tests/test_audit.py
+      - name: Tests de coste por modelo y cuota de coste
+        run: python3 tests/test_cost.py
+      - name: Tests multi-proveedor y reporte de tokens
+        run: python3 tests/test_providers.py

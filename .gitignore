@@ -1,0 +1,30 @@
+# estado del tablero generado en runtime
+board/board-state.json
+board/board-state.json.tmp
+board/board-state.json.audit.log
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# artefactos de build / distribución
+*.plugin
+*.zip
+node_modules/
+
+# entornos / editores
+.venv/
+.env
+.DS_Store
+*.log
+
+# estado persistido del broker
+board/broker-state.json
+board/broker-state.json.tmp
+
+# auditoria de la puerta MCP
+mcp/gate-audit.log
+
+# config MCP real del usuario (usa mcp.example.json como plantilla)
+.mcp.json

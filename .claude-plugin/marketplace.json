@@ -1,0 +1,11 @@
+{
+  "name": "agent-board",
+  "owner": { "name": "Jose Antonio Vilar", "url": "https://github.com/QMetrika-Labs" },
+  "plugins": [
+    {
+      "name": "agent-board",
+      "source": "./",
+      "description": "Dynamic workflow + tablero Kanban de agentes + puerta de aprobacion. Reproducible en cualquier proyecto."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "label": "Soporte IT",
+  "units": ["Triage", "Resolución", "QA"],
+  "specialists": [
+    { "id": "clasificador", "label": "Clasificador de Tickets", "color": "#74a4f7", "role": "read",   "unit": "Triage",     "model": "mistral-local",    "jobs": ["Clasificar y priorizar tickets", "Deduplicar incidencias", "Enrutar a la cola correcta"] },
+    { "id": "diagnostico",  "label": "Diagnóstico",             "color": "#e0b049", "role": "read",   "unit": "Triage",     "model": "gemini-2.0-flash", "jobs": ["Correlacionar logs y alertas", "Reproducir el problema"] },
+    { "id": "resolutor",    "label": "Ejecutor de Runbooks",    "color": "#33d1c9", "role": "effect", "unit": "Resolución", "model": "gpt-4o",           "jobs": ["Reiniciar servicio afectado", "Aplicar parche / rotar credenciales", "Escalar recurso en cloud"] },
+    { "id": "kb",           "label": "Redactor de KB",          "color": "#6cc4ff", "role": "write",  "unit": "Resolución", "model": "sonnet",           "jobs": ["Documentar la resolución", "Actualizar el runbook"] },
+    { "id": "revisor",      "label": "Revisor de Cierre",       "color": "#9a8cf2", "role": "verify", "unit": "QA",         "model": "sonnet" }
+  ]
+}

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q · Agent Board — plano de control de agentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1014; --panel:#151a21; --panel-2:#1a212b; --col:#11161d;
+    --line:#222c38; --line-soft:#1b232e;
+    --text:#dbe3ee; --muted:#7c8a9d; --faint:#566173;
+    --queued:#6b7a90; --working:#33d1c9; --needs:#f2a73c; --review:#9a8cf2; --done:#5cc97e; --failed:#f0596b; --capped:#d9772e;
+    --opus:#e0b049; --sonnet:#74a4f7; --haiku:#8fc97a; --gpt:#19c37d; --gemini:#a78bfa; --local:#9aa5b1;
+    --shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px -12px rgba(0,0,0,.6);
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --sans:"IBM Plex Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+    background-image:
+      radial-gradient(1200px 600px at 80% -10%, rgba(51,209,201,.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(154,140,242,.06), transparent 55%),
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:auto,auto,44px 44px,44px 44px;
+    background-position:0 0,0 0,-1px -1px,-1px -1px;
+  }
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  .app{display:flex;flex-direction:column;height:100%}
+
+  /* Header */
+  header{flex:0 0 auto;padding:16px 22px 14px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent)}
+  .brand{display:flex;align-items:baseline;gap:12px}
+  .brand h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin:0}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--working);box-shadow:0 0 10px var(--working);align-self:center;animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .feed-pill{font-family:var(--mono);font-size:11px;color:var(--needs);border:1px solid color-mix(in srgb,var(--needs) 40%,transparent);
+    padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--needs) 10%,transparent)}
+  .viewnav{display:inline-flex;gap:2px;margin-left:14px;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--panel-2)}
+  .vn{font-family:var(--mono);font-size:12px;text-decoration:none;color:var(--muted);padding:4px 12px;border-radius:999px;transition:.15s}
+  .vn:hover{color:var(--text)}
+  .vn.on{background:color-mix(in srgb,var(--working) 16%,transparent);color:var(--working)}
+  .summary{display:flex;gap:22px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .summary b{color:var(--text);font-weight:600}
+  .summary .sep{color:var(--faint)}
+  .controls{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .btn{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text);background:var(--panel-2);
+    border:1px solid var(--line);padding:7px 13px;border-radius:9px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+  .btn:hover{border-color:var(--working);color:#fff}
+  .btn.ghost{background:transparent}
+  .ctl{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  .ctl input[type=range]{accent-color:var(--working);width:90px}
+  .ctl .val{font-family:var(--mono);color:var(--text);min-width:34px}
+  .saved{font-family:var(--mono);font-size:11px;color:var(--done);opacity:0;transition:opacity .3s}
+  .saved.show{opacity:.9}
+
+  /* Board */
+  .board{flex:1 1 auto;display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:14px;
+    padding:18px 22px 22px;overflow-x:auto;overflow-y:hidden}
+  .column{background:var(--col);border:1px solid var(--line-soft);border-radius:14px;display:flex;flex-direction:column;min-height:0}
+  .col-head{flex:0 0 auto;padding:13px 14px 11px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--line-soft)}
+  .col-head .swatch{width:9px;height:9px;border-radius:3px}
+  .col-head h2{font-size:12.5px;font-weight:600;letter-spacing:.02em;margin:0;text-transform:uppercase}
+  .col-head .count{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto}
+  .wip{font-family:var(--mono);font-size:10px;color:var(--faint);padding:2px 7px;border:1px solid var(--line);border-radius:999px}
+  .wip.full{color:var(--needs);border-color:color-mix(in srgb,var(--needs) 45%,transparent)}
+  .capbadge{display:inline-block;font-family:var(--mono);font-size:9.5px;color:var(--capped);border:1px solid color-mix(in srgb,var(--capped) 45%,transparent);background:color-mix(in srgb,var(--capped) 12%,transparent);border-radius:999px;padding:1px 7px;margin:5px 0 1px}
+  /* swimlanes por unidad/departamento */
+  .board.swim{display:block}
+  .lane-hdr{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+  .lane-hdr .lane-tag{color:transparent}
+  .lane-hcol{flex:1;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .lane-hcol .swatch{width:8px;height:8px;border-radius:2px}
+  .lane{display:flex;gap:8px;align-items:stretch;margin-bottom:8px;background:rgba(255,255,255,.012);border:1px solid var(--line-soft);border-radius:12px;padding:8px}
+  .lane-tag{width:120px;flex:none;font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--text);display:flex;flex-direction:column;justify-content:center;gap:4px;padding-left:4px;border-left:3px solid var(--working)}
+  .lane-tag .lane-n{font-family:var(--mono);font-size:10px;font-weight:400;color:var(--faint)}
+  .lane-cols{flex:1;display:flex;gap:6px;min-width:0}
+  .lane .column{background:transparent;border:none;padding:0}
+  .col-head.mini{gap:6px}
+  .col-head.mini h2{display:none}
+  .cards{flex:1 1 auto;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .cards::-webkit-scrollbar{width:8px}
+  .cards::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+  .empty{color:var(--faint);font-size:12px;text-align:center;padding:18px 6px;font-style:italic}
+
+  /* Card */
+  .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line);border-radius:11px;padding:12px 13px 11px;box-shadow:var(--shadow);
+    border-left:3px solid var(--accent,var(--queued));will-change:transform}
+  .card .top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .kind{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--accent);text-transform:uppercase}
+  .kind .pdot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle}
+  .id{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-left:auto}
+  .job{font-size:13.5px;font-weight:600;line-height:1.32;letter-spacing:-.005em;margin:0 0 4px}
+  .parent{font-family:var(--mono);font-size:10.5px;color:var(--review);margin:-1px 0 7px}
+  .last{font-size:11.5px;color:var(--muted);line-height:1.35;min-height:16px;margin-bottom:9px}
+  .meta{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;color:var(--muted);flex-wrap:wrap}
+  .badge{padding:2px 7px;border-radius:6px;font-weight:600;font-size:10px;letter-spacing:.02em}
+  .badge.opus{color:var(--opus);background:color-mix(in srgb,var(--opus) 14%,transparent)}
+  .badge.sonnet{color:var(--sonnet);background:color-mix(in srgb,var(--sonnet) 14%,transparent)}
+  .badge.haiku{color:var(--haiku);background:color-mix(in srgb,var(--haiku) 14%,transparent)}
+  .badge.gpt{color:var(--gpt);background:color-mix(in srgb,var(--gpt) 14%,transparent)}
+  .badge.gemini{color:var(--gemini);background:color-mix(in srgb,var(--gemini) 16%,transparent)}
+  .badge.local{color:var(--local);background:color-mix(in srgb,var(--local) 16%,transparent)}
+  .meta .tok::before{content:"⛁ ";color:var(--faint)}
+  .meta .time::before{content:"◴ ";color:var(--faint)}
+  .meta .wt{color:var(--faint)}
+  .meta .spacer{flex:1}
+  .bar{height:3px;border-radius:3px;background:var(--line);margin-top:9px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease}
+  .gate{display:flex;gap:8px;margin-top:10px}
+  .gate button{flex:1;font-family:var(--sans);font-size:12px;font-weight:600;padding:6px;border-radius:8px;cursor:pointer;border:1px solid;transition:.15s}
+  .gate .ok{color:var(--done);border-color:color-mix(in srgb,var(--done) 45%,transparent);background:color-mix(in srgb,var(--done) 10%,transparent)}
+  .gate .ok:hover{background:color-mix(in srgb,var(--done) 22%,transparent)}
+  .gate .no{color:var(--failed);border-color:color-mix(in srgb,var(--failed) 40%,transparent);background:color-mix(in srgb,var(--failed) 8%,transparent)}
+  .gate .no:hover{background:color-mix(in srgb,var(--failed) 20%,transparent)}
+  .card.needs{animation:nudge 2.6s ease-in-out infinite}
+  @keyframes nudge{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--needs) 55%,transparent)}}
+  .card.term{opacity:.8}
+  .verdict{font-family:var(--mono);font-size:10.5px;font-weight:600}
+  .verdict.ok{color:var(--done)} .verdict.no{color:var(--failed)}
+  .card.enter{animation:cardIn .42s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+
+  .loading{position:fixed;inset:0;display:grid;place-items:center;font-family:var(--mono);color:var(--muted);font-size:13px}
+  .hint{padding:0 22px 14px;font-size:11.5px;color:var(--faint);font-family:var(--mono)}
+  .hint b{color:var(--muted);font-weight:500}
+  @media(max-width:760px){.board{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%}.summary{display:none}}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">cargando estado del tablero…</div>
+<div class="app" id="app" style="display:none">
+  <header>
+    <div class="brand"><span class="dot"></span><h1>Q · Agent Board</h1><span class="feed-pill" id="feedpill">feed: simulado</span><span class="viewnav"><a class="vn on">Agent</a><a class="vn" href="capital-board.html">Capital</a></span><span class="feed-pill" id="profpill" style="border-color:var(--line);color:var(--muted);background:transparent;margin-left:8px"></span></div>
+    <div class="summary" id="summary"></div>
+    <div class="controls">
+      <span class="saved" id="saved">guardado ✓</span>
+      <div class="ctl">vel <input type="range" id="speed" min="1" max="6" value="3"><span class="val" id="speedv">3×</span></div>
+      <div class="ctl">WIP <input type="range" id="wip" min="2" max="10" value="5"><span class="val" id="wipv">5</span></div>
+      <div class="ctl">€-WIP <input type="range" id="wipcost" min="0.5" max="10" step="0.5" value="2.5"><span class="val" id="wipcostv">€2.5</span></div>
+      <div class="ctl">⚡€ <input type="range" id="wipcostf" min="0.5" max="8" step="0.5" value="1.5"><span class="val" id="wipcostfv">€1.5</span></div>
+      <button class="btn ghost" id="swimbtn" title="Agrupar por unidad/departamento">▤ Carriles</button>
+      <button class="btn ghost" id="pause">⏸ Pausar</button>
+      <button class="btn ghost" id="reset">↺ Reset</button>
+    </div>
+  </header>
+  <div class="board" id="board"></div>
+  <div class="hint">Cada tarjeta es un agente. La columna <b>Needs Input</b> es la puerta humana (operaciones con efectos secundarios): aprueba o deniega. El feed está aislado en <b>tick()</b> — sustitúyelo por eventos reales de tus hooks <b>SessionStart / PermissionRequest / Stop</b> o del orquestador del dynamic workflow.</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- columnas ----------
+  const COLS = [
+    {id:"queued",  name:"Queued",      color:"var(--queued)"},
+    {id:"capped",  name:"⚡ Sin presupuesto", color:"var(--capped)"},
+    {id:"working", name:"Working",     color:"var(--working)", wip:true},
+    {id:"needs",   name:"Needs Input", color:"var(--needs)"},
+    {id:"review",  name:"Review",      color:"var(--review)"},
+    {id:"done",    name:"Done",        color:"var(--done)"},
+  ];
+  // ---------- PERFILES DE PROYECTO ----------
+  // El tablero se adapta a los agentes de TU proyecto. Cada especialista define su
+  // etiqueta, color, ROL DE FLUJO y sus tareas. Selecciona con ?profile=<nombre>.
+  // Roles de flujo (independientes del dominio):
+  //   read   → análisis / solo lectura, sin efectos (no pasa por la puerta).
+  //   effect → opera con efectos → puerta humana → Review por un 'verify'.
+  //   verify → verificador adversarial (idealmente otra familia de modelo).
+  //   write  → escribe entregables (docs), 'allow' por política.
+  // Añade tu perfil aquí (o en config.json para el modo en vivo).
+  // Cada especialista: role de flujo + unit (departamento). Refleja config.json.
+  // EMBEDDED = fallback offline (file://); si el broker sirve /api/config, manda ese.
+  const EMBEDDED = {
+    default: { short:"Genérico", label:"Genérico (dev)", units:["Auditoría","Desarrollo","Docs","QA"], specialists:[
+      {id:"auditor",     label:"auditor",     color:"var(--needs)",  role:"read",   unit:"Auditoría",  jobs:["Auditar dependencias con CVEs","Inventariar feature flags","Escanear secretos hardcodeados"]},
+      {id:"explorer",    label:"explorer",    color:"var(--sonnet)", role:"read",   unit:"Auditoría",  jobs:["Triar y deduplicar issues","Mapear arquitectura y módulos"]},
+      {id:"implementer", label:"implementer", color:"var(--working)",role:"effect", unit:"Desarrollo", jobs:["Migrar IO síncrono a async","Rate limiting en endpoint público","Borrar ramas obsoletas (>90 días)","Eliminar recursos cloud huérfanos"]},
+      {id:"documenter",  label:"documenter",  color:"#6cc4ff",       role:"write",  unit:"Docs",       jobs:["Documentar la migración","Actualizar el CHANGELOG"]},
+      {id:"verifier",    label:"verifier",    color:"var(--review)", role:"verify", unit:"QA"}
+    ]},
+    "claude-science": { short:"Claude Science", label:"Claude Science", units:["Genómica","Terapéutica","Publicación","QA"], specialists:[
+      {id:"genomica",  label:"Analista de Genómica del Cáncer", color:"var(--opus)",   role:"read",   unit:"Genómica",    model:"mistral-local",    jobs:["Analizar mutaciones somáticas del panel","Cruzar con COSMIC y ClinVar","Priorizar genes driver"]},
+      {id:"variantes", label:"Analista de Variantes Genómicas", color:"var(--sonnet)", role:"read",   unit:"Genómica",    model:"gemini-2.0-flash", jobs:["Anotar variantes con VEP","Filtrar por frecuencia poblacional","Clasificar patogenicidad (ACMG)"]},
+      {id:"mrna",      label:"Diseñador de mRNA",               color:"var(--done)",   role:"effect", unit:"Terapéutica", model:"gpt-4o",           jobs:["Optimizar codones de la secuencia","Diseñar UTRs y estructura cap","Exportar construcción a síntesis"]},
+      {id:"biofisico", label:"Motor Biofísico",                 color:"var(--red)",    role:"effect", unit:"Terapéutica", model:"opus",             jobs:["Simular plegamiento (dinámica molecular)","Estimar energía de unión","Barrido de parámetros del modelo"]},
+      {id:"escritor",  label:"Escritor Científico",             color:"var(--review)", role:"write",  unit:"Publicación", model:"sonnet",           jobs:["Redactar la sección de métodos","Generar figuras y leyendas","Compilar el manuscrito"]},
+      {id:"reviewer",  label:"Reviewer",                        color:"var(--working)",role:"verify", unit:"QA",          model:"sonnet"}
+    ]}
+  };
+  // Fuente ÚNICA: si el broker sirve /api/config con perfiles, se usan esos (no se
+  // duplica config). Los 'jobs' de demo se completan desde EMBEDDED por id. file://
+  // u offline -> EMBEDDED. (XHR síncrono, una vez al arrancar.)
+  let PROFILES = EMBEDDED;
+  try {
+    if (location.protocol.indexOf("http") === 0) {
+      const xhr = new XMLHttpRequest(); xhr.open("GET", "/api/config", false); xhr.send();
+      if (xhr.status === 200) {
+        const c = JSON.parse(xhr.responseText || "{}");
+        if (c.profiles && Object.keys(c.profiles).length) {
+          Object.keys(c.profiles).forEach(function(pk){
+            const emb = EMBEDDED[pk] || {}; const by = {}; (emb.specialists||[]).forEach(function(s){by[s.id]=s;});
+            const p = c.profiles[pk]; if (!p.short) p.short = p.label || pk;
+            (p.specialists||[]).forEach(function(s){ if(!s.jobs || !s.jobs.length) s.jobs = (by[s.id] && by[s.id].jobs) || ["Tarea de "+(s.label||s.id)]; });
+          });
+          PROFILES = c.profiles;
+        }
+      }
+    }
+  } catch (e) { /* file:// u offline -> EMBEDDED */ }
+  const _q = new URLSearchParams(location.search);
+  const PROFILE_KEY = _q.get("profile") || "default";
+  const PROF = PROFILES[PROFILE_KEY] || PROFILES.default;
+  const UNIT = _q.get("unit") || null;                    // filtro por departamento
+  const SPECS = PROF.specialists;
+  const SPEC_BY = {}; SPECS.forEach(s=>SPEC_BY[s.id]=s);
+  const VERIFY_SPEC = SPECS.find(s=>s.role==="verify") || {id:"verifier",label:"verifier",color:"var(--review)",role:"verify"};
+  const kindColor = k => (SPEC_BY[k]&&SPEC_BY[k].color) || "var(--queued)";
+  const kindLabel = k => (SPEC_BY[k]&&SPEC_BY[k].label) || k;
+  const kindUnit  = k => (SPEC_BY[k]&&SPEC_BY[k].unit) || "";
+  function slug(t){return (t||"").toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,22)||"job";}
+  (function(){var el=document.getElementById('profpill'); if(!el) return;
+    var profs=Object.keys(PROFILES).map(function(k){return '<a href="?profile='+k+'" style="text-decoration:none;color:'+(k===PROFILE_KEY?'var(--working)':'var(--muted)')+'">'+PROFILES[k].short+'</a>';}).join(' · ');
+    var units='';
+    if(PROF.units&&PROF.units.length){
+      units=' &nbsp;·&nbsp; unidad: <a href="?profile='+PROFILE_KEY+'" style="text-decoration:none;color:'+(!UNIT?'var(--working)':'var(--muted)')+'">todas</a> '
+        + PROF.units.map(function(u){return '<a href="?profile='+PROFILE_KEY+'&unit='+encodeURIComponent(u)+'" style="text-decoration:none;color:'+(UNIT===u?'var(--working)':'var(--muted)')+'">'+u+'</a>';}).join(' ');
+    }
+    el.innerHTML='perfil: '+profs+units;
+  })();
+
+  // modelos variados para que se vea el coste por clase (local barato vs fundacional caro)
+  const MODELS = ["opus","sonnet","haiku","gpt-4o","gemini-flash","mistral-local","llama-local"];
+  // modelo por rol: análisis barato/local, trabajo pesado fundacional, juez de otra familia
+  const ROLE_MODELS = { read:["mistral-local","gemini-2.0-flash","haiku"], effect:["gpt-4o","opus"], verify:["sonnet","opus"], write:["sonnet","gpt-4o-mini"] };
+  // precios €/1M tokens y clase — ESPEJO de mcp/models.json (mantenlos sincronizados)
+  const PRICES = {
+    "opus":{p:15,cls:"foundational"}, "sonnet":{p:3,cls:"foundational"}, "haiku":{p:0.8,cls:"foundational"},
+    "gpt-4o":{p:5,cls:"foundational"}, "gpt-4o-mini":{p:0.5,cls:"foundational"}, "gemini":{p:0.3,cls:"foundational"}, "gemini-flash":{p:0.15,cls:"foundational"}, "gemini-2.0-flash":{p:0.12,cls:"foundational"},
+    "mistral-local":{p:0,cls:"local"}, "llama-local":{p:0,cls:"local"}, "qwen-local":{p:0,cls:"local"}, "local":{p:0,cls:"local"}
+  };
+  function priceOf(model){ const m=(model||"").toLowerCase(); if(PRICES[m]) return PRICES[m];
+    for(const k in PRICES){ if(m.includes(k)) return PRICES[k]; } return {p:5,cls:"foundational"}; }
+  const costOf  = a => (a.tokens||0)/1e6 * priceOf(a.model).p;
+  const classOf = a => priceOf(a.model).cls;
+  const fmtEur  = e => "€"+(e<1 ? e.toFixed(2) : e.toFixed(1));
+
+  // JOBS del perfil activo (una tarea por especialista). Si hay ?unit=, solo esa unidad.
+  const JOBS = [];
+  SPECS.forEach(s => { if(UNIT && s.unit!==UNIT) return; (s.jobs||[]).forEach(t => JOBS.push({t, kind:s.id, role:s.role, mut:(s.role==="effect"), wt:slug(t)})); });
+  if(!JOBS.length) SPECS.forEach(s => (s.jobs||[]).forEach(t => JOBS.push({t, kind:s.id, role:s.role, mut:(s.role==="effect"), wt:slug(t)})));  // fallback si la unidad no tiene tareas
+  const ACTIONS = ["leyendo ficheros","ejecutando comando","consultando logs","comparando con estado conocido",
+    "escribiendo worktree","corriendo tests","analizando diff","enumerando recursos","invocando tool MCP","verificando criterios"];
+
+  // ---------- estado ----------
+  const KEY="agentboard:v3:state";
+  // WIP multidimensional, medido en COSTE (€), no en tokens a secas: la promoción a
+  // Working exige hueco de agentes Y de presupuesto € total Y de € fundacional.
+  // (local ≈ gratis apenas consume; los modelos fundacionales sí pesan.)
+  const DEFAULT_CFG={speed:3, wip:5, wipCost:2.5, wipCostFound:1.5};
+  let state, cfg, timer=null, paused=false, simClock=0, swim=false;
+  const inWorking = ()=> state.agents.filter(a=>a.col==="working");
+  const workingCount     = ()=> inWorking().length;
+  const workingCost      = ()=> inWorking().reduce((s,a)=>s+costOf(a),0);                       // € total en vuelo
+  const workingCostFound = ()=> inWorking().filter(a=>classOf(a)==="foundational").reduce((s,a)=>s+costOf(a),0); // € fundacional
+  const HAS_STORAGE = (typeof window!=="undefined" && window.storage && typeof window.storage.set==="function");
+  let saveT=null;
+
+  function freshState(){
+    return {agents:[], stats:{spawned:0, done:0, failed:0, tokens:0}, nextId:1, order:0, archived:0};
+  }
+  function freshCfg(){ return {...DEFAULT_CFG}; }
+
+  async function load(){
+    if(!HAS_STORAGE) return {s:freshState(), c:freshCfg()};
+    let s=freshState(), c=freshCfg();
+    try{ const r=await window.storage.get(KEY); if(r&&r.value){ const p=JSON.parse(r.value); s=p.state||s; c=p.cfg||c; simClock=p.simClock||0; } }catch(e){/* clave nueva */}
+    return {s,c};
+  }
+  function save(){
+    if(!HAS_STORAGE) return;
+    clearTimeout(saveT);
+    saveT=setTimeout(async()=>{
+      try{ await window.storage.set(KEY, JSON.stringify({state,cfg,simClock})); flashSaved(); }catch(e){}
+    },700);
+  }
+  async function wipe(){ if(HAS_STORAGE){try{await window.storage.delete(KEY);}catch(e){}} }
+  function flashSaved(){ const el=document.getElementById("saved"); el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),900); }
+
+  // ---------- helpers ----------
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const fmtTok=n=> n>=1000 ? (n/1000).toFixed(1).replace(/\.0$/,"")+"k" : String(Math.round(n));
+  const fmtTime=s=>{ s=Math.round(s); if(s<3600){const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");} const h=Math.floor(s/3600);return h+"h "+Math.floor((s%3600)/60)+"m"; };
+  const shortId=id=>"#"+String(id).padStart(3,"0");
+  function modelClass(m){ m=String(m||"").toLowerCase();
+    if(m.includes("gpt")||m.includes("openai")||/\bo[0-9]\b/.test(m))return"gpt";
+    if(m.includes("gemini"))return"gemini";
+    if(m.includes("llama")||m.includes("mistral")||m.includes("qwen")||m.includes("local")||m.includes("deepseek"))return"local";
+    if(m.includes("sonnet"))return"sonnet"; if(m.includes("haiku"))return"haiku"; return"opus"; }
+
+  function spawn(job, kindId, parentId){
+    job = job || pick(JOBS);
+    const spec = SPEC_BY[kindId] || SPEC_BY[job.kind] || {id:job.kind, role:job.role||"effect"};
+    const role = spec.role || "effect";
+    const target = role==="verify" ? rnd(4000,11000) : rnd(11000,42000);
+    const models = spec.model ? [spec.model] : (ROLE_MODELS[role] || MODELS);
+    const a={
+      id:state.nextId++, order:state.order++, kind:spec.id, role, col:"queued",
+      job: role==="verify" ? "Verificar: "+job.t : job.t,
+      model: pick(models),
+      wt:"wt/"+job.wt + (parentId?"-rev":""), tokens:0, target, elapsed:0,
+      mut: (role==="effect"), parentId:parentId||null, gateMsg:"Permiso: "+job.t,
+      last:"en cola", verdict:null, didGate:false, _jobwt:job.wt
+    };
+    state.agents.push(a); state.stats.spawned++;
+    return a;
+  }
+  const byId=id=>state.agents.find(x=>x.id===id);
+
+  // ---------- simulación (un solo punto: tick) ----------
+  function tick(){
+    const dtSim = rnd(2,5);              // segundos simulados por tick
+    simClock += dtSim;
+
+    // spawn de nuevos agentes (respeta un máximo activo)
+    const active = state.agents.filter(a=>a.col!=="done").length;
+    if(active < 26 && Math.random() < 0.55) spawn();
+
+    // promover Queued/Capped -> Working según el WIP multidimensional (agentes, € total,
+    // € fundacional). Si a un agente FUNDACIONAL solo le frena el presupuesto fundacional
+    // (tendría hueco de agente y € total), va a "⚡ Sin presupuesto" para que se VEA por qué
+    // está parado; vuelve a Working en cuanto se libera la ventana.
+    state.agents.filter(a=>a.col==="queued"||a.col==="capped").sort((x,y)=>x.order-y.order).forEach(a=>{
+      const slot = workingCount() < cfg.wip, totalOk = workingCost() < cfg.wipCost, foundOk = workingCostFound() < cfg.wipCostFound;
+      if(slot && totalOk && foundOk){
+        a.col="working"; a.last=pick(ACTIONS); a.capped=false;
+      } else if(classOf(a)==="foundational" && slot && totalOk && !foundOk){
+        a.col="capped"; a.capped=true; a.last="frenado: presupuesto fundacional al tope";
+      }
+    });
+
+    // avanzar agentes activos
+    state.agents.forEach(a=>{
+      if(a.col==="done") return;
+      a.elapsed += dtSim;
+
+      if(a.col==="working"){
+        a.tokens += rnd(250,1600)*dtSim/3; state.stats.tokens += rnd(250,1600)*dtSim/3;
+        if(Math.random()<0.4) a.last=pick(ACTIONS);
+        // puerta humana: solo jobs mutantes, una vez
+        if(a.mut && !a.didGate && a.tokens > a.target*0.45 && Math.random()<0.5){
+          a.col="needs"; a.didGate=true; a.last=a.gateMsg; return;
+        }
+        if(a.tokens >= a.target){
+          if(a.role==="effect"){ a.col="review"; a.last="esperando verificación"; if(!a.parentId) spawnVerifier(a); }
+          else { resolveTerminal(a, Math.random()<0.9); }   // read/write → Done/Failed
+        }
+      }
+      else if(a.col==="needs"){
+        // si el humano no actúa, se auto-resuelve tras un rato (solo para que el demo fluya)
+        if(a.elapsed > a.target/600 + 40 && Math.random()<0.12){ approve(a.id, Math.random()<0.7); }
+      }
+      else if(a.col==="review"){
+        a.tokens += rnd(150,900)*dtSim/3; state.stats.tokens += rnd(150,900)*dtSim/3;
+        if(Math.random()<0.4) a.last=pick(["revisando contra rúbrica","diff main vs branch","comprobando edge-cases","abogado del diablo"]);
+        if(a.role==="verify" && a.tokens>=a.target){
+          const pass=Math.random()<0.72;
+          resolveTerminal(a, pass);
+          const parent=byId(a.parentId);
+          if(parent){ if(pass) resolveTerminal(parent,true); else { if(Math.random()<0.5){parent.col="working";parent.target+=rnd(4000,9000);parent.last="aplicando correcciones";} else resolveTerminal(parent,false);} }
+        }
+      }
+    });
+
+    archiveOld();
+  }
+  function spawnVerifier(parent){
+    const job={t:String(parent.job).replace(/^Verificar:\s*/,""), wt:parent._jobwt, kind:VERIFY_SPEC.id, role:"verify"};
+    const v=spawn(job, VERIFY_SPEC.id, parent.id); v.col="review"; v.last="verificación adversarial";
+  }
+  function resolveTerminal(a, ok){
+    a.col="done"; a.verdict=ok?"ok":"fail"; a.last=ok?"completado y verificado":"rechazado / requiere atención";
+    a.bar=100; if(ok) state.stats.done++; else state.stats.failed++;
+  }
+  function approve(id, ok){
+    const a=byId(id); if(!a||a.col!=="needs") return;
+    if(ok){ a.col="working"; a.last="aprobado — continuando"; }
+    else { resolveTerminal(a,false); a.last="denegado por operador"; }
+  }
+  function archiveOld(){
+    const done=state.agents.filter(a=>a.col==="done").sort((x,y)=>x.order-y.order);
+    const keep=7;
+    if(done.length>keep){ const drop=done.slice(0,done.length-keep); const ids=new Set(drop.map(d=>d.id));
+      state.agents=state.agents.filter(a=>!ids.has(a.id)); state.archived+=drop.length; }
+  }
+
+  // ---------- render con FLIP ----------
+  const board=document.getElementById("board");
+  let firstRects=new Map();
+  function snapshot(){ firstRects.clear(); board.querySelectorAll(".card").forEach(el=>firstRects.set(el.dataset.id, el.getBoundingClientRect())); }
+
+  function cardHTML(a){
+    const accent=kindColor(a.kind);
+    const pct=Math.min(100, a.col==="done"?100:Math.round(a.tokens/a.target*100));
+    const parent=a.parentId?`<div class="parent">↳ verifica ${shortId(a.parentId)}</div>`:"";
+    const gate=a.col==="needs"?`<div class="gate"><button class="ok" data-act="ok" data-id="${a.id}" data-req="${a.reqId||''}" data-hash="${a.payloadHash||''}">Aprobar</button><button class="no" data-act="no" data-id="${a.id}" data-req="${a.reqId||''}" data-hash="${a.payloadHash||''}">Denegar</button></div>`:"";
+    const verdict=a.verdict?`<span class="verdict ${a.verdict==='ok'?'ok':'no'}">${a.verdict==='ok'?'✓ pass':'✗ fail'}</span>`:"";
+    const bar=(a.col==="working"||a.col==="review")?`<div class="bar"><i style="width:${pct}%"></i></div>`:"";
+    return `<div class="card ${a.col==='needs'?'needs':''} ${a.col==='done'?'term':''}" data-id="${a.id}" style="--accent:${accent}">
+      <div class="top"><span class="kind"><span class="pdot"></span>${kindLabel(a.kind)}</span>${kindUnit(a.kind)?`<span style="font-family:var(--mono);font-size:9.5px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:0 5px;margin-left:6px">${kindUnit(a.kind)}</span>`:""}<span class="id">${shortId(a.id)}</span></div>
+      <div class="job">${a.job}</div>${parent}
+      ${(a.capped||a.col==="capped")?`<div><span class="capbadge" title="modelo fundacional frenado por el presupuesto">⚡ sin presupuesto</span></div>`:""}
+      <div class="last">${a.last}</div>${a.note?`<div class="last" style="opacity:.6;font-size:11px">nota del agente: ${a.note}</div>`:""}
+      <div class="meta">
+        <span class="badge ${modelClass(a.model)}">${a.model}</span>
+        <span class="tok">${fmtTok(a.tokens)}</span>
+        <span class="tok" title="coste estimado (${classOf(a)})" style="color:${classOf(a)==='local'?'var(--local)':'var(--opus)'}">${fmtEur(costOf(a))}</span>
+        <span class="time">${fmtTime(a.elapsed)}</span>
+        <span class="spacer"></span>${verdict}
+      </div>
+      <div class="meta" style="margin-top:6px"><span class="wt">${a.wt}</span></div>
+      ${bar}${gate}
+    </div>`;
+  }
+
+  function colHTML(c, cards, counts, mode, extra){
+    let head;
+    if(mode==='full'){
+      const wip = c.wip
+        ? `<span class="wip ${counts.working>=cfg.wip?'full':''}" title="agentes en curso / límite">${counts.working}/${cfg.wip}</span>`
+          + `<span class="wip ${workingCost()>=cfg.wipCost?'full':''}" title="coste en curso / presupuesto">${fmtEur(workingCost())}/${fmtEur(cfg.wipCost)}</span>`
+          + `<span class="wip ${workingCostFound()>=cfg.wipCostFound?'full':''}" title="coste fundacional en curso / presupuesto">⚡${fmtEur(workingCostFound())}/${fmtEur(cfg.wipCostFound)}</span>`
+        : "";
+      head = `<div class="col-head"><span class="swatch" style="background:${c.color}"></span><h2>${c.name}</h2>${wip}<span class="count">${counts[c.id]}</span></div>`;
+    } else {
+      head = `<div class="col-head mini"><span class="swatch" style="background:${c.color}"></span><span class="count">${cards.length}</span></div>`;
+    }
+    const body = (cards.length ? cards.map(cardHTML).join("") : `<div class="empty">${c.id==='needs'?'sin esperas':'—'}</div>`) + (extra||"");
+    return `<div class="column">${head}<div class="cards">${body}</div></div>`;
+  }
+  function render(){
+    snapshot();
+    const counts={};
+    COLS.forEach(c=>counts[c.id]=state.agents.filter(a=>a.col===c.id).length);
+    const units = PROF.units || [];
+    if(swim && units.length){
+      board.classList.add("swim");
+      const hdr = `<div class="lane-hdr"><div class="lane-tag"></div>` +
+        COLS.map(c=>`<div class="lane-hcol"><span class="swatch" style="background:${c.color}"></span>${c.name}</div>`).join("") + `</div>`;
+      const lanes = units.map(u=>{
+        const ua = state.agents.filter(a=>kindUnit(a.kind)===u);
+        const cols = COLS.map(c=>{
+          const cards=ua.filter(a=>a.col===c.id).sort((x,y)=> c.id==="done" ? y.order-x.order : x.order-y.order);
+          return colHTML(c, cards, counts, 'mini');
+        }).join("");
+        const active = ua.filter(a=>a.col!=="done").length;
+        return `<div class="lane"><div class="lane-tag">${u}<span class="lane-n">${active} activos</span></div><div class="lane-cols">${cols}</div></div>`;
+      }).join("");
+      board.innerHTML = hdr + lanes;
+    } else {
+      board.classList.remove("swim");
+      board.innerHTML = COLS.map(c=>{
+        const cards=state.agents.filter(a=>a.col===c.id).sort((x,y)=> c.id==="done" ? y.order-x.order : x.order-y.order);
+        const extra = c.id==="done" && state.archived>0 ? `<div class="empty">+${state.archived} archivados</div>` : "";
+        return colHTML(c, cards, counts, 'full', extra);
+      }).join("");
+    }
+    flip();
+    renderSummary();
+  }
+  function flip(){
+    board.querySelectorAll(".card").forEach(el=>{
+      const first=firstRects.get(el.dataset.id);
+      if(!first){ el.classList.add("enter"); el.addEventListener("animationend",()=>el.classList.remove("enter"),{once:true}); return; }
+      const last=el.getBoundingClientRect();
+      const dx=first.left-last.left, dy=first.top-last.top;
+      if(Math.abs(dx)<1 && Math.abs(dy)<1) return;
+      el.style.transition="none"; el.style.transform=`translate(${dx}px,${dy}px)`;
+      requestAnimationFrame(()=>{ el.style.transition="transform .44s cubic-bezier(.2,.7,.3,1)"; el.style.transform=""; });
+    });
+  }
+  function renderSummary(){
+    const w=state.agents.filter(a=>a.col==="working").length;
+    const q=state.agents.filter(a=>a.col==="queued").length;
+    const cap=state.agents.filter(a=>a.col==="capped").length;
+    const n=state.agents.filter(a=>a.col==="needs").length;
+    const tpm = simClock>0 ? (state.stats.done/(simClock/60)) : 0;
+    document.getElementById("summary").innerHTML=
+      `<span><b>${w}</b> trabajando</span><span class="sep">·</span>`+
+      `<span><b>${q}</b> en cola</span><span class="sep">·</span>`+
+      `<span><b>${n}</b> esperando aprobación</span><span class="sep">·</span>`+
+      (cap>0 ? `<span style="color:var(--capped)"><b>${cap}</b> sin presupuesto</span><span class="sep">·</span>` : "")+
+      `<span><b>${fmtTok(state.stats.tokens)}</b> tok</span><span class="sep">·</span>`+
+      `<span><b>${fmtEur(state.agents.reduce((s,a)=>s+costOf(a),0))}</b> coste</span><span class="sep">·</span>`+
+      `<span><b>${state.stats.done}</b> hechos / <b>${state.stats.failed}</b> fallos</span><span class="sep">·</span>`+
+      `<span><b>${tpm.toFixed(1)}</b>/min</span>`;
+  }
+
+  // ---------- feed en vivo (poll a board-state.json o al broker /api/state) ----------
+  const FEEDURL = new URLSearchParams(location.search).get("feed");
+  const BROKER = !!(FEEDURL && FEEDURL.indexOf("/api/")===0);   // doble via si el feed es del broker
+  // token de operador: llega por el fragmento (#token=...), nunca viaja al servidor.
+  let OP_TOKEN = (location.hash.match(/token=([^&]+)/)||[])[1] || "";
+  if(OP_TOKEN){ try{ history.replaceState(null,"",location.pathname+location.search); }catch(_){} }  // limpiar de la barra
+  let LIVE=false;
+  async function pollLive(){
+    try{ const r=await fetch(FEEDURL,{cache:"no-store"}); if(!r.ok) return false;
+      const d=await r.json(); if(!d||!Array.isArray(d.agents)) return false;
+      state.agents=d.agents; if(d.stats)state.stats=d.stats; if(typeof d.archived==="number")state.archived=d.archived;
+      return true; }catch(e){ return false; }
+  }
+
+  // ---------- loop & controles ----------
+  function intervalMs(){ return 1500/cfg.speed; }
+  function start(){
+    stop(); if(paused) return;
+    if(LIVE){ timer=setInterval(async()=>{ if(await pollLive()) render(); }, intervalMs()); }
+    else { timer=setInterval(()=>{ tick(); render(); save(); }, intervalMs()); }
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+
+  board.addEventListener("click",async e=>{
+    const b=e.target.closest("button[data-act]"); if(!b) return;
+    const ok=b.dataset.act==="ok", id=b.dataset.id, reqId=b.dataset.req||"", payloadHash=b.dataset.hash||"";
+    if(LIVE && BROKER){
+      if(!OP_TOKEN){ OP_TOKEN=(prompt("Pega el token de operador (lo imprime el broker al arrancar):")||"").trim(); if(!OP_TOKEN) return; }
+      b.disabled=true;
+      try{
+        // ADR-0007: se aprueba un req_id concreto ligado al hash exacto del payload
+        const r=await fetch("/api/decide",{method:"POST",
+          headers:{"Content-Type":"application/json","X-Operator-Token":OP_TOKEN},
+          body:JSON.stringify({req_id:reqId, payload_hash:payloadHash||undefined, decision:ok?"allow":"deny"})});
+        if(r.status===403){ OP_TOKEN=""; b.disabled=false; alert("Token de operador inválido. Vuelve a intentarlo."); return; }
+        if(r.status===409){ b.disabled=false; alert("La petición ya no es válida: caducada, ya resuelta, o el contenido cambió tras crearla."); if(await pollLive()) render(); return; }
+      }catch(_){ b.disabled=false; }
+      if(await pollLive()) render();
+    } else {
+      approve(parseInt(id,10), ok); render(); save();
+    }
+  });
+  const speed=document.getElementById("speed"), wip=document.getElementById("wip"),
+        wipcost=document.getElementById("wipcost"), wipcostf=document.getElementById("wipcostf");
+  speed.addEventListener("input",()=>{ cfg.speed=+speed.value; document.getElementById("speedv").textContent=cfg.speed+"×"; start(); save(); });
+  wip.addEventListener("input",()=>{ cfg.wip=+wip.value; document.getElementById("wipv").textContent=cfg.wip; render(); save(); });
+  wipcost.addEventListener("input",()=>{ cfg.wipCost=+wipcost.value; document.getElementById("wipcostv").textContent="€"+cfg.wipCost; render(); save(); });
+  wipcostf.addEventListener("input",()=>{ cfg.wipCostFound=+wipcostf.value; document.getElementById("wipcostfv").textContent="€"+cfg.wipCostFound; render(); save(); });
+  document.getElementById("pause").addEventListener("click",e=>{ paused=!paused; e.target.textContent=paused?"▶ Reanudar":"⏸ Pausar"; if(paused)stop();else start(); });
+  document.getElementById("reset").addEventListener("click",async()=>{ stop(); await wipe(); state=freshState(); cfg=freshCfg(); simClock=0; syncControls(); seed(); render(); start(); });
+  (function(){ var sb=document.getElementById("swimbtn");
+    if(!(PROF.units&&PROF.units.length)){ sb.style.display="none"; return; }
+    sb.addEventListener("click",function(e){ swim=!swim; e.target.textContent=swim?"▥ Columnas":"▤ Carriles"; render(); });
+  })();
+
+  function syncControls(){
+    speed.value=cfg.speed; wip.value=cfg.wip;
+    if(cfg.wipCost==null) cfg.wipCost=DEFAULT_CFG.wipCost;
+    if(cfg.wipCostFound==null) cfg.wipCostFound=DEFAULT_CFG.wipCostFound;
+    wipcost.value=cfg.wipCost; wipcostf.value=cfg.wipCostFound;
+    document.getElementById("speedv").textContent=cfg.speed+"×";
+    document.getElementById("wipv").textContent=cfg.wip;
+    document.getElementById("wipcostv").textContent="€"+cfg.wipCost;
+    document.getElementById("wipcostfv").textContent="€"+cfg.wipCostFound;
+  }
+  function seed(){ for(let i=0;i<6;i++) spawn(); state.agents.forEach((a,i)=>{ if(i<cfg.wip){a.col="working";a.last=pick(ACTIONS);a.tokens=rnd(1000,9000);a.elapsed=rnd(20,120);} }); }
+
+  // ---------- arranque ----------
+  (async function init(){
+    const {s,c}=await load(); state=s; cfg=c;
+    if(FEEDURL && await pollLive()){
+      LIVE=true; document.getElementById("feedpill").textContent = BROKER ? "feed: en vivo · aprobacion de doble via" : "feed: en vivo · observabilidad";
+    } else {
+      if(state.agents.length===0) seed();
+      document.getElementById("feedpill").textContent = HAS_STORAGE ? "feed: simulado · estado persistente" : "feed: simulado · memoria (sin persistencia)";
+    }
+    document.getElementById("loading").style.display="none";
+    document.getElementById("app").style.display="flex";
+    syncControls(); render(); start();
+  })();
+})();
+</script>
+</body>
+</html>

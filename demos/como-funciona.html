@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q · Agent Board — cómo funciona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0d1014; --ink-2:#151a21; --line:rgba(236,231,220,.10); --line-2:rgba(236,231,220,.18);
+    --gold:#e3b15a; --teal:#4fc5c0; --amber:#e0902e; --text:#ece7dc; --muted:#8b93a6; --faint:#566173;
+    --display:'Fraunces',Georgia,serif; --body:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh;
+    background-image:radial-gradient(60vw 45vw at 88% -8%,rgba(227,177,90,.07),transparent 60%),radial-gradient(50vw 45vw at 4% 106%,rgba(79,197,192,.07),transparent 62%);
+    padding:20px clamp(16px,4vw,34px) 48px}
+  .wrap{max-width:860px;margin:0 auto}
+  .top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:1.05rem}
+  .brand .sq{width:9px;height:9px;border-radius:3px;background:var(--teal)}
+  .sig{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}.sig .org{color:var(--gold)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:26px 0 10px;display:flex;align-items:center;gap:.6rem}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+  h1{font-family:var(--display);font-weight:500;font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.01em}
+  h1 .a{font-style:italic;color:var(--teal)}
+  .lead{color:var(--muted);font-size:1.02rem;max-width:60ch;margin-top:.9rem;line-height:1.55}
+  .lead b{color:var(--text);font-weight:500}
+  .legend{font-family:var(--mono);font-size:11px;color:var(--faint);margin:22px 0 8px 46px}
+  .legend .d{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);vertical-align:1px;margin-right:5px}
+  .tl{margin-top:6px}
+  .st{display:flex;gap:14px;align-items:stretch}
+  .rail{position:relative;width:36px;flex:none;display:flex;justify-content:center}
+  .rail .ln{position:absolute;top:0;bottom:-14px;width:2px;background:var(--line);left:50%;transform:translateX(-50%)}
+  .st:last-child .rail .ln{display:none}
+  .num{position:relative;z-index:1;width:36px;height:36px;border-radius:50%;background:var(--ink-2);border:1px solid var(--line-2);color:var(--muted);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px}
+  .st.key .num{background:color-mix(in srgb,var(--amber) 16%,transparent);border-color:var(--amber);color:var(--amber)}
+  .cd{flex:1;background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:12px;padding:.85rem 1.05rem;margin-bottom:14px;min-width:0}
+  .st.key .cd{border-color:color-mix(in srgb,var(--amber) 45%,transparent);background:color-mix(in srgb,var(--amber) 7%,transparent)}
+  .cd h3{font-family:var(--display);font-weight:500;font-size:1.2rem;color:var(--text)}
+  .st.key .cd h3{color:var(--amber)}
+  .cd p{color:var(--muted);font-size:.95rem;line-height:1.5;margin-top:.3rem}
+  .cd p b{color:var(--text);font-weight:500}
+  .chips{margin-top:.5rem;display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+  code{font-family:var(--mono);font-size:.88em;color:var(--teal);background:rgba(79,197,192,.08);padding:1px 6px;border-radius:5px}
+  .foot{margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;gap:16px;flex-wrap:wrap}
+  .foot a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><span class="sq"></span>Q · Agent Board</div>
+    <div class="sig">Jose Antonio Vilar · <span class="org">QMetrika Labs</span></div>
+  </div>
+  <div class="eyebrow"><span class="dot"></span>cómo funciona</div>
+  <h1>De instalar a <span class="a">gobernar</span></h1>
+  <p class="lead">Lo que vive quien adopta el proyecto: de lanzar agentes a ciegas y a coste incontrolado, a <b>verlos trabajar por departamento, aprobar solo lo que tiene efectos, con presupuesto y auditoría</b> — y que ese control se acumule como capital.</p>
+
+  <p class="legend"><span class="d"></span>paso resaltado = el momento de gobierno (decisión humana)</p>
+  <div class="tl">
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">1</span></div><div class="cd"><h3>Instalas</h3><p>Un comando. <b>Cero dependencias</b> (solo Python). En 2 minutos lo tienes.</p></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">2</span></div><div class="cd"><h3>Configuras</h3><p>Con <code>/setup</code> o una plantilla defines tus especialistas y departamentos.</p><div class="chips"><span class="chip">dev</span><span class="chip">legal</span><span class="chip">finanzas</span><span class="chip">soporte IT</span><span class="chip">genómica</span></div></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">3</span></div><div class="cd"><h3>Arrancas y conectas</h3><p>Levantas el broker y enchufas cualquier LLM.</p><div class="chips"><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip">OpenAI</span><span class="chip">locales ~gratis</span></div></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">4</span></div><div class="cd"><h3>Observas el enjambre</h3><p>Cada agente es una tarjeta en vivo, agrupada por departamento (carriles), con sus tokens y coste €.</p></div></div>
+    <div class="st key"><div class="rail"><span class="ln"></span><span class="num">5</span></div><div class="cd"><h3>Gobiernas</h3><p>Toda operación con efectos se para en <b>Needs Input</b> y espera tu Aprobar o Denegar. La decisión la toma una política en código, no el modelo.</p></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">6</span></div><div class="cd"><h3>Controlas el coste</h3><p>Presupuestos en €: lo local apenas cuenta; el modelo caro que se pasa cae en «⚡ Sin presupuesto».</p></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">7</span></div><div class="cd"><h3>Auditas</h3><p>Cada decisión queda en una <b>cadena verificable</b>, a prueba de manipulación.</p></div></div>
+    <div class="st"><div class="rail"><span class="ln"></span><span class="num">8</span></div><div class="cd"><h3>Acumulas capital</h3><p>El poso se vuelve activo: <b>criterio humano</b> capturado, datos para evals y <b>coste por tarea</b> a la baja — tu moat crece.</p></div></div>
+  </div>
+
+  <div class="foot">
+    <a href="board-demo.html?profile=claude-science">▶ Ver el demo</a>
+    <a href="presentation.html">◆ Presentación</a>
+    <a href="../board/capital-board.html">Tablero de capital</a>
+    <a href="index.html">Inicio</a>
+  </div>
+</div>
+</body>
+</html>

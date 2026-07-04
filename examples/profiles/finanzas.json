@@ -1,0 +1,11 @@
+{
+  "label": "Finanzas",
+  "units": ["Análisis", "Operaciones", "Control"],
+  "specialists": [
+    { "id": "analista",    "label": "Analista Financiero",       "color": "#e0b049", "role": "read",   "unit": "Análisis",    "model": "mistral-local",    "jobs": ["Analizar desviaciones vs presupuesto", "Calcular ratios y KPIs", "Preparar cierre mensual"] },
+    { "id": "riesgo",      "label": "Analista de Riesgo",        "color": "#f0596b", "role": "read",   "unit": "Análisis",    "model": "gemini-2.0-flash", "jobs": ["Evaluar exposición por contraparte", "Detectar anomalías en transacciones"] },
+    { "id": "conciliador", "label": "Ejecutor de Conciliaciones","color": "#33d1c9", "role": "effect", "unit": "Operaciones", "model": "gpt-4o",           "jobs": ["Conciliar cuentas bancarias", "Generar asientos de ajuste", "Emitir informe de tesorería"] },
+    { "id": "redactor",    "label": "Redactor de Informes",      "color": "#6cc4ff", "role": "write",  "unit": "Control",     "model": "sonnet",           "jobs": ["Redactar informe de resultados", "Documentar notas a los estados"] },
+    { "id": "auditor",     "label": "Auditor de Control",        "color": "#9a8cf2", "role": "verify", "unit": "Control",     "model": "opus" }
+  ]
+}

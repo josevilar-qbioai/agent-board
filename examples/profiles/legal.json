@@ -1,0 +1,10 @@
+{
+  "label": "Legal",
+  "units": ["Análisis", "Redacción", "Revisión"],
+  "specialists": [
+    { "id": "contratos",     "label": "Analista de Contratos",     "color": "#e0b049", "role": "read",   "unit": "Análisis",  "model": "mistral-local",    "jobs": ["Extraer cláusulas y obligaciones", "Detectar riesgos y desviaciones", "Comparar contra plantilla estándar"] },
+    { "id": "jurisprudencia","label": "Investigador Jurisprudencia","color": "#74a4f7", "role": "read",   "unit": "Análisis",  "model": "gemini-2.0-flash", "jobs": ["Buscar precedentes aplicables", "Resumir doctrina relevante"] },
+    { "id": "redactor",      "label": "Redactor de Cláusulas",     "color": "#33d1c9", "role": "effect", "unit": "Redacción", "model": "gpt-4o",           "jobs": ["Redactar addenda contractual", "Modificar cláusula de responsabilidad", "Generar versión negociable"] },
+    { "id": "revisor",       "label": "Revisor Legal",             "color": "#9a8cf2", "role": "verify", "unit": "Revisión",  "model": "opus" }
+  ]
+}

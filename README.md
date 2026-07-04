@@ -19,6 +19,9 @@ adaptas a tu proyecto editando `config.json`.
 ![sin dependencias](https://img.shields.io/badge/deps-0%20(stdlib)-brightgreen)
 ![license: MIT](https://img.shields.io/badge/license-MIT-green)
 
+**▶ Demos en vivo (GitHub Pages):** https://josevilar-qbioai.github.io/agent-board/ ·
+tablero, presentación, "cómo funciona" y el Tablero de Capital, sin instalar nada.
+
 ## 🚀 Quickstart (2 minutos)
 
 Sin dependencias — solo Python 3.8+.

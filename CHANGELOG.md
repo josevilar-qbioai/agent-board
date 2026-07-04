@@ -11,6 +11,9 @@
 - Repo listo para OSS: badges (CI, Python, deps=0, MIT), .gitignore ampliado,
   plantillas de issue (bug/idea) y de pull request, y SECURITY.md (reporte privado de
   vulnerabilidades + alcance, ligado al THREAT_MODEL).
+- Demos en GitHub Pages: workflow .github/workflows/pages.yml que publica el sitio en
+  cada push, index.html raíz que redirige a demos/, y .nojekyll. Las demos quedan
+  visibles en https://josevilar-qbioai.github.io/agent-board/ sin instalar nada.
 
 ## 0.16.0 — swimlanes por unidad/departamento
 - Vista de carriles en el tablero (botón "▤ Carriles"): agrupa el Kanban por unidad

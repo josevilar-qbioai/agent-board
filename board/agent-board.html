@@ -141,7 +141,7 @@
 <div class="loading" id="loading">cargando estado del tablero…</div>
 <div class="app" id="app" style="display:none">
   <header>
-    <div class="brand"><span class="dot"></span><h1>Q · Agent Board</h1><span class="feed-pill" id="feedpill">feed: simulado</span><span class="viewnav"><a class="vn on">Agent</a><a class="vn" href="capital-board.html">Capital</a></span><span class="feed-pill" id="profpill" style="border-color:var(--line);color:var(--muted);background:transparent;margin-left:8px"></span></div>
+    <div class="brand"><span class="dot"></span><h1>Q · Agent Board</h1><span class="feed-pill" id="feedpill">feed: simulado</span><span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn on">Agent</a><a class="vn" href="capital-board.html">Capital</a></span><span class="feed-pill" id="profpill" style="border-color:var(--line);color:var(--muted);background:transparent;margin-left:8px"></span></div>
     <div class="summary" id="summary"></div>
     <div class="controls">
       <span class="saved" id="saved">guardado ✓</span>
@@ -153,6 +153,7 @@
       <button class="btn ghost" id="pause">⏸ Pausar</button>
       <button class="btn ghost" id="reset">↺ Reset</button>
     </div>
+    <div class="sig" style="margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;white-space:nowrap"><b style="color:var(--text)">Jose Antonio Vilar</b> · <span style="color:#e0b049">QMetrika Labs</span></div>
   </header>
   <div class="board" id="board"></div>
   <div class="hint">Cada tarjeta es un agente. La columna <b>Needs Input</b> es la puerta humana (operaciones con efectos secundarios): aprueba o deniega. El feed está aislado en <b>tick()</b> — sustitúyelo por eventos reales de tus hooks <b>SessionStart / PermissionRequest / Stop</b> o del orquestador del dynamic workflow.</div>

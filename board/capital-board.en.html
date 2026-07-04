@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Q · Capital Board — vista de acumulación</title>
+<title>Q · Capital Board — accumulation view</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -76,25 +76,25 @@
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="capital-board.html" style="color:#33d1c9;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="capital-board.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
+<a href="capital-board.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="capital-board.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
 </div>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><span class="sq"></span>Q · Capital Board<span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn" href="agent-board.html">Agent</a><a class="vn on">Capital</a></span></div>
+    <div class="brand"><span class="sq"></span>Q · Capital Board<span class="viewnav"><a class="vn" href="../demos/index.en.html">◆ Landing</a><a class="vn" href="agent-board.html">Agent</a><a class="vn on">Capital</a></span></div>
     <div class="sig"><b>Jose Antonio Vilar</b> · <span class="org">QMetrika Labs</span></div>
   </header>
-  <p class="sub">Vista de acumulación (Capital de Tokens). Lee el mismo sustrato del tablero operativo —auditoría, ledger de coste, aprobaciones— como capital que se acumula. · <a href="../demos/presentation.html">Ver presentación del proyecto →</a> · <span style="color:var(--faint)">datos simulados</span></p>
+  <p class="sub">Accumulation view (Token Capital). Reads the same substrate as the operational board —audit, cost ledger, approvals— as capital that compounds. · <a href="../demos/presentation.en.html">See project presentation →</a> · <span style="color:var(--faint)">simulated data</span></p>
 
   <div class="kpis" id="kpis"></div>
 
   <div class="row">
     <div class="panel">
-      <h3>Coste por proveedor <span class="hint">últimos 30 días</span></h3>
+      <h3>Cost by provider <span class="hint">last 30 days</span></h3>
       <div class="prov" id="prov"></div>
-      <div class="legend"><span><i style="background:var(--amber)"></i>fundacional (API de pago)</span><span><i style="background:var(--teal)"></i>local (~gratis)</span></div>
+      <div class="legend"><span><i style="background:var(--amber)"></i>foundational (paid API)</span><span><i style="background:var(--teal)"></i>local (~free)</span></div>
     </div>
     <div class="panel">
-      <h3>Decisiones por resultado <span class="hint">de la puerta</span></h3>
+      <h3>Decisions by outcome <span class="hint">at the gate</span></h3>
       <div class="donut">
         <svg width="132" height="132" viewBox="0 0 132 132" id="donut"></svg>
         <div class="dlist" id="dlist"></div>
@@ -103,42 +103,42 @@
   </div>
 
   <div class="panel chart" style="margin-bottom:16px">
-    <h3>Uso de tokens · fundacional vs local <span class="hint">cuanto más local, más autonomía y menos coste</span></h3>
+    <h3>Token usage · foundational vs local <span class="hint">the more local, the more autonomy and less cost</span></h3>
     <div id="tsplit"></div>
     <svg viewBox="0 0 1180 170" id="tokchart" style="width:100%;height:auto;margin-top:12px"></svg>
-    <div class="legend"><span><i style="background:var(--amber)"></i>fundacional (API de pago)</span><span><i style="background:var(--teal)"></i>local (~gratis)</span></div>
+    <div class="legend"><span><i style="background:var(--amber)"></i>foundational (paid API)</span><span><i style="background:var(--teal)"></i>local (~free)</span></div>
     <p style="font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:8px" id="tokcap"></p>
   </div>
 
   <div class="panel chart" style="margin-bottom:16px">
-    <h3>Capital capturado por semana <span class="hint">juicio humano + datos para evals</span></h3>
+    <h3>Capital captured per week <span class="hint">human judgment + eval data</span></h3>
     <svg viewBox="0 0 1180 200" id="chart"></svg>
-    <div class="legend"><span><i style="background:var(--gold)"></i>decisiones humanas (labels)</span><span><i style="background:var(--teal)"></i>entradas de auditoría (evals)</span></div>
+    <div class="legend"><span><i style="background:var(--gold)"></i>human decisions (labels)</span><span><i style="background:var(--teal)"></i>audit entries (evals)</span></div>
   </div>
 
   <div class="panel">
-    <h3>Últimas decisiones auditadas <span class="hint">cadena hash-chain · verificable</span></h3>
+    <h3>Latest audited decisions <span class="hint">hash-chain · verifiable</span></h3>
     <div style="overflow-x:auto"><table class="audit" id="audit"></table></div>
   </div>
 
-  <p class="foot">fuente · audit.py (hash-chain) + cost.py (ledger) + decisiones del broker · verifica con <span style="color:var(--teal)">python3 mcp/audit.py verify</span></p>
+  <p class="foot">source · audit.py (hash-chain) + cost.py (ledger) + broker decisions · verify with <span style="color:var(--teal)">python3 mcp/audit.py verify</span></p>
 </div>
 <script>
 (function(){
   function up(el){var t=+el.dataset.c,pre=el.dataset.pre||"",suf=el.dataset.suf||"",dec=+(el.dataset.dec||0),t0=performance.now();
     (function s(n){var p=Math.min(1,(n-t0)/900),e=1-Math.pow(1-p,3),v=t*e;
-      el.textContent=pre+(dec>0?v.toFixed(dec):Math.round(v).toLocaleString('es-ES'))+suf;if(p<1)requestAnimationFrame(s);})(performance.now());}
-  // coste por tarea = coste agregado (30d) ÷ tareas completadas. La métrica que decide
-  // si el enfoque multiagente compensa (coordinación de especialistas vs modelo único).
+      el.textContent=pre+(dec>0?v.toFixed(dec):Math.round(v).toLocaleString('en-US'))+suf;if(p<1)requestAnimationFrame(s);})(performance.now());}
+  // cost per task = aggregate cost (30d) / completed tasks. The metric that decides
+  // whether the multi-agent approach pays off (specialist coordination vs single model).
   var COST30=417, TASKS=268, CPT=COST30/TASKS;
   var KPI=[
-    {ac:"var(--teal)",l:"Coste por tarea",c:CPT,pre:"€",dec:2,sub:"€"+COST30+" ÷ "+TASKS+" tareas (30d)",tr:"▼ −12% · organización > router"},
-    {ac:"var(--gold)",l:"Criterio humano",c:1284,tr:"▲ +73 esta semana"},
-    {ac:"var(--teal)",l:"Datos para evals",c:8942,tr:"▲ +512 esta semana"},
-    {ac:"var(--teal)",l:"Autonomía local",c:68,suf:"%",tr:"▲ +6 pts / mes"},
-    {ac:"var(--teal)",l:"Coste fund. 30d",c:COST30,pre:"€",tr:"▼ −18% vs. mes ant."},
-    {ac:"var(--gold)",l:"Valor capturado",c:320,suf:" h",tr:"▲ +40 h / mes"},
-    {ac:"var(--teal)",l:"Moat (semanas)",c:14,tr:"▲ crece cada vuelta"}
+    {ac:"var(--teal)",l:"Cost per task",c:CPT,pre:"€",dec:2,sub:"€"+COST30+" ÷ "+TASKS+" tasks (30d)",tr:"▼ −12% · organization > router"},
+    {ac:"var(--gold)",l:"Human judgment",c:1284,tr:"▲ +73 this week"},
+    {ac:"var(--teal)",l:"Eval data",c:8942,tr:"▲ +512 this week"},
+    {ac:"var(--teal)",l:"Local autonomy",c:68,suf:"%",tr:"▲ +6 pts / mo"},
+    {ac:"var(--teal)",l:"Foundational cost 30d",c:COST30,pre:"€",tr:"▼ −18% vs. prev. mo"},
+    {ac:"var(--gold)",l:"Captured value",c:320,suf:" h",tr:"▲ +40 h / mo"},
+    {ac:"var(--teal)",l:"Moat (weeks)",c:14,tr:"▲ grows every cycle"}
   ];
   var kw=document.getElementById('kpis');
   KPI.forEach(function(k){var d=document.createElement('div');d.className='kpi';d.style.setProperty('--ac',k.ac);
@@ -146,11 +146,11 @@
     kw.appendChild(d);up(d.querySelector('.val'));});
 
   var PROV=[
-    {n:"opus",c:"var(--amber)",eur:198,cls:"fundacional"},
-    {n:"gpt-4o",c:"var(--amber)",eur:112,cls:"fundacional"},
-    {n:"sonnet",c:"var(--amber)",eur:68,cls:"fundacional"},
-    {n:"gemini",c:"var(--amber)",eur:34,cls:"fundacional"},
-    {n:"mistral-local",c:"var(--teal)",eur:0,cls:"local ~gratis"}
+    {n:"opus",c:"var(--amber)",eur:198,cls:"foundational"},
+    {n:"gpt-4o",c:"var(--amber)",eur:112,cls:"foundational"},
+    {n:"sonnet",c:"var(--amber)",eur:68,cls:"foundational"},
+    {n:"gemini",c:"var(--amber)",eur:34,cls:"foundational"},
+    {n:"mistral-local",c:"var(--teal)",eur:0,cls:"local ~free"}
   ];
   var mx=Math.max.apply(null,PROV.map(function(p){return p.eur;}))||1;
   document.getElementById('prov').innerHTML=PROV.map(function(p){
@@ -163,8 +163,8 @@
   var DEC=[{n:"allow",v:812,c:"var(--green)"},{n:"ask",v:314,c:"var(--gold)"},{n:"deny",v:158,c:"var(--red)"}];
   var tot=DEC.reduce(function(s,d){return s+d.v;},0),off=0,R=52,C=2*Math.PI*R;
   var seg=DEC.map(function(d){var frac=d.v/tot,len=frac*C,s='<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="'+d.c+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 66 66)"/>';off+=len;return s;}).join("");
-  document.getElementById('donut').innerHTML=seg+'<text x="66" y="62" text-anchor="middle" style="font-family:var(--display);font-size:22px;fill:var(--text)">'+tot.toLocaleString('es-ES')+'</text><text x="66" y="80" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--muted)">decisiones</text>';
-  document.getElementById('dlist').innerHTML=DEC.map(function(d){return '<div class="d"><i style="background:'+d.c+'"></i>'+d.n+' <b>'+d.v.toLocaleString('es-ES')+'</b></div>';}).join("");
+  document.getElementById('donut').innerHTML=seg+'<text x="66" y="62" text-anchor="middle" style="font-family:var(--display);font-size:22px;fill:var(--text)">'+tot.toLocaleString('en-US')+'</text><text x="66" y="80" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--muted)">decisions</text>';
+  document.getElementById('dlist').innerHTML=DEC.map(function(d){return '<div class="d"><i style="background:'+d.c+'"></i>'+d.n+' <b>'+d.v.toLocaleString('en-US')+'</b></div>';}).join("");
 
   var W=1180,H=200,pB=24,pT=6,weeks=14;
   var data=Array.from({length:weeks},function(_,i){return {g:Math.round(28+i*3.6+(i%3)*4),t:Math.round(90+i*30+(i%2)*20)};});
@@ -172,7 +172,7 @@
   data.forEach(function(w,i){var x=i*bw+bw*0.2,cw=bw*0.6,gH=w.g/maxV*(H-pT-pB),tH=(w.t/10)/maxV*(H-pT-pB),yB=H-pB;
     out+='<rect x="'+x.toFixed(1)+'" y="'+(yB-tH).toFixed(1)+'" width="'+cw.toFixed(1)+'" height="'+tH.toFixed(1)+'" fill="#4fc5c0" opacity="'+(0.4+i*0.03).toFixed(2)+'" rx="2"/>';
     out+='<rect x="'+x.toFixed(1)+'" y="'+(yB-tH-gH).toFixed(1)+'" width="'+cw.toFixed(1)+'" height="'+gH.toFixed(1)+'" fill="#e3b15a" opacity="'+(0.6+i*0.03).toFixed(2)+'" rx="2"/>';
-    if(i%3===0||i===weeks-1)out+='<text x="'+(x+cw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--faint)">S'+(i+1)+'</text>';});
+    if(i%3===0||i===weeks-1)out+='<text x="'+(x+cw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--faint)">W'+(i+1)+'</text>';});
   out+='<line x1="0" y1="'+(H-pB)+'" x2="'+W+'" y2="'+(H-pB)+'" stroke="rgba(236,231,220,.12)"/>';
   document.getElementById('chart').innerHTML=out;
 
@@ -185,21 +185,21 @@
   document.getElementById('tsplit').innerHTML=
     '<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12.5px;margin-bottom:7px">'
     +'<span style="color:var(--teal)">local <b style="color:var(--text)">'+pL+'%</b> · '+fmtM(Loc)+' tok</span>'
-    +'<span style="color:var(--amber)">fundacional <b style="color:var(--text)">'+(100-pL)+'%</b> · '+fmtM(Fnd)+' tok</span></div>'
+    +'<span style="color:var(--amber)">foundational <b style="color:var(--text)">'+(100-pL)+'%</b> · '+fmtM(Fnd)+' tok</span></div>'
     +'<div style="height:14px;border-radius:7px;overflow:hidden;display:flex;border:1px solid var(--line)"><div style="width:'+pL+'%;background:var(--teal)"></div><div style="flex:1;background:var(--amber)"></div></div>';
   (function(){var W=1180,H=170,pB=22,pT=6,maxT=Math.max.apply(null,TW.map(function(x){return x.loc+x.fnd;})),bw=W/weeks,o="";
     TW.forEach(function(x,i){var X=i*bw+bw*0.2,cw=bw*0.6,yB=H-pB,fH=x.fnd/maxT*(H-pT-pB),lH=x.loc/maxT*(H-pT-pB);
       o+='<rect x="'+X.toFixed(1)+'" y="'+(yB-fH).toFixed(1)+'" width="'+cw.toFixed(1)+'" height="'+fH.toFixed(1)+'" fill="#e0902e" opacity="0.85" rx="2"/>';
       o+='<rect x="'+X.toFixed(1)+'" y="'+(yB-fH-lH).toFixed(1)+'" width="'+cw.toFixed(1)+'" height="'+lH.toFixed(1)+'" fill="#4fc5c0" opacity="0.9" rx="2"/>';
-      if(i%3===0||i===weeks-1)o+='<text x="'+(X+cw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--faint)">S'+(i+1)+'</text>';});
+      if(i%3===0||i===weeks-1)o+='<text x="'+(X+cw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--faint)">W'+(i+1)+'</text>';});
     o+='<line x1="0" y1="'+(H-pB)+'" x2="'+W+'" y2="'+(H-pB)+'" stroke="rgba(236,231,220,.12)"/>';
     document.getElementById('tokchart').innerHTML=o;})();
   var s1=Math.round(TW[0].loc/(TW[0].loc+TW[0].fnd)*100),sN=Math.round(TW[weeks-1].loc/(TW[weeks-1].loc+TW[weeks-1].fnd)*100);
-  document.getElementById('tokcap').textContent='Semana 1: '+s1+'% local → semana '+weeks+': '+sN+'% local. Cada punto que pasa a local es coste de API que dejas de pagar y capital que retienes.';
+  document.getElementById('tokcap').textContent='Week 1: '+s1+'% local → week '+weeks+': '+sN+'% local. Every point that shifts to local is API cost you stop paying and capital you keep.';
 
   var t=Math.floor(Date.now()/1000);
-  document.getElementById('audit').innerHTML='<tr><th>hora</th><th>tool</th><th>decisión</th><th>origen</th><th>modelo</th><th>coste</th><th>hash</th></tr>'+
-    TOOLS.map(function(r,i){var ts=new Date((t-i*137)*1000).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('audit').innerHTML='<tr><th>time</th><th>tool</th><th>decision</th><th>source</th><th>model</th><th>cost</th><th>hash</th></tr>'+
+    TOOLS.map(function(r,i){var ts=new Date((t-i*137)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
       return '<tr><td>'+ts+'</td><td class="tool">'+r[0]+'</td><td><span class="tag '+r[1]+'">'+r[1]+'</span></td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="hash">'+h()+'</td></tr>';}).join("");
 })();
 </script>

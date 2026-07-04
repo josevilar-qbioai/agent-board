@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q · Agent Board — supervisión y gobernanza de agentes</title>
+<title>Q · Agent Board — agent supervision &amp; governance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -131,174 +131,174 @@
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="index.html" style="color:#33d1c9;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="index.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
+<a href="index.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="index.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
 </div>
 
 <div class="hero">
   <div class="wrap">
-    <div class="badge-top"><span class="dot"></span>supervisión y gobernanza de agentes · independiente del LLM</div>
+    <div class="badge-top"><span class="dot"></span>agent supervision &amp; governance · LLM-agnostic</div>
     <h1>Q · Agent Board</h1>
-    <p class="sub">Un <b>tablero Kanban para supervisar agentes de IA en tiempo real</b> y mantener el control
-      de lo que tocan — sin confiar en que el modelo se porte bien.</p>
+    <p class="sub">A <b>Kanban board to supervise AI agents in real time</b> and keep control
+      of what they touch — without trusting the model to behave.</p>
     <div class="cta-row">
-      <a class="cta primary" href="board-demo.html">▶ Ver el demo del tablero</a>
-      <a class="cta ghost" href="como-funciona.html">Cómo funciona</a>
-      <a class="cta ghost" href="presentation.html">◆ Presentación</a>
+      <a class="cta primary" href="board-demo.en.html">▶ See the board demo</a>
+      <a class="cta ghost" href="how-it-works.en.html">How it works</a>
+      <a class="cta ghost" href="presentation.en.html">◆ Presentation</a>
       <a class="cta ghost" href="../board/capital-board.html">Capital</a>
     </div>
     <div class="mini" id="mini">
-      <div class="col"><div class="ch"><i style="background:#d9772e"></i>⚡ Sin presup.</div>
-        <div class="c held" style="--cc:#d9772e;animation-delay:.05s">Auditar deps<div class="m">opus · frenado: presupuesto €</div></div></div>
-      <div class="col"><div class="ch"><i style="background:var(--teal)"></i>Working<span class="wipb" title="agentes en curso">2/5</span><span class="wipb full" title="coste fundacional en curso / presupuesto">⚡€1.4/€1.5</span></div>
-        <div class="c" style="--cc:var(--teal);animation-delay:.1s">Mapear el repo<div class="m">mistral-local · €0.00</div></div>
-        <div class="c" style="--cc:var(--teal);animation-delay:.25s">Refactor cliente<div class="m">gpt-4o · €1.40</div></div></div>
+      <div class="col"><div class="ch"><i style="background:#d9772e"></i>⚡ No budget</div>
+        <div class="c held" style="--cc:#d9772e;animation-delay:.05s">Audit deps<div class="m">opus · throttled: budget €</div></div></div>
+      <div class="col"><div class="ch"><i style="background:var(--teal)"></i>Working<span class="wipb" title="agents in progress">2/5</span><span class="wipb full" title="foundational cost in progress / budget">⚡€1.4/€1.5</span></div>
+        <div class="c" style="--cc:var(--teal);animation-delay:.1s">Map the repo<div class="m">mistral-local · €0.00</div></div>
+        <div class="c" style="--cc:var(--teal);animation-delay:.25s">Refactor client<div class="m">gpt-4o · €1.40</div></div></div>
       <div class="col"><div class="ch"><i style="background:var(--amber)"></i>Needs input</div>
-        <div class="c needs" style="--cc:var(--amber);animation-delay:.5s">Eliminar recursos<div class="m">esperando aprobación</div></div></div>
+        <div class="c needs" style="--cc:var(--amber);animation-delay:.5s">Delete resources<div class="m">awaiting approval</div></div></div>
       <div class="col"><div class="ch"><i style="background:var(--indigo)"></i>Review</div>
-        <div class="c" style="--cc:var(--indigo);animation-delay:.7s">Verificar fix<div class="m">opus</div></div></div>
+        <div class="c" style="--cc:var(--indigo);animation-delay:.7s">Verify fix<div class="m">opus</div></div></div>
       <div class="col"><div class="ch"><i style="background:var(--green)"></i>Done</div>
-        <div class="c" style="--cc:var(--green);animation-delay:.85s">Docs escritas<div class="m">sonnet ✓</div></div></div>
+        <div class="c" style="--cc:var(--green);animation-delay:.85s">Docs written<div class="m">sonnet ✓</div></div></div>
     </div>
-    <p class="mini-cap">Hay una vía propia <b>⚡ Sin presupuesto</b>: el agente caro (opus) cae ahí porque el presupuesto fundacional está al tope (<b>⚡€1.4/€1.5</b>) — se ve <i>por qué</i> está parado; el local entró sin coste. Vuelve a <i>Working</i> al liberarse la ventana.</p>
+    <p class="mini-cap">There's a dedicated lane <b>⚡ Out of budget</b>: the expensive agent (opus) lands there because the foundational budget is maxed out (<b>⚡€1.4/€1.5</b>) — you can see <i>why</i> it's paused; the local one entered at no cost. It returns to <i>Working</i> once the window frees up.</p>
   </div>
 </div>
 
 <section class="rev" id="modos"><div class="wrap">
-  <h2>pruébalo</h2>
-  <h3>El mismo tablero, tres modos</h3>
-  <p>Todo es HTML autónomo: el demo simulado se abre solo en el navegador, sin instalar nada.</p>
+  <h2>try it</h2>
+  <h3>The same board, three modes</h3>
+  <p>Everything is self-contained HTML: the simulated demo opens on its own in the browser, with nothing to install.</p>
   <div class="demo-box">
     <table class="modes">
       <tr>
-        <td><a class="cta primary" href="../board/agent-board.html" style="font-size:12.5px;padding:7px 13px">▶ demo simulado</a></td>
-        <td><b>Demo simulado.</b> Agentes ficticios que avanzan por las columnas. Sin backend — ideal para enseñarlo.</td>
+        <td><a class="cta primary" href="../board/agent-board.html" style="font-size:12.5px;padding:7px 13px">▶ simulated demo</a></td>
+        <td><b>Simulated demo.</b> Fictional agents that move across the columns. No backend — ideal for showing it off.</td>
       </tr>
       <tr>
         <td><code>?feed=/api/state</code></td>
-        <td><b>En vivo contra el broker.</b> Aprobaciones reales (doble vía). Requiere <code>python3 hooks/broker.py</code>.</td>
+        <td><b>Live against the broker.</b> Real approvals (two-key). Requires <code>python3 hooks/broker.py</code>.</td>
       </tr>
       <tr>
         <td><code>?feed=board-state.json</code></td>
-        <td><b>Observabilidad offline</b> (solo lectura) desde el estado que escriben los hooks.</td>
+        <td><b>Offline observability</b> (read-only) from the state written by the hooks.</td>
       </tr>
       <tr>
-        <td><a class="cta ghost" href="board-demo.html?profile=claude-science" style="font-size:12.5px;padding:7px 13px">▶ demo · Claude Science</a></td>
-        <td><b>Perfiles y unidades.</b> El tablero se adapta a los agentes concretos de tu proyecto y se reparte por departamentos: este abre <i>Claude Science</i> (Analista de Genómica, Motor Biofísico, Diseñador de mRNA…). Cada unidad ve lo suyo con <code>?profile=claude-science&amp;unit=Terapéutica</code>. Fuente de verdad: <code>config.json</code>.</td>
+        <td><a class="cta ghost" href="board-demo.en.html?profile=claude-science" style="font-size:12.5px;padding:7px 13px">▶ demo · Claude Science</a></td>
+        <td><b>Profiles and units.</b> The board adapts to the concrete agents of your project and is split across departments: this one opens <i>Claude Science</i> (Genomics Analyst, Biophysics Engine, mRNA Designer…). Each unit sees its own with <code>?profile=claude-science&amp;unit=Terapéutica</code>. Source of truth: <code>config.json</code>.</td>
       </tr>
       <tr>
-        <td><a class="cta ghost" href="../board/capital-board.html" style="font-size:12.5px;padding:7px 13px">◆ tablero de capital</a></td>
-        <td><b>Segunda vista, mismo sustrato.</b> Lee la auditoría, el coste y las aprobaciones como <b>capital que se acumula</b> (concepto <i>Capital de Tokens</i>): juicio humano capturado, datos para evals y el moat. Un sistema, dos lentes.</td>
+        <td><a class="cta ghost" href="../board/capital-board.html" style="font-size:12.5px;padding:7px 13px">◆ capital board</a></td>
+        <td><b>A second view, same substrate.</b> It reads the audit trail, cost, and approvals as <b>capital that accumulates</b> (the <i>Token Capital</i> concept): captured human judgment, data for evals, and the moat. One system, two lenses.</td>
       </tr>
     </table>
   </div>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>el problema</h2>
-  <h3>Lanzar muchos agentes es potente. Y opaco. Y peligroso.</h3>
-  <p class="lead">Los <b>workflows dinámicos</b> disparan decenas de agentes en paralelo. Hacen mucho trabajo, pero no ves
-    qué tocan, y una acción irreversible —borrar datos, desplegar, rotar claves— puede tirar producción.</p>
-  <p>El reflejo habitual es pedirle al modelo, en el prompt, que “tenga cuidado” o “pida permiso antes de borrar”.
-    Eso es una <b>convención</b>: el modelo puede saltársela, equivocarse o ser manipulado por inyección de prompt.
-    No es control.</p>
+  <h2>the problem</h2>
+  <h3>Launching many agents is powerful. And opaque. And dangerous.</h3>
+  <p class="lead"><b>Dynamic workflows</b> spin up dozens of agents in parallel. They get a lot done, but you can't see
+    what they touch, and one irreversible action — deleting data, deploying, rotating keys — can take down production.</p>
+  <p>The usual reflex is to ask the model, in the prompt, to “be careful” or “ask before deleting.”
+    That's a <b>convention</b>: the model can skip it, get it wrong, or be manipulated by prompt injection.
+    It's not control.</p>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>el enfoque</h2>
-  <h3>Invierte la confianza: controla donde el agente <em>actúa</em>, no donde <em>piensa</em>.</h3>
-  <p>El control no se pone en el cerebro del agente (el LLM, infinito e imprevisible), sino en la <b>herramienta</b>
-    por la que pasa toda acción con efectos. Si la puerta vive dentro de la tool, el efecto es físicamente inalcanzable
-    sin cruzarla — da igual qué modelo la haya invocado.</p>
-  <div class="quote"><p>No intentes certificar a cada conductor. Pon un control en el peaje de la única carretera
-    que lleva a las operaciones peligrosas. Quien quiera actuar, cruza el peaje.</p></div>
+  <h2>the approach</h2>
+  <h3>Invert the trust: control where the agent <em>acts</em>, not where it <em>thinks</em>.</h3>
+  <p>Control isn't placed in the agent's brain (the LLM, infinite and unpredictable), but in the <b>tool</b>
+    through which every action with effects passes. If the gate lives inside the tool, the effect is physically unreachable
+    without crossing it — no matter which model invoked it.</p>
+  <div class="quote"><p>Don't try to certify every driver. Put a checkpoint at the tollgate of the only road
+    that leads to dangerous operations. Whoever wants to act crosses the tollgate.</p></div>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>los cuatro pilares</h2>
-  <h3>Qué lo compone</h3>
+  <h2>the four pillars</h2>
+  <h3>What it's made of</h3>
   <div class="grid">
     <div class="card" style="--ac:var(--teal)">
       <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="14" rx="1"/></svg></div>
-      <h4>Tablero Kanban de agentes</h4>
-      <p>Cada agente es una tarjeta que avanza por columnas. Ves en vivo qué hace, su coste y tiempo, y los resultados. <b>WIP multidimensional medido en coste</b>: el límite de Working es nº de agentes, € total y € en modelos fundacionales — un token local es ~gratis, uno de Opus/GPT-4o no.</p>
+      <h4>Agent Kanban board</h4>
+      <p>Each agent is a card that moves across columns. You see live what it's doing, its cost and time, and the results. <b>Multi-dimensional WIP measured in cost</b>: the Working limit is number of agents, total €, and € on foundational models — a local token is ~free, an Opus/GPT-4o one is not.</p>
     </div>
     <div class="card" style="--ac:var(--amber)">
       <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/><path d="M5 19h14" opacity=".4"/></svg></div>
-      <h4>Aprobación de doble vía</h4>
-      <p>Las operaciones con efectos se paran y esperan tu Aprobar/Denegar. Aprobar exige un token de operador: un agente no puede auto-aprobarse.</p>
+      <h4>Two-key approval</h4>
+      <p>Operations with effects stop and wait for your Approve/Deny. Approving requires an operator token: an agent can't self-approve.</p>
     </div>
     <div class="card" style="--ac:var(--indigo)">
       <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7z"/></svg></div>
-      <h4>Puerta determinista por política</h4>
-      <p>La decisión la toman reglas en código (<code>policy.json</code>): allow / ask / deny por tool y dominio. Reproducible y auditada — no negociable por el modelo.</p>
+      <h4>Deterministic policy gate</h4>
+      <p>The decision is made by rules in code (<code>policy.json</code>): allow / ask / deny per tool and domain. Reproducible and audited — not negotiable by the model.</p>
     </div>
     <div class="card" style="--ac:var(--green)">
       <div class="ic"><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M4 20c0-3 2-5 3-5M20 20c0-3-2-5-3-5"/></svg></div>
-      <h4>Roles multi-modelo</h4>
-      <p>Un LLM distinto por rol: explorer, auditor, implementer, verifier, documenter. El verifier de otra familia mata el sesgo de autoaprobación.</p>
+      <h4>Multi-model roles</h4>
+      <p>A different LLM per role: explorer, auditor, implementer, verifier, documenter. A verifier from another family kills the self-approval bias.</p>
     </div>
   </div>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>cómo fluye una decisión</h2>
-  <h3>De la intención del agente al efecto real</h3>
+  <h2>how a decision flows</h2>
+  <h3>From the agent's intent to the real effect</h3>
   <div class="flow">
-    <div class="step"><div class="n">01</div><h5>RBAC</h5><p>¿Este rol puede siquiera intentarlo?</p></div>
+    <div class="step"><div class="n">01</div><h5>RBAC</h5><p>Can this role even attempt it?</p></div>
     <div class="arrow">→</div>
-    <div class="step"><div class="n">02</div><h5>Política</h5><p>Reglas deterministas: allow · ask · deny.</p></div>
+    <div class="step"><div class="n">02</div><h5>Policy</h5><p>Deterministic rules: allow · ask · deny.</p></div>
     <div class="arrow">→</div>
-    <div class="step gate"><div class="n">03</div><h5>Tablero</h5><p>Solo lo marcado <code>ask</code> espera tu visto bueno.</p></div>
+    <div class="step gate"><div class="n">03</div><h5>Board</h5><p>Only what's marked <code>ask</code> waits for your sign-off.</p></div>
     <div class="arrow">→</div>
-    <div class="step"><div class="n">04</div><h5>Auditoría</h5><p>Cadena verificable: cada decisión queda registrada con su origen.</p></div>
+    <div class="step"><div class="n">04</div><h5>Audit</h5><p>Verifiable chain: every decision is logged with its origin.</p></div>
   </div>
   <div class="verdict">
-    <span class="vtag a">allow → ejecuta</span>
-    <span class="vtag k">ask → espera al humano</span>
-    <span class="vtag d">deny → nunca</span>
+    <span class="vtag a">allow → runs</span>
+    <span class="vtag k">ask → waits for the human</span>
+    <span class="vtag d">deny → never</span>
   </div>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>independiente del LLM</h2>
-  <h3>El control vive en la herramienta, así que da igual quién la llame</h3>
-  <p>Como la puerta está en la tool (vía MCP) y no en el cliente, el mismo control sirve para cualquier agente —
-    los de hoy y los que salgan mañana. Cada uno se enchufa por su superficie:</p>
+  <h2>LLM-agnostic</h2>
+  <h3>Control lives in the tool, so it doesn't matter who calls it</h3>
+  <p>Because the gate is in the tool (via MCP) and not in the client, the same control works for any agent —
+    today's and whatever ships tomorrow. Each one plugs in through its own surface:</p>
   <div class="chips">
-    <div class="chip">Claude Code <span>· plugin nativo</span></div>
+    <div class="chip">Claude Code <span>· native plugin</span></div>
     <div class="chip">ChatGPT <span>· MCP</span></div>
     <div class="chip">Antigravity <span>· MCP</span></div>
-    <div class="chip">Grok <span>· orquestador</span></div>
-    <div class="chip">LLM locales <span>· orquestador</span></div>
+    <div class="chip">Grok <span>· orchestrator</span></div>
+    <div class="chip">Local LLMs <span>· orchestrator</span></div>
   </div>
   <ul class="clean" style="--ac:var(--teal)">
-    <li><b>Un servidor MCP = un dominio</b> de funcionalidad (notify, data, deploy…), con credenciales de mínimo privilegio.</li>
-    <li>La convención <code>mcp__servidor__tool</code> deja que una sola política razone por dominio con globs.</li>
-    <li>Gobierna incluso los MCP de terceros que no puedes modificar.</li>
+    <li><b>One MCP server = one domain</b> of functionality (notify, data, deploy…), with least-privilege credentials.</li>
+    <li>The <code>mcp__server__tool</code> convention lets a single policy reason per domain with globs.</li>
+    <li>It governs even the third-party MCPs you can't modify.</li>
   </ul>
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>gobernanza honesta</h2>
-  <h3>Potente, y consciente de sus límites</h3>
+  <h2>honest governance</h2>
+  <h3>Powerful, and aware of its limits</h3>
   <ul class="clean" style="--ac:var(--indigo)">
-    <li><b>Determinista</b>: misma tool + mismos argumentos → siempre la misma decisión. La toma el código, no el modelo.</li>
-    <li><b>Auditable</b>: cadena con hash encadenado, verificable (<code>audit.py verify</code>); cada decisión, por regla o humana, ligada al hash del payload.</li>
-    <li><b>Con límites de recurso y coste</b>: cuotas agregadas por ventana (cierran el troceo) y presupuestos en € que distinguen modelos locales (~gratis) de fundacionales (caros), tanto en el tablero como en cuotas (€/hora).</li>
-    <li><b>Fail-closed</b>: sin aprobación, no se ejecuta. El sistema no se relaja cuando algo falla.</li>
-    <li><b>Con un modelo de amenazas</b> que enumera por dónde podría colarse una acción y cómo cerrarlo — incluido lo que aún no cubre.</li>
+    <li><b>Deterministic</b>: same tool + same arguments → always the same decision. Made by the code, not the model.</li>
+    <li><b>Auditable</b>: a hash-chained trail, verifiable (<code>audit.py verify</code>); every decision, whether by rule or human, tied to the payload's hash.</li>
+    <li><b>With resource and cost limits</b>: aggregate windowed quotas (they close the slicing loophole) and € budgets that distinguish local models (~free) from foundational ones (expensive), both on the board and in quotas (€/hour).</li>
+    <li><b>Fail-closed</b>: without approval, nothing runs. The system doesn't relax when something fails.</li>
+    <li><b>With a threat model</b> that enumerates where an action could slip through and how to close it — including what it doesn't yet cover.</li>
   </ul>
-  <p style="margin-top:18px">La puerta gobierna las <b>acciones que pasan por la tool</b>, no lo que el modelo dice o razona.
-    Documentar el límite es parte de cerrarlo bien: evita la falsa sensación de seguridad.</p>
+  <p style="margin-top:18px">The gate governs the <b>actions that pass through the tool</b>, not what the model says or reasons.
+    Documenting the limit is part of closing it well: it avoids a false sense of security.</p>
 </div></section>
 
 <footer>
   <div class="wrap">
-    <div class="big">Lo tedioso lo hacen los agentes.<br>Lo irreversible pasa por <span class="a">tu puerta</span>.<br>Todo queda registrado.</div>
+    <div class="big">The tedious work is done by the agents.<br>The irreversible passes through <span class="a">your gate</span>.<br>Everything is logged.</div>
     <div class="cta-row" style="margin:0 0 18px">
-      <a class="cta primary" href="../board/agent-board.html">▶ Abrir el tablero (demo en vivo)</a>
+      <a class="cta primary" href="../board/agent-board.html">▶ Open the board (live demo)</a>
     </div>
-    agent-board · framework genérico de supervisión y gobernanza de agentes · MIT
+    agent-board · generic framework for agent supervision &amp; governance · MIT
   </div>
 </footer>
 

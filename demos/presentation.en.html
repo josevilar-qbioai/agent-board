@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Q · Agent Board — presentación</title>
+<title>Q · Agent Board — presentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -70,123 +70,123 @@
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="presentation.html" style="color:#33d1c9;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="presentation.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
+<a href="presentation.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="presentation.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
 </div>
   <div class="brand"><span class="sq"></span>Q · Agent Board</div>
   <div class="sig"><b>Jose Antonio Vilar</b> · <span class="org">QMetrika Labs</span></div>
   <div class="deck" id="deck">
 
     <section class="slide on"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>01 · qué es</div>
-      <h1>Supervisa y gobierna<br/>tus <span class="a">agentes</span></h1>
-      <p class="lead">Un <b>tablero Kanban en vivo</b> con <b>puerta de aprobación humana</b> sobre cualquier operación con efectos. Observabilidad y control, sin confiar en que el modelo se porte bien.</p>
-      <p class="hook">No es un agente: es la capa que observa y gobierna a los agentes mientras trabajan. Independiente del LLM y del dominio.</p>
+      <div class="eyebrow"><span class="dot"></span>01 · what it is</div>
+      <h1>Supervise and govern<br/>your <span class="a">agents</span></h1>
+      <p class="lead">A <b>live Kanban board</b> with a <b>human approval gate</b> over any operation with effects. Observability and control, without trusting the model to behave.</p>
+      <p class="hook">It's not an agent: it's the layer that watches and governs agents while they work. LLM-agnostic and domain-agnostic.</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>02 · el problema</div>
-      <h2>Lanzar muchos agentes es potente. Y opaco. Y peligroso.</h2>
-      <p class="lead" style="max-width:56ch">Los workflows dinámicos disparan decenas de agentes en paralelo. No ves qué tocan, y una acción irreversible —borrar, desplegar, rotar claves— puede tirar producción.</p>
-      <p class="hook">Pedirle al modelo en el prompt que "tenga cuidado" es una convención, no un control: puede saltársela, equivocarse o ser manipulado por inyección de prompt.</p>
+      <div class="eyebrow"><span class="dot"></span>02 · the problem</div>
+      <h2>Fleets of agents are powerful. And opaque. And dangerous.</h2>
+      <p class="lead" style="max-width:56ch">Dynamic workflows spawn dozens of agents in parallel. You can't see what they touch, and one irreversible action —delete, deploy, rotate keys— can take down production.</p>
+      <p class="hook">Asking the model in the prompt to "be careful" is a convention, not a control: it can skip it, get it wrong, or be manipulated by prompt injection.</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>03 · el enfoque</div>
-      <h2>Controla donde el agente <em>actúa</em>, no donde <em>piensa</em>.</h2>
-      <p class="lead" style="max-width:58ch">El control no va en el cerebro del agente (el LLM, imprevisible), sino en la <b>herramienta</b> por la que pasa toda acción con efectos. Si la puerta vive dentro de la tool, el efecto es inalcanzable sin cruzarla — da igual qué modelo la invoque.</p>
-      <p class="hook">Pon el control en el peaje de la única carretera que lleva a las operaciones peligrosas. Quien quiera actuar, cruza el peaje.</p>
+      <div class="eyebrow"><span class="dot"></span>03 · the approach</div>
+      <h2>Control where the agent <em>acts</em>, not where it <em>thinks</em>.</h2>
+      <p class="lead" style="max-width:58ch">Control doesn't live in the agent's brain (the LLM, unpredictable), but in the <b>tool</b> that every action with effects passes through. If the gate lives inside the tool, the effect is unreachable without crossing it — no matter which model invokes it.</p>
+      <p class="hook">Put the control at the toll on the only road to dangerous operations. Whoever wants to act, crosses the toll.</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>04 · los pilares</div>
-      <h2>Qué lo compone</h2>
+      <div class="eyebrow"><span class="dot"></span>04 · the pillars</div>
+      <h2>What makes it up</h2>
       <div class="grid g2">
-        <div class="card" style="--ac:var(--teal)"><h4>Tablero de agentes</h4><p>Cada agente es una tarjeta que avanza por columnas. Ves en vivo qué hace, su modelo, <b>tokens y coste €</b>.</p></div>
-        <div class="card" style="--ac:var(--gold)"><h4>Aprobación de doble vía</h4><p>Las operaciones con efectos se paran en <b>Needs Input</b> y esperan tu Aprobar/Denegar. Aprobar exige token de operador.</p></div>
-        <div class="card" style="--ac:var(--indigo)"><h4>Puerta determinista</h4><p>La decisión la toman reglas en código (<code>policy.json</code>): allow / ask / deny por tool. Reproducible y auditada.</p></div>
-        <div class="card" style="--ac:var(--green)"><h4>Multi-modelo por rol</h4><p>Un LLM distinto por rol; el verifier de otra familia mata el sesgo de autoaprobación.</p></div>
+        <div class="card" style="--ac:var(--teal)"><h4>Agent board</h4><p>Each agent is a card moving across columns. You see live what it's doing, its model, <b>tokens and cost €</b>.</p></div>
+        <div class="card" style="--ac:var(--gold)"><h4>Two-key approval</h4><p>Operations with effects stop at <b>Needs Input</b> and wait for your Approve/Deny. Approving requires an operator token.</p></div>
+        <div class="card" style="--ac:var(--indigo)"><h4>Deterministic gate</h4><p>The decision is made by rules in code (<code>policy.json</code>): allow / ask / deny per tool. Reproducible and audited.</p></div>
+        <div class="card" style="--ac:var(--green)"><h4>Multi-model by role</h4><p>A different LLM per role; the verifier from another family kills self-approval bias.</p></div>
       </div>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>05 · cómo fluye una decisión</div>
-      <h2>De la intención al efecto real</h2>
+      <div class="eyebrow"><span class="dot"></span>05 · how a decision flows</div>
+      <h2>From intent to real effect</h2>
       <div class="flow">
-        <div class="step"><div class="n">01</div><h5>RBAC</h5><p>¿Este rol puede intentarlo?</p></div><div class="arrow">→</div>
-        <div class="step"><div class="n">02</div><h5>Política</h5><p>allow · ask · deny (determinista).</p></div><div class="arrow">→</div>
-        <div class="step gate"><div class="n">03</div><h5>Tablero</h5><p>Solo lo <code>ask</code> espera tu visto bueno.</p></div><div class="arrow">→</div>
-        <div class="step"><div class="n">04</div><h5>Auditoría</h5><p>Cadena verificable con hash.</p></div>
+        <div class="step"><div class="n">01</div><h5>RBAC</h5><p>Can this role even attempt it?</p></div><div class="arrow">→</div>
+        <div class="step"><div class="n">02</div><h5>Policy</h5><p>allow · ask · deny (deterministic).</p></div><div class="arrow">→</div>
+        <div class="step gate"><div class="n">03</div><h5>Board</h5><p>Only <code>ask</code> waits for your sign-off.</p></div><div class="arrow">→</div>
+        <div class="step"><div class="n">04</div><h5>Audit</h5><p>Verifiable chain with hash.</p></div>
       </div>
-      <p class="hook" style="margin-top:1.6rem">Fail-closed: sin aprobación, no se ejecuta. La aprobación se liga al hash del payload (nada de replay).</p>
+      <p class="hook" style="margin-top:1.6rem">Fail-closed: without approval, nothing runs. The approval is bound to the payload hash (no replay).</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>06 · multi-proveedor</div>
-      <h2>Claude, Gemini, OpenAI y modelos locales</h2>
-      <p class="lead" style="max-width:56ch">El mismo tablero supervisa agentes de cualquier proveedor. Una capa <code>providers.py</code> despacha por el nombre del modelo y reporta <b>tokens y coste reales</b> por agente.</p>
+      <div class="eyebrow"><span class="dot"></span>06 · multi-provider</div>
+      <h2>Claude, Gemini, OpenAI and local models</h2>
+      <p class="lead" style="max-width:56ch">The same board supervises agents from any provider. A <code>providers.py</code> layer dispatches by model name and reports <b>real tokens and cost</b> per agent.</p>
       <div class="chips">
         <div class="chip">Claude <span>· Anthropic</span></div>
         <div class="chip">GPT-4o <span>· OpenAI</span></div>
         <div class="chip">Gemini <span>· Google</span></div>
-        <div class="chip">Local <span>· Ollama/vLLM ~gratis</span></div>
+        <div class="chip">Local <span>· Ollama/vLLM ~free</span></div>
       </div>
-      <p class="hook">No todos los tokens cuestan igual: presupuestos en € que distinguen local (~gratis) de fundacional (caro). Si un modelo caro se pasa, cae en "⚡ Sin presupuesto".</p>
+      <p class="hook">Not all tokens cost the same: budgets in € that distinguish local (~free) from foundational (expensive). If an expensive model overruns, it lands in "⚡ Out of budget".</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>07 · local vs fundacional</div>
-      <h2>Cada token en <span class="a">local</span> es capital que retienes</h2>
-      <p class="lead" style="max-width:58ch">Una métrica clave del capital de tokens: qué parte del trabajo corre en modelos <b>locales</b> (que posees, ~gratis) frente a <b>fundacionales</b> (API de pago). Cuanto más local, más autonomía y menos coste variable.</p>
+      <div class="eyebrow"><span class="dot"></span>07 · local vs foundational</div>
+      <h2>Every token run <span class="a">locally</span> is capital you keep</h2>
+      <p class="lead" style="max-width:58ch">A key token-capital metric: how much of the work runs on <b>local</b> models (that you own, ~free) versus <b>foundational</b> ones (paid API). The more local, the more autonomy and the less variable cost.</p>
       <div style="margin-top:1.6rem;max-width:720px">
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;margin-bottom:8px"><span style="color:var(--teal)">local <b style="color:var(--text)">72%</b></span><span style="color:var(--gold)">fundacional <b style="color:var(--text)">28%</b></span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;margin-bottom:8px"><span style="color:var(--teal)">local <b style="color:var(--text)">72%</b></span><span style="color:var(--gold)">foundational <b style="color:var(--text)">28%</b></span></div>
         <div style="height:18px;border-radius:9px;overflow:hidden;display:flex;border:1px solid var(--line)"><div style="width:72%;background:var(--teal)"></div><div style="flex:1;background:var(--gold)"></div></div>
       </div>
       <div class="grid g2" style="margin-top:1.4rem;max-width:720px">
-        <div class="card" style="--ac:var(--teal)"><h4>Autonomía creciente</h4><p>De 40% a 72% de trabajo en local en 14 semanas. Menos dependencia de proveedor.</p></div>
-        <div class="card" style="--ac:var(--gold)"><h4>Coste variable a la baja</h4><p>Cada punto que pasa a local es coste de API que dejas de pagar.</p></div>
+        <div class="card" style="--ac:var(--teal)"><h4>Growing autonomy</h4><p>From 40% to 72% of work running local in 14 weeks. Less provider dependence.</p></div>
+        <div class="card" style="--ac:var(--gold)"><h4>Variable cost trending down</h4><p>Every point that moves to local is API cost you stop paying.</p></div>
       </div>
-      <p class="hook">El foso no es solo el bucle: es que cada vez más inteligencia corre en modelos que posees. El capital de tokens sube; el coste marginal baja.</p>
+      <p class="hook">The moat isn't just the loop: it's that more and more intelligence runs on models you own. Token capital rises; marginal cost falls.</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>08 · endurecimiento (Fase 0)</div>
-      <h2>Gobernanza seria, cero dependencias</h2>
+      <div class="eyebrow"><span class="dot"></span>08 · hardening (Phase 0)</div>
+      <h2>Serious governance, zero dependencies</h2>
       <ul class="clean" style="--ac:var(--gold)">
-        <li><b>Binding de aprobación</b> al hash del payload — cierra replay y TOCTOU.</li>
-        <li><b>Cuotas agregadas</b> por ventana — cierran el troceo de umbrales, en conteo o en €.</li>
-        <li><b>Auditoría hash-chain</b> verificable (<code>audit.py verify</code>) — tamper-evident.</li>
-        <li><b>Resumen canónico</b> compuesto por el servidor — el payload no engaña al operador.</li>
-        <li><b>Lint en CI</b> — toda tool con efectos está decorada.</li>
+        <li><b>Approval binding</b> to the payload hash — closes replay and TOCTOU.</li>
+        <li><b>Aggregate quotas</b> per window — close threshold-chopping, by count or in €.</li>
+        <li><b>Verifiable hash-chain audit</b> (<code>audit.py verify</code>) — tamper-evident.</li>
+        <li><b>Canonical summary</b> composed by the server — the payload can't fool the operator.</li>
+        <li><b>CI lint</b> — every tool with effects is decorated.</li>
       </ul>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>09 · dos vistas</div>
-      <h2>Operación hoy, <span class="a">capital</span> con el tiempo</h2>
-      <p class="lead" style="max-width:58ch">La misma telemetría, dos lentes. El <b>tablero operativo</b> controla el bucle minuto a minuto. El <b>tablero de capital</b> lee ese poso —auditoría, coste, aprobaciones— como el activo que se acumula: juicio humano capturado, datos para evals, tu moat.</p>
-      <p class="hook">Concepto Capital de Tokens: el foso no es el modelo que alquilas, es el bucle cerrado que nadie más puede copiar. Cada aprobación es un label; cada auditoría, un dato de eval.</p>
+      <div class="eyebrow"><span class="dot"></span>09 · two views</div>
+      <h2>Operations today, <span class="a">capital</span> over time</h2>
+      <p class="lead" style="max-width:58ch">The same telemetry, two lenses. The <b>operational board</b> controls the loop minute by minute. The <b>capital board</b> reads that sediment —audit, cost, approvals— as the asset that accumulates: captured human judgment, data for evals, your moat.</p>
+      <p class="hook">Token Capital concept: the moat isn't the model you rent, it's the closed loop no one else can copy. Every approval is a label; every audit entry, an eval datapoint.</p>
     </div></section>
 
     <section class="slide"><div class="wrap">
-      <div class="eyebrow"><span class="dot"></span>10 · empezar</div>
-      <h2>Instala y supervisa en minutos</h2>
-      <p class="lead" style="max-width:54ch">Plugin de Claude Code (o cliente genérico para cualquier runtime). Python puro, sin dependencias. Arranca el broker, abre el tablero, y lo con efectos espera tu aprobación.</p>
+      <div class="eyebrow"><span class="dot"></span>10 · get started</div>
+      <h2>Install and supervise in minutes</h2>
+      <p class="lead" style="max-width:54ch">A Claude Code plugin (or a generic client for any runtime). Pure Python, no dependencies. Start the broker, open the board, and anything with effects waits for your approval.</p>
       <div class="chips">
         <div class="chip">plugin <span>· Claude Code</span></div>
-        <div class="chip">cliente <span>· LangGraph/CrewAI/propio</span></div>
-        <div class="chip">self-host <span>· 1 proceso</span></div>
+        <div class="chip">client <span>· LangGraph/CrewAI/your own</span></div>
+        <div class="chip">self-host <span>· 1 process</span></div>
       </div>
-      <div class="cta"><a href="board-demo.html">▶ Ver el demo del tablero</a></div>
+      <div class="cta"><a href="board-demo.en.html">▶ See the board demo</a></div>
     </div></section>
 
   </div>
-  <button class="arw prev" id="prev" aria-label="Anterior">‹</button>
-  <button class="arw next" id="next" aria-label="Siguiente">›</button>
+  <button class="arw prev" id="prev" aria-label="Previous">‹</button>
+  <button class="arw next" id="next" aria-label="Next">›</button>
   <div class="nav"><div class="dots" id="dots"></div><span class="counter" id="counter">01 / 10</span></div>
 <script>
   var S=[].slice.call(document.querySelectorAll('.slide')),T=S.length,i=0;
   var dots=document.getElementById('dots'),ctr=document.getElementById('counter'),pv=document.getElementById('prev'),nx=document.getElementById('next');
-  S.forEach(function(_,n){var b=document.createElement('button');b.className='dot-nav'+(n===0?' on':'');b.setAttribute('aria-label','Diapositiva '+(n+1));b.onclick=function(){go(n);};dots.appendChild(b);});
+  S.forEach(function(_,n){var b=document.createElement('button');b.className='dot-nav'+(n===0?' on':'');b.setAttribute('aria-label','Slide '+(n+1));b.onclick=function(){go(n);};dots.appendChild(b);});
   var D=[].slice.call(dots.children);
   function go(n){i=Math.max(0,Math.min(T-1,n));S.forEach(function(s,k){s.classList.toggle('on',k===i);});D.forEach(function(d,k){d.classList.toggle('on',k===i);});
     ctr.textContent=('0'+(i+1)).slice(-2)+' / '+('0'+T).slice(-2);pv.classList.toggle('hidden',i===0);nx.classList.toggle('hidden',i===T-1);}

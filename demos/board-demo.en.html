@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Q · Agent Board — demo en vivo</title>
+<title>Q · Agent Board — live demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -60,14 +60,14 @@
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="board-demo.html" style="color:#33d1c9;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="board-demo.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
+<a href="board-demo.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="board-demo.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
 </div>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><span class="dot"></span>Q · Agent Board<span class="pill">demo en vivo · sin backend</span><span class="pill" id="profpill"></span><span class="pill" id="swimbtn" style="cursor:pointer" title="Agrupar por unidad/departamento">▤ Carriles</span></div>
+    <div class="brand"><span class="dot"></span>Q · Agent Board<span class="pill">live demo · no backend</span><span class="pill" id="profpill"></span><span class="pill" id="swimbtn" style="cursor:pointer" title="Group by unit/department">▤ Swimlanes</span></div>
     <div class="sig"><b>Jose Antonio Vilar</b> · <span class="org">QMetrika Labs</span></div>
   </header>
-  <p class="sub">Cada tarjeta es un agente. Avanza por columnas mostrando su proveedor, tokens y coste. Las operaciones con efectos caen en <b>Needs Input</b> — pulsa Aprobar/Denegar. Los modelos fundacionales que superan el presupuesto caen en <b>⚡ Sin presupuesto</b>.</p>
+  <p class="sub">Each card is an agent. It advances through columns showing its provider, tokens and cost. Operations with effects land in <b>Needs Input</b> — press Approve/Deny. Foundational models that exceed the budget land in <b>⚡ Out of budget</b>.</p>
   <div class="summary" id="summary"></div>
   <div class="board" id="board"></div>
   <div class="legend">
@@ -75,13 +75,13 @@
     <span><i style="background:var(--gpt)"></i>gpt-4o</span>
     <span><i style="background:var(--opus)"></i>opus</span>
     <span><i style="background:var(--sonnet)"></i>sonnet</span>
-    <span><i style="background:var(--local)"></i>local (~gratis)</span>
+    <span><i style="background:var(--local)"></i>local (~free)</span>
   </div>
-  <p class="foot">Demo simulado (sin broker). El tablero real es <a href="../board/agent-board.html">board/agent-board.html</a> · vista de capital: <a href="../board/capital-board.html">capital-board.html</a></p>
+  <p class="foot">Simulated demo (no broker). The real board is <a href="../board/agent-board.html">board/agent-board.html</a> · capital view: <a href="../board/capital-board.html">capital-board.html</a></p>
 </div>
 <script>
 (function(){
-  var COLS=[{id:"queued",n:"Queued",c:"var(--queued)"},{id:"capped",n:"⚡ Sin presupuesto",c:"var(--capped)"},{id:"working",n:"Working",c:"var(--working)",wip:true},{id:"needs",n:"Needs Input",c:"var(--needs)"},{id:"review",n:"Review",c:"var(--review)"},{id:"done",n:"Done",c:"var(--done)"}];
+  var COLS=[{id:"queued",n:"Queued",c:"var(--queued)"},{id:"capped",n:"⚡ Out of budget",c:"var(--capped)"},{id:"working",n:"Working",c:"var(--working)",wip:true},{id:"needs",n:"Needs Input",c:"var(--needs)"},{id:"review",n:"Review",c:"var(--review)"},{id:"done",n:"Done",c:"var(--done)"}];
   var P={
     "gemini-2.0-flash":{v:"var(--gemini)",bg:"rgba(167,139,250,.14)",price:0.12,cls:"f"},
     "gpt-4o":{v:"var(--gpt)",bg:"rgba(25,195,125,.14)",price:5,cls:"f"},
@@ -90,19 +90,19 @@
     "mistral-local":{v:"var(--local)",bg:"rgba(154,165,177,.14)",price:0,cls:"l"}
   };
   var EMBEDDED={
-    default:{short:"Genérico",units:["Auditoría","Desarrollo","Docs","QA"],specialists:[
-      {id:"auditor",label:"auditor",color:"var(--local)",role:"read",unit:"Auditoría",jobs:["Auditar dependencias con CVEs","Inventariar feature flags","Escanear secretos hardcodeados"]},
-      {id:"explorer",label:"explorer",color:"var(--sonnet)",role:"read",unit:"Auditoría",jobs:["Triar y deduplicar issues","Mapear arquitectura y módulos"]},
-      {id:"implementer",label:"implementer",color:"var(--working)",role:"effect",unit:"Desarrollo",jobs:["Migrar IO síncrono a async","Rate limiting en endpoint público","Borrar ramas obsoletas (>90 días)","Eliminar recursos cloud huérfanos"]},
-      {id:"documenter",label:"documenter",color:"#6cc4ff",role:"write",unit:"Docs",jobs:["Documentar la migración","Actualizar el CHANGELOG"]},
+    default:{short:"Generic",units:["Audit","Development","Docs","QA"],specialists:[
+      {id:"auditor",label:"auditor",color:"var(--local)",role:"read",unit:"Audit",jobs:["Audit dependencies with CVEs","Inventory feature flags","Scan for hardcoded secrets"]},
+      {id:"explorer",label:"explorer",color:"var(--sonnet)",role:"read",unit:"Audit",jobs:["Triage and deduplicate issues","Map architecture and modules"]},
+      {id:"implementer",label:"implementer",color:"var(--working)",role:"effect",unit:"Development",jobs:["Migrate synchronous IO to async","Rate limiting on public endpoint","Delete stale branches (>90 days)","Remove orphaned cloud resources"]},
+      {id:"documenter",label:"documenter",color:"#6cc4ff",role:"write",unit:"Docs",jobs:["Document the migration","Update the CHANGELOG"]},
       {id:"verifier",label:"verifier",color:"var(--review)",role:"verify",unit:"QA"}
     ]},
-    "claude-science":{short:"Claude Science",units:["Genómica","Terapéutica","Publicación","QA"],specialists:[
-      {id:"genomica",label:"Analista de Genómica del Cáncer",color:"var(--opus)",role:"read",unit:"Genómica",model:"mistral-local",jobs:["Analizar mutaciones somáticas del panel","Cruzar con COSMIC y ClinVar","Priorizar genes driver"]},
-      {id:"variantes",label:"Analista de Variantes Genómicas",color:"var(--sonnet)",role:"read",unit:"Genómica",model:"gemini-2.0-flash",jobs:["Anotar variantes con VEP","Filtrar por frecuencia poblacional","Clasificar patogenicidad (ACMG)"]},
-      {id:"mrna",label:"Diseñador de mRNA",color:"var(--done)",role:"effect",unit:"Terapéutica",model:"gpt-4o",jobs:["Optimizar codones de la secuencia","Diseñar UTRs y estructura cap","Exportar construcción a síntesis"]},
-      {id:"biofisico",label:"Motor Biofísico",color:"var(--red)",role:"effect",unit:"Terapéutica",model:"opus",jobs:["Simular plegamiento (dinámica molecular)","Estimar energía de unión","Barrido de parámetros del modelo"]},
-      {id:"escritor",label:"Escritor Científico",color:"var(--review)",role:"write",unit:"Publicación",model:"sonnet",jobs:["Redactar la sección de métodos","Generar figuras y leyendas","Compilar el manuscrito"]},
+    "claude-science":{short:"Claude Science",units:["Genomics","Therapeutics","Publication","QA"],specialists:[
+      {id:"genomica",label:"Cancer Genomics Analyst",color:"var(--opus)",role:"read",unit:"Genomics",model:"mistral-local",jobs:["Analyze somatic mutations from the panel","Cross-reference with COSMIC and ClinVar","Prioritize driver genes"]},
+      {id:"variantes",label:"Genomic Variant Analyst",color:"var(--sonnet)",role:"read",unit:"Genomics",model:"gemini-2.0-flash",jobs:["Annotate variants with VEP","Filter by population frequency","Classify pathogenicity (ACMG)"]},
+      {id:"mrna",label:"mRNA Designer",color:"var(--done)",role:"effect",unit:"Therapeutics",model:"gpt-4o",jobs:["Optimize codons of the sequence","Design UTRs and cap structure","Export construct to synthesis"]},
+      {id:"biofisico",label:"Biophysics Engine",color:"var(--red)",role:"effect",unit:"Therapeutics",model:"opus",jobs:["Simulate folding (molecular dynamics)","Estimate binding energy","Sweep model parameters"]},
+      {id:"escritor",label:"Scientific Writer",color:"var(--review)",role:"write",unit:"Publication",model:"sonnet",jobs:["Draft the methods section","Generate figures and legends","Compile the manuscript"]},
       {id:"reviewer",label:"Reviewer",color:"var(--working)",role:"verify",unit:"QA",model:"sonnet"}
     ]}
   };
@@ -112,7 +112,7 @@
       if(c.profiles&&Object.keys(c.profiles).length){ Object.keys(c.profiles).forEach(function(pk){
         var emb=EMBEDDED[pk]||{},by={}; (emb.specialists||[]).forEach(function(s){by[s.id]=s;});
         var p=c.profiles[pk]; if(!p.short)p.short=p.label||pk;
-        (p.specialists||[]).forEach(function(s){ if(!s.jobs||!s.jobs.length)s.jobs=(by[s.id]&&by[s.id].jobs)||["Tarea de "+(s.label||s.id)]; });});
+        (p.specialists||[]).forEach(function(s){ if(!s.jobs||!s.jobs.length)s.jobs=(by[s.id]&&by[s.id].jobs)||["Task for "+(s.label||s.id)]; });});
         PROFILES=c.profiles; } } } }catch(e){}
   var _q=new URLSearchParams(location.search);
   var PKEY=_q.get("profile")||"default";
@@ -141,7 +141,7 @@
   }
   function spawnVerifier(parent){
     st.a.push({id:id++,order:order++,kind:VSPEC.id,label:VSPEC.label,color:VSPEC.color,role:"verify",model:pick(RMODELS.verify),
-      job:"Verificar: "+String(parent.job),col:"review",tokens:rnd(1000,3000),target:rnd(5000,12000),mut:false,gated:true,capped:false,verdict:null,parent:parent.id});
+      job:"Verify: "+String(parent.job),col:"review",tokens:rnd(1000,3000),target:rnd(5000,12000),mut:false,gated:true,capped:false,verdict:null,parent:parent.id});
   }
   function seed(){for(var i=0;i<6;i++)spawn(); st.a.slice(0,2).forEach(function(a){a.col="working";a.tokens=rnd(3000,12000);});}
   function tick(){
@@ -171,10 +171,10 @@
   window.__dec=function(cid,ok){var a=st.a.filter(function(x){return x.id===cid;})[0]; if(!a)return; if(ok){a.col="working";} else {a.col="done";a.verdict="fail";st.failed++;} render();};
   function cardHTML(a){
     var p=P[a.model]; var pct=Math.min(100,Math.round(a.tokens/a.target*100));
-    var cap=a.capped?'<div class="capbadge">⚡ sin presupuesto</div>':"";
+    var cap=a.capped?'<div class="capbadge">⚡ out of budget</div>':"";
     var v=a.verdict?('<span style="font-size:11px;color:'+(a.verdict==="ok"?"var(--done)":"var(--red)")+'">'+(a.verdict==="ok"?"✓ pass":"✗ fail")+'</span>'):"";
     var bar=(a.col==="working"||a.col==="review")?'<div class="bar"><i style="width:'+pct+'%;background:'+p.v+'"></i></div>':"";
-    var gate=a.col==="needs"?'<div class="gate"><button class="ok" onclick="__dec('+a.id+',true)">Aprobar</button><button class="no" onclick="__dec('+a.id+',false)">Denegar</button></div>':"";
+    var gate=a.col==="needs"?'<div class="gate"><button class="ok" onclick="__dec('+a.id+',true)">Approve</button><button class="no" onclick="__dec('+a.id+',false)">Deny</button></div>':"";
     return '<div class="card">'
       +'<div class="krow"><span style="color:'+(a.color||'var(--muted)')+';font-weight:600">'+(a.label||a.kind)+'</span>'+(a.unit?'<span style="font-family:var(--mono);font-size:9.5px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:0 5px;margin-left:6px">'+a.unit+'</span>':'')+v+'</div>'+cap
       +'<div style="font-size:12px;color:var(--text);line-height:1.3;margin:2px 0 5px">'+(a.job||'')+'</div>'
@@ -183,9 +183,9 @@
   }
   function render(){
     document.getElementById("summary").innerHTML=
-      '<span><b>'+wc()+'</b> trabajando</span><span><b>'+st.a.filter(function(a){return a.col==="capped";}).length+'</b> sin presupuesto</span>'
-      +'<span><b>'+fmtTok(st.tokens)+'</b> tok</span><span><b>'+fmtEur(st.a.reduce(function(s,a){return s+costOf(a);},0))+'</b> coste</span>'
-      +'<span><b>'+st.done+'</b> hechos / <b>'+st.failed+'</b> fallos</span>';
+      '<span><b>'+wc()+'</b> working</span><span><b>'+st.a.filter(function(a){return a.col==="capped";}).length+'</b> out of budget</span>'
+      +'<span><b>'+fmtTok(st.tokens)+'</b> tok</span><span><b>'+fmtEur(st.a.reduce(function(s,a){return s+costOf(a);},0))+'</b> cost</span>'
+      +'<span><b>'+st.done+'</b> done / <b>'+st.failed+'</b> failed</span>';
     var board=document.getElementById("board");
     if(swim && PROF.units && PROF.units.length){
       board.style.display="block";
@@ -197,7 +197,7 @@
           return '<div style="flex:1;min-width:0">'+(cs.length?cs.map(cardHTML).join(""):'<div class="empty">—</div>')+'</div>';}).join("");
         var active=ua.filter(function(a){return a.col!=="done";}).length;
         return '<div style="display:flex;gap:8px;align-items:stretch;margin-bottom:8px;background:rgba(255,255,255,.012);border:1px solid var(--line-soft);border-radius:12px;padding:8px">'
-          +'<div style="width:120px;flex:none;border-left:3px solid var(--working);padding-left:6px;display:flex;flex-direction:column;justify-content:center"><span style="font-size:12.5px;font-weight:600;color:var(--text)">'+u+'</span><span style="font-family:var(--mono);font-size:10px;color:var(--faint)">'+active+' activos</span></div>'
+          +'<div style="width:120px;flex:none;border-left:3px solid var(--working);padding-left:6px;display:flex;flex-direction:column;justify-content:center"><span style="font-size:12.5px;font-weight:600;color:var(--text)">'+u+'</span><span style="font-family:var(--mono);font-size:10px;color:var(--faint)">'+active+' active</span></div>'
           +'<div style="flex:1;display:flex;gap:6px;min-width:0">'+cols+'</div></div>';
       }).join("");
       board.innerHTML=hdr+lanes;
@@ -221,11 +221,11 @@
   }
   (function(){var el=document.getElementById("profpill");if(!el)return;
     var profs=Object.keys(PROFILES).map(function(k){return '<a href="?profile='+k+'" style="text-decoration:none;color:'+(k===PKEY?'var(--working)':'var(--muted)')+'">'+PROFILES[k].short+'</a>';}).join(' · ');
-    var units='';if(PROF.units&&PROF.units.length){units=' &nbsp;·&nbsp; unidad: <a href="?profile='+PKEY+'" style="text-decoration:none;color:'+(!UNIT?'var(--working)':'var(--muted)')+'">todas</a> '+PROF.units.map(function(u){return '<a href="?profile='+PKEY+'&unit='+encodeURIComponent(u)+'" style="text-decoration:none;color:'+(UNIT===u?'var(--working)':'var(--muted)')+'">'+u+'</a>';}).join(' ');}
-    el.innerHTML='perfil: '+profs+units;})();
+    var units='';if(PROF.units&&PROF.units.length){units=' &nbsp;·&nbsp; unit: <a href="?profile='+PKEY+'" style="text-decoration:none;color:'+(!UNIT?'var(--working)':'var(--muted)')+'">all</a> '+PROF.units.map(function(u){return '<a href="?profile='+PKEY+'&unit='+encodeURIComponent(u)+'" style="text-decoration:none;color:'+(UNIT===u?'var(--working)':'var(--muted)')+'">'+u+'</a>';}).join(' ');}
+    el.innerHTML='profile: '+profs+units;})();
   (function(){var b=document.getElementById("swimbtn"); if(!b)return;
     if(!(PROF.units&&PROF.units.length)){b.style.display="none";return;}
-    b.addEventListener("click",function(){swim=!swim;b.textContent=swim?"▥ Columnas":"▤ Carriles";render();});})();
+    b.addEventListener("click",function(){swim=!swim;b.textContent=swim?"▥ Columns":"▤ Swimlanes";render();});})();
   seed(); render(); setInterval(tick,1000);
 })();
 </script>

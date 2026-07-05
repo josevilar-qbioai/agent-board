@@ -28,3 +28,7 @@ mcp/gate-audit.log
 
 # config MCP real del usuario (usa mcp.example.json como plantilla)
 .mcp.json
+
+# Presentación: solo local, no se publica
+demos/presentation.html
+demos/presentation.en.html

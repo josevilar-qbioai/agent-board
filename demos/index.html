@@ -55,6 +55,11 @@
   .cta.ghost{background:rgba(255,255,255,.02);color:var(--muted)}
   .cta.ghost:hover{color:var(--text);border-color:var(--line)}
 
+  /* stats strip */
+  .stats{display:flex;justify-content:center;gap:8px 22px;flex-wrap:wrap;margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .stats span{display:inline-flex;align-items:center;gap:7px}
+  .stats span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:.75}
+
   .mini{display:flex;justify-content:center;gap:8px;margin-top:42px;flex-wrap:wrap}
   .mini .col{width:120px;background:rgba(255,255,255,.018);border:1px solid var(--line-soft);border-radius:10px;padding:8px;min-height:96px}
   .mini .ch{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);display:flex;align-items:center;gap:5px;margin-bottom:8px}
@@ -66,7 +71,7 @@
   .mini .c .m{font-family:var(--mono);font-size:8.5px;color:var(--faint);margin-top:3px}
   .mini .c.needs{border-color:var(--amber);animation:rise .5s ease forwards, glow 2.4s ease-in-out infinite 1s}
   .mini .c.held{opacity:.55;border-left-color:var(--faint);border-left-style:dashed}
-  .mini-cap{text-align:center;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px}
+  .mini-cap{text-align:center;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px;max-width:760px;margin-left:auto;margin-right:auto}
   .mini-cap b{color:var(--amber)}
   @keyframes rise{to{opacity:1}}
   @keyframes glow{50%{box-shadow:0 0 0 1px rgba(242,167,60,.5)}}
@@ -74,6 +79,17 @@
   /* reveal */
   .rev{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
   .rev.in{opacity:1;transform:none}
+
+  /* audiencia */
+  .who{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .who .w{background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px}
+  .who .w .t{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.03em;margin-bottom:9px;display:block}
+  .who .w h4{font-size:15.5px;margin:0 0 6px;font-weight:600}
+  .who .w p{font-size:13.5px;margin:0}
+
+  /* enlace de sección */
+  .more{display:inline-flex;align-items:center;gap:7px;margin-top:20px;font-family:var(--mono);font-size:13px;color:var(--teal);text-decoration:none;border-bottom:1px solid transparent;transition:.15s}
+  .more:hover{border-color:var(--teal)}
 
   /* demo / modes */
   .demo-box{background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:14px;padding:8px 4px;margin-top:8px}
@@ -126,7 +142,7 @@
   footer{padding:44px 0 60px;text-align:center;color:var(--faint);font-size:13px;font-family:var(--mono)}
   footer .big{font-family:var(--sans);font-size:22px;font-weight:600;color:var(--text);letter-spacing:-.01em;margin-bottom:18px;line-height:1.35}
   footer .big .a{color:var(--teal)}
-  @media(max-width:720px){.hero h1{font-size:38px}.grid{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg);padding:4px 0}h3{font-size:22px}.cta-row{flex-direction:column}.cta{justify-content:center}}
+  @media(max-width:720px){.hero h1{font-size:38px}.grid{grid-template-columns:1fr}.who{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg);padding:4px 0}h3{font-size:22px}.cta-row{flex-direction:column}.cta{justify-content:center}}
 </style>
 </head>
 <body>
@@ -138,12 +154,16 @@
   <div class="wrap">
     <div class="badge-top"><span class="dot"></span>supervisión y gobernanza de agentes · independiente del LLM</div>
     <h1>Q · Agent Board</h1>
-    <p class="sub">Un <b>tablero Kanban para supervisar agentes de IA en tiempo real</b> y mantener el control
-      de lo que tocan — sin confiar en que el modelo se porte bien.</p>
+    <p class="sub">El <b>tablero Kanban para supervisar y gobernar agentes de IA en tiempo real</b>. Ves qué hace cada
+      agente y las acciones irreversibles se detienen en tu puerta hasta que tú apruebas — sin depender de que el
+      modelo se porte bien.</p>
     <div class="cta-row">
       <a class="cta primary" href="board-demo.html">▶ Ver el demo del tablero</a>
-      <a class="cta ghost" href="como-funciona.html">Cómo funciona</a>
-      <a class="cta ghost" href="../board/capital-board.html">Capital</a>
+      <a class="cta ghost" href="#como">Cómo funciona</a>
+      <a class="cta ghost" href="../board/capital-board.html">◆ Capital</a>
+    </div>
+    <div class="stats">
+      <span>Cero dependencias</span><span>Python stdlib</span><span>Auditoría verificable</span><span>Open source · MIT</span>
     </div>
     <div class="mini" id="mini">
       <div class="col"><div class="ch"><i style="background:#d9772e"></i>⚡ Sin presup.</div>
@@ -162,14 +182,69 @@
   </div>
 </div>
 
+<section class="rev" id="que"><div class="wrap">
+  <h2>01 · qué es</h2>
+  <h3>Una capa de control entre tus agentes y lo que pueden tocar</h3>
+  <p class="lead">Q · Agent Board no orquesta agentes: los <b>observa y los gobierna</b>. Cada agente es una tarjeta en un
+    tablero Kanban; cada acción con efectos —escribir, desplegar, borrar, llamar a una API— cruza una puerta que
+    decide <b>allow · ask · deny</b> y, cuando toca, espera tu aprobación. Todo queda en una auditoría verificable.</p>
+  <div class="who">
+    <div class="w"><span class="t">para quién</span><h4>Equipos que lanzan flotas de agentes</h4><p>Workflows dinámicos con decenas de agentes en paralelo que necesitan visibilidad y frenos, no solo logs.</p></div>
+    <div class="w"><span class="t">para quién</span><h4>Plataformas con tools / MCP</h4><p>Cualquier stack donde los agentes actúan a través de herramientas: la puerta vive en la tool, da igual el LLM.</p></div>
+    <div class="w"><span class="t">para quién</span><h4>Quien necesita rastro y coste bajo control</h4><p>Auditoría tamper-evident y presupuestos en € que separan lo local (~gratis) de lo fundacional (caro).</p></div>
+  </div>
+</div></section>
+
+<section class="rev"><div class="wrap">
+  <h2>02 · el problema</h2>
+  <h3>Lanzar muchos agentes es potente. Y opaco. Y peligroso.</h3>
+  <p class="lead">Los <b>workflows dinámicos</b> disparan decenas de agentes en paralelo. Hacen mucho trabajo, pero no ves
+    qué tocan, y una acción irreversible —borrar datos, desplegar, rotar claves— puede tirar producción.</p>
+  <p>El reflejo habitual es pedirle al modelo, en el prompt, que "tenga cuidado" o "pida permiso antes de borrar".
+    Eso es una <b>convención</b>: el modelo puede saltársela, equivocarse o ser manipulado por inyección de prompt.
+    No es control.</p>
+</div></section>
+
+<section class="rev"><div class="wrap">
+  <h2>03 · el enfoque</h2>
+  <h3>Controla donde el agente <em>actúa</em>, no donde <em>piensa</em></h3>
+  <p>El control no se pone en el cerebro del agente (el LLM, infinito e imprevisible), sino en la <b>herramienta</b>
+    por la que pasa toda acción con efectos. Si la puerta vive dentro de la tool, el efecto es físicamente inalcanzable
+    sin cruzarla — da igual qué modelo la haya invocado.</p>
+  <div class="quote"><p>No intentes certificar a cada conductor. Pon un control en el peaje de la única carretera
+    que lleva a las operaciones peligrosas. Quien quiera actuar, cruza el peaje.</p></div>
+</div></section>
+
+<section class="rev" id="como"><div class="wrap">
+  <h2>04 · cómo funciona</h2>
+  <h3>De la intención del agente al efecto real</h3>
+  <p>Toda acción con efectos recorre cuatro pasos deterministas antes de tocar nada. Solo lo marcado <code>ask</code>
+    te interrumpe; el resto fluye o se bloquea sin molestarte.</p>
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h5>RBAC</h5><p>¿Este rol puede siquiera intentarlo?</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">02</div><h5>Política</h5><p>Reglas deterministas: allow · ask · deny.</p></div>
+    <div class="arrow">→</div>
+    <div class="step gate"><div class="n">03</div><h5>Tablero</h5><p>Solo lo marcado <code>ask</code> espera tu visto bueno.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">04</div><h5>Auditoría</h5><p>Cadena verificable: cada decisión queda registrada con su origen.</p></div>
+  </div>
+  <div class="verdict">
+    <span class="vtag a">allow → ejecuta</span>
+    <span class="vtag k">ask → espera al humano</span>
+    <span class="vtag d">deny → nunca</span>
+  </div>
+  <a class="more" href="como-funciona.html">Ver el recorrido de adopción paso a paso →</a>
+</div></section>
+
 <section class="rev" id="modos"><div class="wrap">
-  <h2>pruébalo</h2>
+  <h2>05 · pruébalo</h2>
   <h3>El mismo tablero, tres modos</h3>
   <p>Todo es HTML autónomo: el demo simulado se abre solo en el navegador, sin instalar nada.</p>
   <div class="demo-box">
     <table class="modes">
       <tr>
-        <td><a class="cta primary" href="../board/agent-board.html" style="font-size:12.5px;padding:7px 13px">▶ demo simulado</a></td>
+        <td><a class="cta primary" href="board-demo.html" style="font-size:12.5px;padding:7px 13px">▶ demo simulado</a></td>
         <td><b>Demo simulado.</b> Agentes ficticios que avanzan por las columnas. Sin backend — ideal para enseñarlo.</td>
       </tr>
       <tr>
@@ -193,28 +268,8 @@
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>el problema</h2>
-  <h3>Lanzar muchos agentes es potente. Y opaco. Y peligroso.</h3>
-  <p class="lead">Los <b>workflows dinámicos</b> disparan decenas de agentes en paralelo. Hacen mucho trabajo, pero no ves
-    qué tocan, y una acción irreversible —borrar datos, desplegar, rotar claves— puede tirar producción.</p>
-  <p>El reflejo habitual es pedirle al modelo, en el prompt, que “tenga cuidado” o “pida permiso antes de borrar”.
-    Eso es una <b>convención</b>: el modelo puede saltársela, equivocarse o ser manipulado por inyección de prompt.
-    No es control.</p>
-</div></section>
-
-<section class="rev"><div class="wrap">
-  <h2>el enfoque</h2>
-  <h3>Invierte la confianza: controla donde el agente <em>actúa</em>, no donde <em>piensa</em>.</h3>
-  <p>El control no se pone en el cerebro del agente (el LLM, infinito e imprevisible), sino en la <b>herramienta</b>
-    por la que pasa toda acción con efectos. Si la puerta vive dentro de la tool, el efecto es físicamente inalcanzable
-    sin cruzarla — da igual qué modelo la haya invocado.</p>
-  <div class="quote"><p>No intentes certificar a cada conductor. Pon un control en el peaje de la única carretera
-    que lleva a las operaciones peligrosas. Quien quiera actuar, cruza el peaje.</p></div>
-</div></section>
-
-<section class="rev"><div class="wrap">
-  <h2>los cuatro pilares</h2>
-  <h3>Qué lo compone</h3>
+  <h2>06 · qué lo compone</h2>
+  <h3>Los cuatro pilares</h3>
   <div class="grid">
     <div class="card" style="--ac:var(--teal)">
       <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="14" rx="1"/></svg></div>
@@ -240,27 +295,8 @@
 </div></section>
 
 <section class="rev"><div class="wrap">
-  <h2>cómo fluye una decisión</h2>
-  <h3>De la intención del agente al efecto real</h3>
-  <div class="flow">
-    <div class="step"><div class="n">01</div><h5>RBAC</h5><p>¿Este rol puede siquiera intentarlo?</p></div>
-    <div class="arrow">→</div>
-    <div class="step"><div class="n">02</div><h5>Política</h5><p>Reglas deterministas: allow · ask · deny.</p></div>
-    <div class="arrow">→</div>
-    <div class="step gate"><div class="n">03</div><h5>Tablero</h5><p>Solo lo marcado <code>ask</code> espera tu visto bueno.</p></div>
-    <div class="arrow">→</div>
-    <div class="step"><div class="n">04</div><h5>Auditoría</h5><p>Cadena verificable: cada decisión queda registrada con su origen.</p></div>
-  </div>
-  <div class="verdict">
-    <span class="vtag a">allow → ejecuta</span>
-    <span class="vtag k">ask → espera al humano</span>
-    <span class="vtag d">deny → nunca</span>
-  </div>
-</div></section>
-
-<section class="rev"><div class="wrap">
-  <h2>independiente del LLM</h2>
-  <h3>El control vive en la herramienta, así que da igual quién la llame</h3>
+  <h2>07 · por qué puedes fiarte</h2>
+  <h3>Independiente del LLM, y consciente de sus límites</h3>
   <p>Como la puerta está en la tool (vía MCP) y no en el cliente, el mismo control sirve para cualquier agente —
     los de hoy y los que salgan mañana. Cada uno se enchufa por su superficie:</p>
   <div class="chips">
@@ -270,20 +306,10 @@
     <div class="chip">Grok <span>· orquestador</span></div>
     <div class="chip">LLM locales <span>· orquestador</span></div>
   </div>
-  <ul class="clean" style="--ac:var(--teal)">
-    <li><b>Un servidor MCP = un dominio</b> de funcionalidad (notify, data, deploy…), con credenciales de mínimo privilegio.</li>
-    <li>La convención <code>mcp__servidor__tool</code> deja que una sola política razone por dominio con globs.</li>
-    <li>Gobierna incluso los MCP de terceros que no puedes modificar.</li>
-  </ul>
-</div></section>
-
-<section class="rev"><div class="wrap">
-  <h2>gobernanza honesta</h2>
-  <h3>Potente, y consciente de sus límites</h3>
   <ul class="clean" style="--ac:var(--indigo)">
     <li><b>Determinista</b>: misma tool + mismos argumentos → siempre la misma decisión. La toma el código, no el modelo.</li>
     <li><b>Auditable</b>: cadena con hash encadenado, verificable (<code>audit.py verify</code>); cada decisión, por regla o humana, ligada al hash del payload.</li>
-    <li><b>Con límites de recurso y coste</b>: cuotas agregadas por ventana (cierran el troceo) y presupuestos en € que distinguen modelos locales (~gratis) de fundacionales (caros), tanto en el tablero como en cuotas (€/hora).</li>
+    <li><b>Con límites de recurso y coste</b>: cuotas agregadas por ventana (cierran el troceo) y presupuestos en € que distinguen modelos locales (~gratis) de fundacionales (caros).</li>
     <li><b>Fail-closed</b>: sin aprobación, no se ejecuta. El sistema no se relaja cuando algo falla.</li>
     <li><b>Con un modelo de amenazas</b> que enumera por dónde podría colarse una acción y cómo cerrarlo — incluido lo que aún no cubre.</li>
   </ul>
@@ -295,7 +321,8 @@
   <div class="wrap">
     <div class="big">Lo tedioso lo hacen los agentes.<br>Lo irreversible pasa por <span class="a">tu puerta</span>.<br>Todo queda registrado.</div>
     <div class="cta-row" style="margin:0 0 18px">
-      <a class="cta primary" href="../board/agent-board.html">▶ Abrir el tablero (demo en vivo)</a>
+      <a class="cta primary" href="board-demo.html">▶ Ver el demo del tablero</a>
+      <a class="cta ghost" href="../board/capital-board.html">◆ Tablero de capital</a>
     </div>
     <b style="color:var(--text)">Jose Antonio Vilar</b> · <span style="color:var(--gold)">QMetrika Labs</span><br>
     agent-board · framework genérico de supervisión y gobernanza de agentes · MIT

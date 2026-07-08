@@ -169,9 +169,17 @@ try:
 except Exception:
     _audit_append = None
 
-def _audit(tool, role, decision, source, summary, payload_hash=None):
+# Guardar el payload completo en la auditoria (evals / juicio humano capturado). Por
+# defecto NO, por minimizacion de datos. Mismo flag que usa el broker.
+_AUDIT_FULL_PAYLOAD = os.environ.get("AGENT_BOARD_AUDIT_FULL_PAYLOAD", "").strip().lower() \
+    in ("1", "true", "yes", "on")
+
+
+def _audit(tool, role, decision, source, summary, payload_hash=None, payload=None):
     entry = {"tool": tool, "role": role, "decision": decision, "source": source,
              "summary": summary, "payload_hash": payload_hash}
+    if _AUDIT_FULL_PAYLOAD and payload is not None:
+        entry["payload"] = payload
     if _audit_append:
         _audit_append(entry, AUDIT_PATH)          # cadena tamper-evident
         return
@@ -211,7 +219,8 @@ def check(tool, payload, role=None, summary=None):
     summary = summary or f"{tool}: " + ", ".join(f"{k}={v}" for k, v in list(payload.items())[:3])
     ph = op_hash(tool, payload)                         # ancla la auditoria al contenido
     def aud(decision, source):                          # cada decision queda en la cadena
-        _audit(tool, role, decision, source, summary, payload_hash=ph)
+        _audit(tool, role, decision, source, summary, payload_hash=ph,
+               payload=(payload if _AUDIT_FULL_PAYLOAD else None))
     decision = evaluate(tool, payload, role)
 
     if decision == "deny":

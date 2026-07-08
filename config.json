@@ -2,40 +2,135 @@
   "project": "claude-science",
   "description": "Adapta este harness a tu proyecto editando este fichero.",
   "active_profile": "claude-science",
-  "wip_limit": { "agents": 5, "cost_eur": 2.5, "foundational_cost_eur": 1.5 },
-  "columns": ["queued", "capped", "working", "needs", "review", "done"],
-  "gated_tools": ["Write", "Edit", "Bash"],
+  "wip_limit": {
+    "agents": 5,
+    "cost_eur": 2.5,
+    "foundational_cost_eur": 1.5
+  },
+  "columns": [
+    "queued",
+    "capped",
+    "working",
+    "needs",
+    "review",
+    "done"
+  ],
+  "gated_tools": [
+    "Write",
+    "Edit",
+    "Bash"
+  ],
   "approval_routing": "board",
   "broker_url": "http://127.0.0.1:8787",
   "gate_timeout_seconds": 300,
   "board_state_path": "board/board-state.json",
-
   "profiles": {
     "default": {
       "label": "Genérico (dev)",
-      "units": ["Auditoría", "Desarrollo", "Docs", "QA"],
+      "units": [
+        "Auditoría",
+        "Desarrollo",
+        "Docs",
+        "QA"
+      ],
       "specialists": [
-        { "id": "auditor",     "label": "Auditor",     "color": "#f2a73c", "role": "read",   "unit": "Auditoría" },
-        { "id": "explorer",    "label": "Explorer",    "color": "#74a4f7", "role": "read",   "unit": "Auditoría" },
-        { "id": "implementer", "label": "Implementer", "color": "#33d1c9", "role": "effect", "unit": "Desarrollo" },
-        { "id": "documenter",  "label": "Documenter",  "color": "#6cc4ff", "role": "write",  "unit": "Docs" },
-        { "id": "verifier",    "label": "Verifier",    "color": "#9a8cf2", "role": "verify", "unit": "QA" }
+        {
+          "id": "auditor",
+          "label": "Auditor",
+          "color": "#f2a73c",
+          "role": "read",
+          "unit": "Auditoría"
+        },
+        {
+          "id": "explorer",
+          "label": "Explorer",
+          "color": "#74a4f7",
+          "role": "read",
+          "unit": "Auditoría"
+        },
+        {
+          "id": "implementer",
+          "label": "Implementer",
+          "color": "#33d1c9",
+          "role": "effect",
+          "unit": "Desarrollo"
+        },
+        {
+          "id": "documenter",
+          "label": "Documenter",
+          "color": "#6cc4ff",
+          "role": "write",
+          "unit": "Docs"
+        },
+        {
+          "id": "verifier",
+          "label": "Verifier",
+          "color": "#9a8cf2",
+          "role": "verify",
+          "unit": "QA"
+        }
       ]
     },
     "claude-science": {
       "label": "Claude Science",
-      "units": ["Genómica", "Terapéutica", "Publicación", "QA"],
+      "units": [
+        "Genómica",
+        "Terapéutica",
+        "Publicación",
+        "QA"
+      ],
       "specialists": [
-        { "id": "genomica",  "label": "Analista de Genómica del Cáncer", "color": "#e0b049", "role": "read",   "unit": "Genómica",     "model": "mistral-local" },
-        { "id": "variantes", "label": "Analista de Variantes Genómicas", "color": "#74a4f7", "role": "read",   "unit": "Genómica",     "model": "gemini-2.0-flash" },
-        { "id": "mrna",      "label": "Diseñador de mRNA",               "color": "#5cc97e", "role": "effect", "unit": "Terapéutica",  "model": "gpt-4o" },
-        { "id": "biofisico", "label": "Motor Biofísico",                 "color": "#f0596b", "role": "effect", "unit": "Terapéutica",  "model": "opus" },
-        { "id": "escritor",  "label": "Escritor Científico",             "color": "#9a8cf2", "role": "write",  "unit": "Publicación",  "model": "sonnet" },
-        { "id": "reviewer",  "label": "Reviewer",                        "color": "#33d1c9", "role": "verify", "unit": "QA",           "model": "sonnet" }
+        {
+          "id": "genomica",
+          "label": "Analista de Genómica del Cáncer",
+          "color": "#e0b049",
+          "role": "read",
+          "unit": "Genómica",
+          "model": "mistral-local"
+        },
+        {
+          "id": "variantes",
+          "label": "Analista de Variantes Genómicas",
+          "color": "#74a4f7",
+          "role": "read",
+          "unit": "Genómica",
+          "model": "gemini-2.0-flash"
+        },
+        {
+          "id": "mrna",
+          "label": "Diseñador de mRNA",
+          "color": "#5cc97e",
+          "role": "effect",
+          "unit": "Terapéutica",
+          "model": "gpt-4o"
+        },
+        {
+          "id": "biofisico",
+          "label": "Motor Biofísico",
+          "color": "#f0596b",
+          "role": "effect",
+          "unit": "Terapéutica",
+          "model": "opus"
+        },
+        {
+          "id": "escritor",
+          "label": "Escritor Científico",
+          "color": "#9a8cf2",
+          "role": "write",
+          "unit": "Publicación",
+          "model": "sonnet"
+        },
+        {
+          "id": "reviewer",
+          "label": "Reviewer",
+          "color": "#33d1c9",
+          "role": "verify",
+          "unit": "QA",
+          "model": "sonnet"
+        }
       ]
     }
   },
-
   "notes": [
     "profiles: fuente de verdad de los AGENTES CONCRETOS del proyecto. Cada especialista: id, label, color, role (read | effect | verify | write), unit (departamento) y model por defecto (opcional). role = comportamiento de flujo: 'read' analiza sin efectos; 'effect' opera con efectos -> puerta humana -> review; 'verify' verificador adversarial; 'write' escribe entregables.",
     "DISTRIBUCION POR UNIDADES/DEPARTAMENTOS: 'units' lista los departamentos. Cada departamento abre el tablero con su vista: board/agent-board.html?profile=claude-science&unit=Terapéutica (solo ve sus agentes). Sin ?unit ve todo el proyecto. Un proyecto = un profile; un departamento = un unit dentro del profile. Para proyectos muy distintos, crea otro profile.",
@@ -47,6 +142,7 @@
     "broker_url / gate_timeout_seconds: el hook exporta estos como AGENT_BOARD_BROKER y AGENT_BOARD_GATE_TIMEOUT.",
     "Para anadir un MCP propio, crea .mcp.json en la raiz del plugin y suma sus tools de escritura a gated_tools.",
     "quotas (ADR-0008): seccion opcional en mcp/policy.json. Limite agregado por ventana contra el troceo.",
-    "AGENT_BOARD_AGENT / AGENT_BOARD_WORKFLOW: identifican las dimensiones de cuota del proceso del agente (def vacio)."
+    "AGENT_BOARD_AGENT / AGENT_BOARD_WORKFLOW: identifican las dimensiones de cuota del proceso del agente (def vacio).",
+    "AUDITORIA: cada decision humana (Aprobar/Denegar) se registra en la cadena tamper-evident con {tool, decision, source=operator, summary, payload_hash, req_id, ts}. Para guardar tambien el PAYLOAD COMPLETO (dataset de evals / juicio capturado) arranca el broker con AGENT_BOARD_AUDIT_FULL_PAYLOAD=1. Por defecto NO se guarda (minimizacion de datos). El payload guardado re-hashea al payload_hash: contexto verificable."
   ]
 }

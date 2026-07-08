@@ -410,6 +410,28 @@ que el broker lo genere.
 Las tools de lectura nunca tocan la puerta. Solo las de `gated_tools`
 (= `AGENT_BOARD_GATED`, por defecto `Write,Edit,Bash`) abren tarjeta y esperan.
 
+### Registro de decisiones humanas (par contexto → decisión)
+
+Cada vez que un operador pulsa **Aprobar/Denegar**, el broker escribe una entrada en la
+cadena de auditoría tamper-evident (`mcp/audit.py verify`) con el par
+`{contexto, decisión_humana}`: `tool`, `decision` (`allow`/`deny`), `source="operator"`,
+`req_id`, timestamp, el `summary` legible que vio el operador y el `payload_hash` (sha256
+canónico que liga la decisión a la operación exacta). Por defecto **no** se guarda el
+payload crudo (minimización de datos).
+
+Para construir un dataset de evals / *juicio humano capturado* con el contexto íntegro,
+activa:
+
+```bash
+AGENT_BOARD_AUDIT_FULL_PAYLOAD=1 python3 hooks/broker.py
+```
+
+Con el flag, la entrada incluye además el campo `payload` completo. Sigue ligado por
+`payload_hash`, así que el payload guardado **re-hashea** a ese hash: puedes probar que
+el contexto registrado es exactamente el que se aprobó. Aplica igual a las decisiones del
+gate (`mcp/agentboard_gate.py`). Úsalo con cuidado: el payload puede contener datos
+sensibles y queda en el log.
+
 Otros modos del tablero:
 - `agent-board.html` (sin `?feed`) → demo simulada.
 - `agent-board.html?feed=board-state.json` → observabilidad offline (solo lectura;

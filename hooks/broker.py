@@ -55,6 +55,11 @@ except Exception:
 
 AUDIT_PATH = os.environ.get("AGENT_BOARD_AUDIT",
                             os.path.join(os.path.dirname(__file__), "..", "mcp", "gate-audit.log"))
+# Guardar el payload COMPLETO en la auditoria (ademas de summary + payload_hash). Sirve
+# para construir el dataset {contexto, decision_humana} (evals / juicio capturado). Por
+# defecto NO: minimizacion de datos, el payload puede contener contenido sensible.
+AUDIT_FULL_PAYLOAD = os.environ.get("AGENT_BOARD_AUDIT_FULL_PAYLOAD", "").strip().lower() \
+    in ("1", "true", "yes", "on")
 
 def audit_event(**entry):
     if _audit_mod:
@@ -225,7 +230,9 @@ def on_request(d):
     card["reqId"] = req_id; card["payloadHash"] = ph
     requests[req_id] = {"req_id": req_id, "sid": sid, "card_id": card["id"], "tool": tool,
                         "payload_hash": ph, "summary": safe, "decision": "pending",
-                        "created": time.time(), "decided_at": None, "used": False}
+                        "created": time.time(), "decided_at": None, "used": False,
+                        # payload completo retenido SOLO si el operador lo activo (evals)
+                        "payload": (payload if AUDIT_FULL_PAYLOAD else None)}
     mark_dirty()
     return {"req_id": req_id, "payload_hash": ph}
 
@@ -310,9 +317,14 @@ def on_decide(req_id, decision, payload_hash=None):
                 a["col"] = "done"; a["verdict"] = "fail"; a["last"] = "denegado por operador"
                 state["stats"]["failed"] += 1
             break
-    # auditoria tamper-evident de la decision del operador (ADR-0006)
+    # auditoria tamper-evident de la decision del operador (ADR-0006). Si el operador
+    # activo AGENT_BOARD_AUDIT_FULL_PAYLOAD, el payload completo queda ligado a la
+    # decision humana en la MISMA cadena (par {contexto, decision} para evals).
+    extra = {"payload": rec.get("payload")} \
+        if (AUDIT_FULL_PAYLOAD and rec.get("payload") is not None) else {}
     audit_event(tool=rec.get("tool"), role="operator", decision=decision, source="operator",
-                summary=rec.get("summary"), payload_hash=rec.get("payload_hash"), req_id=req_id)
+                summary=rec.get("summary"), payload_hash=rec.get("payload_hash"), req_id=req_id,
+                **extra)
     flush(force=True)  # las decisiones se persisten de inmediato
     return 200, {"ok": True}
 

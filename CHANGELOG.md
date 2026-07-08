@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.18.0 — auditoría del payload completo (juicio humano capturado)
+- Nueva opción `AGENT_BOARD_AUDIT_FULL_PAYLOAD=1`: además del `summary` y el
+  `payload_hash`, la auditoría guarda el **payload completo** ligado a cada decisión.
+  Pensado para construir el dataset `{contexto, decisión_humana}` (evals / juicio
+  capturado del Capital Board). Por defecto NO se guarda (minimización de datos: el
+  payload puede contener contenido sensible).
+- Aplica a las **decisiones humanas** del broker (Aprobar/Denegar en `/api/decide`, con
+  `source="operator"`) y a las decisiones del gate (`mcp/agentboard_gate.py`). El broker
+  retiene el payload de una petición `ask` solo si el flag está activo.
+- Integridad verificable: el payload guardado **re-hashea** al `payload_hash`, así que se
+  puede probar que el contexto registrado es exactamente el que se aprobó/denegó. La
+  cadena hash-chain sigue verificándose con `python3 mcp/audit.py verify`.
+- Documentado en README (sección "Registro de decisiones humanas") y en las notas de
+  `config.json`.
+
 ## 0.17.0 — config fácil (OSS)
 - Asistente `/setup` (comando): genera config.json + policy.json de forma guiada
   (proyecto, especialistas/unidades, tools con efectos, presupuestos), sin editar JSON.

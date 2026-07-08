@@ -1,7 +1,7 @@
 {
   "name": "agent-board",
   "description": "Harness reproducible de dynamic workflows con tablero Kanban de agentes en vivo y puerta de aprobacion humana sobre operaciones de escritura. Agentes de solo-lectura por defecto, auditoria de cada llamada a tool. Independiente del dominio: se adapta a cualquier proyecto via config.",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "author": {
     "name": "Jose Antonio Vilar",
     "email": "qmetrika@proton.me",

@@ -480,6 +480,12 @@ Cada unidad mantiene su autonomía y su prueba de integridad; la organización o
 vista agregada del juicio humano (el *moat* del Capital de Tokens) y un único dataset de
 evals de toda la flota.
 
+> El central es una **colección de cadenas por unidad** (re-verificables), no una cadena
+> global fusionada — así se preserva la autonomía y el encadenado de cada unidad. Un
+> **sello de integridad global** (árbol de Merkle sobre la raíz de cada unidad) queda
+> propuesto como opción futura en [ADR-0006](docs/adr/0006-auditoria-hash-chain.md), para
+> atestiguar la integridad de *toda la flota* cuando haga falta.
+
 Otros modos del tablero:
 - `agent-board.html` (sin `?feed`) → demo simulada.
 - `agent-board.html?feed=board-state.json` → observabilidad offline (solo lectura;

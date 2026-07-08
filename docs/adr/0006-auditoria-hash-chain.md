@@ -62,3 +62,43 @@ excepcional es el **más** auditado, no el menos.
   garantía a quien no tiene SIEM.
 - **Firmar cada línea sin encadenar**: detecta edición de una línea pero no borrado de
   líneas intermedias ni reordenado.
+
+## Federación y trabajo futuro
+
+**Federación (implementado, v0.20.0).** El tablero se adopta por **unidades pequeñas y
+autónomas**: cada una tiene su `policy.json`/`config.json` y su **propia cadena**. Para
+consolidar sin acoplar:
+- cada instalación se etiqueta con `AGENT_BOARD_DEPLOYMENT=<unidad>` (estampado en cada
+  entrada);
+- `scripts/forward_audit.py` reenvía la cadena de la unidad a un **central** (carpeta con
+  un fichero por unidad, `--to-dir`, o colector HTTP, `--to-url`);
+- `scripts/analyze_decisions.py <carpeta>` verifica **cada cadena por separado** y agrega
+  el conjunto por despliegue/unidad/agente/modelo/tool + export JSONL.
+
+Principio: **las cadenas NO se fusionan**. Concatenar entradas de unidades distintas
+rompería el encadenado `prev_hash`. El central es una *colección* de cadenas
+re-verificables, cada una con su prueba de integridad; así se preserva la autonomía de la
+unidad y su garantía local.
+
+**Opción futura — sello de integridad GLOBAL (Merkle sobre las unidades).** La federación
+actual prueba la integridad *por unidad*, pero no del *conjunto* (no detecta que falte una
+unidad entera, ni ancla el estado global en el tiempo). Extensión propuesta, sin romper el
+diseño:
+- Periódicamente, tomar el `entry_hash` final (la "raíz" actual) de la cadena de **cada**
+  unidad y construir un **árbol de Merkle** con esas hojas → una única `root` global.
+- Registrar cada `root` en un **libro de sellos** (append-only, él mismo encadenado) con
+  timestamp, el conjunto de unidades incluidas y sus alturas de cadena. Opcionalmente
+  firmar la `root` (clave del broker central, ADR-0010) o anclarla externamente (repo,
+  servicio de timestamping) para atestiguación en el tiempo.
+- Verificación en dos niveles: (1) cada unidad sigue verificando su cadena localmente;
+  (2) un `verify-federation` comprueba que las hojas del árbol coinciden con los
+  `entry_hash` finales presentes y que la secuencia de `root` no se ha truncado/reordenado
+  → detecta **omisión de una unidad** o **retroceso** del estado global.
+- Propiedades: no requiere fusionar cadenas ni un escritor compartido; cada unidad sigue
+  siendo autónoma; el sello es incremental y barato (una hoja por unidad por periodo);
+  degrada a "solo por-unidad" si no se despliega. Coste: un componente central de sellado
+  (cron/servicio) y la gestión de la clave de firma si se ancla criptográficamente.
+
+Estado: **propuesto** (no implementado). Se activaría cuando una organización necesite
+atestiguar la integridad *de toda la flota* (auditoría/compliance a nivel corporativo),
+no solo de cada unidad por separado.

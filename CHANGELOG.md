@@ -13,6 +13,9 @@
   el sello global Merkle como opción futura (ADR-0006).
 - Navegación coherente en los tableros: **Landing · Agent · Capital · Central**. Todo en
   ES y EN con conmutador. JS validado (node --check) en los cuatro.
+- Housekeeping: nuevo `docs/REPO_MAP.md` (mapa de todos los ficheros, núcleo vs. opcional);
+  `.gitignore` ampliado (`*.fwd-offset`, `blog-*.md`). Repo revisado: sin residuos
+  versionados; todo lo trackeado es código, tests, docs de diseño, demos o config.
 
 ## 0.20.0 — federación → central (adopción por unidades, evals de toda la flota)
 - **Etiqueta de tenant** `AGENT_BOARD_DEPLOYMENT=<unidad>`: se estampa en cada decisión

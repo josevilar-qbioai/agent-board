@@ -32,3 +32,9 @@ mcp/gate-audit.log
 # Presentación: solo local, no se publica
 demos/presentation.html
 demos/presentation.en.html
+
+# offset del reenviador de auditoría (estado local de forward_audit.py)
+*.fwd-offset
+
+# entregables sueltos (posts de blog, borradores) — no forman parte del proyecto
+blog-*.md

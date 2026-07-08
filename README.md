@@ -22,6 +22,9 @@ adaptas a tu proyecto editando `config.json`.
 **▶ Demos en vivo (GitHub Pages):** https://josevilar-qbioai.github.io/agent-board/ ·
 tablero, "cómo funciona" y el Tablero de Capital, sin instalar nada.
 
+**🗂️ ¿Qué hay en el repo?** Mapa de todos los ficheros y su propósito (núcleo vs. opcional)
+en [docs/REPO_MAP.md](docs/REPO_MAP.md).
+
 ## 🚀 Quickstart (2 minutos)
 
 Sin dependencias — solo Python 3.8+.

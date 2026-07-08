@@ -173,11 +173,15 @@ except Exception:
 # defecto NO, por minimizacion de datos. Mismo flag que usa el broker.
 _AUDIT_FULL_PAYLOAD = os.environ.get("AGENT_BOARD_AUDIT_FULL_PAYLOAD", "").strip().lower() \
     in ("1", "true", "yes", "on")
+# Tenant/unidad para federar hacia un log central (mismo flag que el broker).
+_DEPLOYMENT = (os.environ.get("AGENT_BOARD_DEPLOYMENT") or "").strip() or None
 
 
 def _audit(tool, role, decision, source, summary, payload_hash=None, payload=None):
     entry = {"tool": tool, "role": role, "decision": decision, "source": source,
              "summary": summary, "payload_hash": payload_hash}
+    if _DEPLOYMENT:
+        entry["deployment"] = _DEPLOYMENT
     if _AUDIT_FULL_PAYLOAD and payload is not None:
         entry["payload"] = payload
     if _audit_append:

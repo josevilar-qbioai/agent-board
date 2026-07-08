@@ -60,8 +60,13 @@ AUDIT_PATH = os.environ.get("AGENT_BOARD_AUDIT",
 # defecto NO: minimizacion de datos, el payload puede contener contenido sensible.
 AUDIT_FULL_PAYLOAD = os.environ.get("AGENT_BOARD_AUDIT_FULL_PAYLOAD", "").strip().lower() \
     in ("1", "true", "yes", "on")
+# Identificador de despliegue/tenant (unidad). Se estampa en cada entrada para poder
+# FEDERAR varias instalaciones hacia un log central sin ambiguedad de procedencia.
+DEPLOYMENT = (os.environ.get("AGENT_BOARD_DEPLOYMENT") or "").strip() or None
 
 def audit_event(**entry):
+    if DEPLOYMENT and "deployment" not in entry:
+        entry["deployment"] = DEPLOYMENT
     if _audit_mod:
         _audit_mod.append(entry, AUDIT_PATH)
 
@@ -168,11 +173,14 @@ def find(sid):
             return a
     return None
 
-def new_card(sid, job="", kind="implementer", col="working", model="opus", last="", mut=False, parent=None):
+def new_card(sid, job="", kind="implementer", col="working", model="opus", last="", mut=False, parent=None, unit=None, profile=None):
     a = {"sid": sid, "id": state["nextId"], "order": state["order"], "kind": kind,
          "col": col, "job": str(job)[:90], "model": model, "wt": "wt/" + str(sid)[:6],
          "tokens": 0, "target": 20000, "elapsed": 0, "mut": mut,
          "parentId": parent, "last": last, "verdict": None,
+         # unit/profile: dimensión de departamento para el análisis por unidad de las
+         # decisiones humanas (se propaga a la auditoría al decidir).
+         "unit": unit, "profile": profile,
          "reqId": None, "payloadHash": None, "note": "", "capped": False}
     state["nextId"] += 1; state["order"] += 1; state["stats"]["spawned"] += 1
     state["agents"].append(a)
@@ -185,7 +193,8 @@ def on_event(d):
         if not card:
             new_card(sid, job=d.get("prompt") or "sesion " + sid[:6],
                      kind=d.get("kind", "implementer"), model=d.get("model", "opus"),
-                     parent=d.get("parent_id"), last="sesion iniciada")
+                     parent=d.get("parent_id"), last="sesion iniciada",
+                     unit=d.get("unit"), profile=d.get("profile"))
     elif ev == "PreToolUse" and card:
         card["last"] = "tool: " + str(d.get("tool_name") or "tool")
         card["tokens"] += 600; state["stats"]["tokens"] += 600
@@ -225,6 +234,8 @@ def on_request(d):
     note = str(d.get("summary") or "")[:80]               # texto libre del agente: secundario
     req_id = secrets.token_urlsafe(12)        # no secuencial, no adivinable (ADR-0007)
     card = find(sid) or new_card(sid, job=safe)
+    if d.get("unit"): card["unit"] = d["unit"]           # dimensión de departamento
+    if d.get("profile"): card["profile"] = d["profile"]
     card["col"] = "needs"; card["mut"] = True
     card["last"] = safe; card["note"] = note
     card["reqId"] = req_id; card["payloadHash"] = ph
@@ -309,8 +320,10 @@ def on_decide(req_id, decision, payload_hash=None):
     if decision not in ("allow", "deny"):
         return 400, {"error": "decision invalida"}
     rec["decision"] = decision; rec["decided_at"] = time.time()
+    card = None
     for a in state["agents"]:
         if a["id"] == rec["card_id"]:
+            card = a
             if decision == "allow":
                 a["col"] = "working"; a["last"] = "aprobado en el tablero"; a["mut"] = False
             else:
@@ -320,11 +333,20 @@ def on_decide(req_id, decision, payload_hash=None):
     # auditoria tamper-evident de la decision del operador (ADR-0006). Si el operador
     # activo AGENT_BOARD_AUDIT_FULL_PAYLOAD, el payload completo queda ligado a la
     # decision humana en la MISMA cadena (par {contexto, decision} para evals).
+    # Ademas se enriquece con la dimension de UNIDAD/DEPARTAMENTO (+ agente, modelo,
+    # coste) para poder analizar el juicio humano de forma agregada por area.
+    meta = {}
+    if card:
+        for k in ("sid", "kind", "model", "unit", "profile"):
+            if card.get(k) is not None:
+                meta[k] = card.get(k)
+        if _cost and card.get("model") is not None:
+            meta["cost_eur"] = _cost.cost_eur(card.get("model"), card.get("tokens") or 0, _PRICES)
     extra = {"payload": rec.get("payload")} \
         if (AUDIT_FULL_PAYLOAD and rec.get("payload") is not None) else {}
     audit_event(tool=rec.get("tool"), role="operator", decision=decision, source="operator",
                 summary=rec.get("summary"), payload_hash=rec.get("payload_hash"), req_id=req_id,
-                **extra)
+                **meta, **extra)
     flush(force=True)  # las decisiones se persisten de inmediato
     return 200, {"ok": True}
 

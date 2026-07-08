@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.20.0 — federación → central (adopción por unidades, evals de toda la flota)
+- **Etiqueta de tenant** `AGENT_BOARD_DEPLOYMENT=<unidad>`: se estampa en cada decisión
+  auditada (broker y gate). Permite federar varias instalaciones autónomas sin ambigüedad
+  de procedencia. Cada unidad conserva su `policy.json`/`config.json`/cadena propios.
+- **Reenviador** `scripts/forward_audit.py`: sincroniza la cadena de una unidad a una
+  carpeta central (un fichero por unidad, **intacta y re-verificable** — no se fusionan
+  cadenas) con `--to-dir`, o la envía incrementalmente a un colector HTTP con `--to-url`.
+- **Analizador multi-log**: `scripts/analyze_decisions.py` acepta una carpeta o varios
+  logs, verifica CADA cadena por separado y agrega el conjunto por despliegue/tenant,
+  unidad, agente, modelo y tool; exporta el dataset `{contexto, decisión}` central en JSONL.
+- Verificado e2e (2 unidades → central → informe agregado + JSONL) con integridad por
+  cadena intacta. Los 5 tests del núcleo siguen pasando.
+
+## 0.19.0 — análisis de decisiones humanas por departamento (captura de conocimiento)
+- La auditoría de cada decisión humana se enriquece con la **dimensión de unidad/
+  departamento** (+ `kind` del agente, `model` y `cost_eur`). El agente aporta `unit`/
+  `profile` en `SessionStart` o en la petición; el broker los propaga a la tarjeta y a
+  la cadena. Así el juicio humano se analiza agregado por área, no solo global.
+- Nuevo `scripts/analyze_decisions.py`: verifica la cadena, agrega las decisiones humanas
+  por departamento / agente / modelo / tool (ratio allow/deny y €), y **exporta el dataset
+  `{contexto, decisión_humana}` en JSONL** (`--jsonl`) para evals / captura de conocimiento.
+  Con `AGENT_BOARD_AUDIT_FULL_PAYLOAD=1` cada línea incluye el contexto íntegro.
+- Verificado e2e (decisiones en varios departamentos → agregados + JSONL) y los 5 tests
+  del núcleo siguen pasando.
+
 ## 0.18.0 — auditoría del payload completo (juicio humano capturado)
 - Nueva opción `AGENT_BOARD_AUDIT_FULL_PAYLOAD=1`: además del `summary` y el
   `payload_hash`, la auditoría guarda el **payload completo** ligado a cada decisión.

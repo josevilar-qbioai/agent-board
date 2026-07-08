@@ -432,6 +432,54 @@ el contexto registrado es exactamente el que se aprobó. Aplica igual a las deci
 gate (`mcp/agentboard_gate.py`). Úsalo con cuidado: el payload puede contener datos
 sensibles y queda en el log.
 
+### Análisis global por departamento (captura de conocimiento)
+
+Como el tablero se reparte por unidades/departamentos, cada decisión humana se registra
+con su **dimensión de unidad** (además de `kind` del agente, `model` y `cost_eur`) cuando
+el agente la aporta — envía `unit`/`profile` en el evento `SessionStart` o en la petición.
+Así el juicio humano se puede analizar de forma agregada por área, no solo global.
+
+`scripts/analyze_decisions.py` lee la cadena (verificando su integridad), agrega las
+decisiones humanas por departamento / agente / modelo / tool, y exporta el dataset
+`{contexto, decisión_humana}` en JSONL para evals o captura de conocimiento:
+
+```bash
+python3 scripts/analyze_decisions.py --jsonl decisiones.jsonl
+#   decisiones humanas por DEPARTAMENTO/UNIDAD, AGENTE, MODELO, TOOL (ratio allow/deny, €)
+#   + una línea JSON por decisión: {context:{tool,summary,payload,unit,model,…}, human_decision}
+```
+
+Cada línea del JSONL une el **contexto** (tool, summary, payload si está activo, unidad,
+perfil, agente, modelo, coste, payload_hash) con la **decisión humana** (`allow`/`deny`).
+Es el dataset con el que entrenar/evaluar una política que imite el criterio del equipo.
+
+### Federación → central (varias unidades, un análisis)
+
+El tablero se adopta **por unidades pequeñas**: cada una arranca su propio broker con su
+`policy.json` (su lógica de negocio), su `config.json` (sus agentes/unidad) y su cadena de
+auditoría local. Para consolidar el conocimiento sin acoplar las unidades:
+
+1. **Etiqueta de tenant.** Arranca cada instalación con `AGENT_BOARD_DEPLOYMENT=<unidad>`;
+   ese identificador se estampa en cada decisión (procedencia sin ambigüedad).
+2. **Reenvío a central.** `scripts/forward_audit.py` copia la cadena de la unidad a una
+   carpeta central (una por unidad, **intacta y re-verificable** — las cadenas no se
+   fusionan) o la envía por HTTP a un colector:
+
+   ```bash
+   python3 scripts/forward_audit.py --to-dir /central/logs        # FS compartido / rsync
+   python3 scripts/forward_audit.py --to-url https://host/ingest  # colector HTTP (incremental)
+   ```
+3. **Análisis central.** Apunta el analizador a la carpeta: verifica **cada** cadena por
+   separado y agrega el conjunto por despliegue/tenant, unidad, agente, modelo y tool:
+
+   ```bash
+   python3 scripts/analyze_decisions.py /central/logs --jsonl org-decisiones.jsonl
+   ```
+
+Cada unidad mantiene su autonomía y su prueba de integridad; la organización obtiene la
+vista agregada del juicio humano (el *moat* del Capital de Tokens) y un único dataset de
+evals de toda la flota.
+
 Otros modos del tablero:
 - `agent-board.html` (sin `?feed`) → demo simulada.
 - `agent-board.html?feed=board-state.json` → observabilidad offline (solo lectura;

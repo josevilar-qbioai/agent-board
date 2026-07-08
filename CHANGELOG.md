@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.21.0 — Capital Board por unidad + Capital Central (refleja el pipeline de captura)
+- Capital Board (unidad) enriquecido: nuevo KPI **Cobertura de contexto** (% con payload
+  completo), panel **Criterio humano por departamento** (allow/deny por unidad), columna
+  **unidad** en la tabla de auditoría, y KPIs reencuadrados al pipeline real
+  ({contexto → decisión}, export JSONL). Subtítulo aclara "modo demo · listo para datos
+  reales vía analyze_decisions.py".
+- Nuevo **Capital Central** (`board/capital-central.html`): agrega la flota federada —
+  capital por unidad/tenant, decisiones de la flota, criterio humano por departamento
+  agregado, e **integridad de cadenas por unidad** (cada una verificable por separado).
+  Deja constancia de que el central es una colección de cadenas (no fusionadas) y enlaza
+  el sello global Merkle como opción futura (ADR-0006).
+- Navegación coherente en los tableros: **Landing · Agent · Capital · Central**. Todo en
+  ES y EN con conmutador. JS validado (node --check) en los cuatro.
+
 ## 0.20.0 — federación → central (adopción por unidades, evals de toda la flota)
 - **Etiqueta de tenant** `AGENT_BOARD_DEPLOYMENT=<unidad>`: se estampa en cada decisión
   auditada (broker y gate). Permite federar varias instalaciones autónomas sin ambigüedad

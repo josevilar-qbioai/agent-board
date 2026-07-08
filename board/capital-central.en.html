@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q · Capital Central — federated fleet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0d1014; --ink-2:#151a21; --ink-3:#1c2230; --line:rgba(236,231,220,.10); --line-2:rgba(236,231,220,.18);
+    --gold:#e3b15a; --teal:#4fc5c0; --indigo:#9a8cf2; --green:#5cc97e; --red:#f0596b; --amber:#e0902e;
+    --text:#ece7dc; --muted:#8b93a6; --faint:#566173;
+    --display:'Fraunces',Georgia,serif; --body:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(60vw 40vw at 88% -8%,rgba(154,140,242,.07),transparent 60%),radial-gradient(50vw 40vw at 4% 108%,rgba(79,197,192,.06),transparent 62%);
+    min-height:100vh;padding:18px clamp(14px,3vw,30px) 40px}
+  .wrap{max-width:1240px;margin:0 auto}
+  header.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:1.1rem}
+  .brand .sq{width:9px;height:9px;border-radius:3px;background:var(--indigo)}
+  .viewnav{display:inline-flex;gap:2px;margin-left:12px;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--ink-2)}
+  .vn{font-family:var(--mono);font-size:12px;text-decoration:none;color:var(--muted);padding:4px 12px;border-radius:999px}
+  .vn.on{background:color-mix(in srgb,var(--indigo) 18%,transparent);color:var(--indigo)} .vn:hover{color:var(--text)}
+  .sig{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right} .sig b{color:var(--text)} .sig .org{color:var(--gold)}
+  .sub{color:var(--muted);font-size:.86rem;margin:2px 0 16px;max-width:80ch}
+  .sub a{color:var(--teal);text-decoration:none}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+  .kpi .ksub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:.35rem;line-height:1.3}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:linear-gradient(180deg,var(--ink-2),rgba(21,26,37,.4));border:1px solid var(--line);border-radius:12px;padding:.85rem .9rem;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--ac,var(--teal))}
+  .kpi .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+  .kpi .val{font-family:var(--display);font-weight:500;font-size:1.7rem;line-height:1;color:var(--ac,var(--teal))}
+  .kpi .tr{font-family:var(--mono);font-size:10.5px;color:var(--teal);margin-top:.4rem}
+
+  .row{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:16px}
+  @media(max-width:860px){.row{grid-template-columns:1fr}}
+  .panel{background:linear-gradient(180deg,var(--ink-2),rgba(21,26,37,.35));border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;margin-bottom:16px}
+  .panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;display:flex;justify-content:space-between}
+  .panel h3 .hint{color:var(--faint);text-transform:none;letter-spacing:0}
+
+  .donut{display:flex;align-items:center;gap:16px}
+  .donut svg{flex:none}
+  .dlist{display:flex;flex-direction:column;gap:.55rem;font-size:.9rem}
+  .dlist .d{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .dlist .d i{width:9px;height:9px;border-radius:3px;flex:none} .dlist .d b{color:var(--text);margin-left:auto}
+
+  .legend{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:14px;margin-top:8px}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0}
+
+  /* bars by unit/department */
+  .bars .r{display:grid;grid-template-columns:150px 1fr 120px;align-items:center;gap:10px;margin-bottom:.65rem}
+  .bars .nm{font-family:var(--mono);font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px}
+  .bars .track{height:9px;background:var(--ink);border-radius:6px;overflow:hidden;display:flex}
+  .bars .track i{display:block;height:100%}
+  .bars .num{font-family:var(--mono);font-size:12px;text-align:right;color:var(--text)}
+  .bars .num small{display:block;font-size:10px;color:var(--faint)}
+  .ok{color:var(--green)} .ok::before{content:"✓ "}
+
+  table.audit{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.audit th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:400;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+  table.audit td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);color:var(--muted);white-space:nowrap}
+  table.audit td.u{color:var(--text);font-family:var(--mono);font-size:12px}
+  .hash{font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .foot{margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
+<a href="capital-central.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="capital-central.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
+</div>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="sq"></span>Q · Capital Central<span class="viewnav"><a class="vn" href="../demos/index.en.html">◆ Landing</a><a class="vn" href="agent-board.html">Agent</a><a class="vn" href="capital-board.en.html">Capital</a><a class="vn on">Central</a></span></div>
+    <div class="sig"><b>Jose Antonio Vilar</b> · <span class="org">QMetrika Labs</span></div>
+  </header>
+  <p class="sub"><b>Whole-fleet capital.</b> It aggregates the human judgment of every federated unit —each with its own audit chain, autonomous and verifiable— without merging them. It is the output of <span style="color:var(--teal)">analyze_decisions.py /central/logs</span> over the chains that each unit forwards with <span style="color:var(--teal)">forward_audit.py</span>. The <i>moat</i> is the sum of them all.<br><span style="color:var(--faint)">demo mode (simulated data) · ready to read the real central folder</span></p>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="row">
+    <div class="panel" style="margin-bottom:0">
+      <h3>Capital by unit / tenant <span class="hint">captured human decisions</span></h3>
+      <div class="bars" id="tenants"></div>
+      <div class="legend"><span><i style="background:var(--green)"></i>allow</span><span><i style="background:var(--red)"></i>deny</span><span><span class="ok"></span>chain verified</span></div>
+    </div>
+    <div class="panel" style="margin-bottom:0">
+      <h3>Fleet decisions <span class="hint">gate aggregate</span></h3>
+      <div class="donut">
+        <svg width="132" height="132" viewBox="0 0 132 132" id="donut"></svg>
+        <div class="dlist" id="dlist"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Human judgment by department <span class="hint">aggregated across the fleet</span></h3>
+    <div class="bars" id="depts"></div>
+    <div class="legend"><span><i style="background:var(--green)"></i>allow</span><span><i style="background:var(--red)"></i>deny</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>Per-unit chain integrity <span class="hint">each unit is verified separately</span></h3>
+    <div style="overflow-x:auto"><table class="audit" id="chains"></table></div>
+    <p class="foot">central = a collection of per-unit chains (not merged) · global fleet seal (Merkle): future option — see <span style="color:var(--teal)">ADR-0006</span></p>
+  </div>
+</div>
+<script>
+(function(){
+  function up(el){var t=+el.dataset.c,pre=el.dataset.pre||"",suf=el.dataset.suf||"",dec=+(el.dataset.dec||0),t0=performance.now();
+    (function s(n){var p=Math.min(1,(n-t0)/900),e=1-Math.pow(1-p,3),v=t*e;
+      el.textContent=pre+(dec>0?v.toFixed(dec):Math.round(v).toLocaleString('en-US'))+suf;if(p<1)requestAnimationFrame(s);})(performance.now());}
+
+  // federated units (one chain per unit, forwarded to /central/logs)
+  var UNITS=[
+    {n:"genomica-lab",   dec:1180, allow:78, cover:82},
+    {n:"terapeutica-lab",dec:940,  allow:64, cover:88},
+    {n:"publicacion-lab",dec:610,  allow:93, cover:71},
+    {n:"qa-lab",         dec:820,  allow:71, cover:69},
+    {n:"soporte-it",     dec:660,  allow:83, cover:77}
+  ];
+  var totalDec=UNITS.reduce(function(s,u){return s+u.dec;},0);
+  var avgCover=Math.round(UNITS.reduce(function(s,u){return s+u.cover;},0)/UNITS.length);
+
+  var KPI=[
+    {ac:"var(--indigo)",l:"Federated units",c:UNITS.length,sub:"autonomous + verifiable chains"},
+    {ac:"var(--gold)",l:"Human judgment (fleet)",c:totalDec,sub:"{context → decision} pairs",tr:"▲ +286 this week"},
+    {ac:"var(--teal)",l:"Eval dataset (fleet)",c:31240,sub:"aggregated JSONL",tr:"▲ +1.8k this week"},
+    {ac:"var(--gold)",l:"Context coverage",c:avgCover,suf:"%",sub:"avg. with full payload",tr:"▲ +7 pts / month"},
+    {ac:"var(--teal)",l:"Fleet cost 30d",c:1940,pre:"€",tr:"▼ −15% vs. prev. month"},
+    {ac:"var(--teal)",l:"Local autonomy (avg.)",c:66,suf:"%",tr:"▲ +5 pts / month"},
+    {ac:"var(--indigo)",l:"Chains verified",c:100,suf:"%",sub:UNITS.length+"/"+UNITS.length+" verify",tr:"✓ audit.py verify"},
+    {ac:"var(--teal)",l:"Moat (weeks)",c:14,tr:"▲ grows with the fleet"}
+  ];
+  var kw=document.getElementById('kpis');
+  KPI.forEach(function(k){var d=document.createElement('div');d.className='kpi';d.style.setProperty('--ac',k.ac);
+    d.innerHTML='<div class="lbl">'+k.l+'</div><div class="val" data-c="'+k.c+'" data-pre="'+(k.pre||"")+'" data-suf="'+(k.suf||"")+'" data-dec="'+(k.dec||0)+'">0</div>'+(k.sub?'<div class="ksub">'+k.sub+'</div>':'')+(k.tr?'<div class="tr">'+k.tr+'</div>':'');
+    kw.appendChild(d);up(d.querySelector('.val'));});
+
+  var mxD=Math.max.apply(null,UNITS.map(function(u){return u.dec;}));
+  document.getElementById('tenants').innerHTML=UNITS.map(function(u){
+    var aw=u.allow,w=Math.max(6,Math.round(u.dec/mxD*100));
+    return '<div class="r"><span class="nm"><span class="ok"></span>'+u.n+'</span>'
+      +'<span class="track" style="width:'+w+'%"><i style="width:'+aw+'%;background:var(--green)"></i><i style="width:'+(100-aw)+'%;background:var(--red)"></i></span>'
+      +'<span class="num">'+u.dec.toLocaleString('en-US')+'<small>'+aw+'% allow · '+u.cover+'% ctx</small></span></div>';
+  }).join("");
+
+  // fleet aggregate donut
+  var DEC=[{n:"allow",v:3210,c:"var(--green)"},{n:"ask",v:640,c:"var(--gold)"},{n:"deny",v:360,c:"var(--red)"}];
+  var tot=DEC.reduce(function(s,d){return s+d.v;},0),off=0,R=52,C=2*Math.PI*R;
+  var seg=DEC.map(function(d){var frac=d.v/tot,len=frac*C,s='<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="'+d.c+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 66 66)"/>';off+=len;return s;}).join("");
+  document.getElementById('donut').innerHTML=seg+'<text x="66" y="62" text-anchor="middle" style="font-family:var(--display);font-size:20px;fill:var(--text)">'+tot.toLocaleString('en-US')+'</text><text x="66" y="80" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--muted)">decisions</text>';
+  document.getElementById('dlist').innerHTML=DEC.map(function(d){return '<div class="d"><i style="background:'+d.c+'"></i>'+d.n+' <b>'+d.v.toLocaleString('en-US')+'</b></div>';}).join("");
+
+  // human judgment by department (aggregated across the fleet)
+  var DEPT=[{n:"Genomics",allow:512,deny:96},{n:"Therapeutics",allow:388,deny:141},
+            {n:"Publication",allow:264,deny:19},{n:"QA",allow:305,deny:88},{n:"IT Support",allow:210,deny:44}];
+  var mxT=Math.max.apply(null,DEPT.map(function(d){return d.allow+d.deny;}));
+  document.getElementById('depts').innerHTML=DEPT.map(function(d){
+    var tt=d.allow+d.deny,aw=Math.round(d.allow/tt*100),w=Math.max(6,Math.round(tt/mxT*100));
+    return '<div class="r"><span class="nm">'+d.n+'</span>'
+      +'<span class="track" style="width:'+w+'%"><i style="width:'+aw+'%;background:var(--green)"></i><i style="width:'+(100-aw)+'%;background:var(--red)"></i></span>'
+      +'<span class="num">'+tt+'<small>'+aw+'% allow · '+d.deny+' deny</small></span></div>';
+  }).join("");
+
+  // per-unit chain integrity
+  function hh(){var s="";for(var i=0;i<10;i++)s+="0123456789abcdef"[Math.floor(Math.random()*16)];return s;}
+  var now=new Date();
+  document.getElementById('chains').innerHTML='<tr><th>unit / tenant</th><th>entries</th><th>height</th><th>last verification</th><th>root (entry_hash)</th></tr>'+
+    UNITS.map(function(u,i){var d=new Date(now-i*3600*1000).toLocaleString('en-US',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      return '<tr><td class="u">'+u.n+'</td><td>'+u.dec.toLocaleString('en-US')+'</td><td>#'+u.dec+'</td><td><span class="ok">verified</span> · '+d+'</td><td class="hash">'+hh()+'…</td></tr>';}).join("");
+})();
+</script>
+</body>
+</html>

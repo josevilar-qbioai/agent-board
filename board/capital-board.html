@@ -72,6 +72,13 @@
   .tag.allow{color:var(--green);background:rgba(92,201,126,.12)} .tag.ask{color:var(--gold);background:rgba(227,177,90,.12)} .tag.deny{color:var(--red);background:rgba(240,89,107,.12)}
   .hash{font-family:var(--mono);font-size:11px;color:var(--faint)}
   .foot{margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--faint)}
+  /* criterio humano por departamento */
+  .depts .r{display:grid;grid-template-columns:130px 1fr 94px;align-items:center;gap:10px;margin-bottom:.6rem}
+  .depts .nm{font-family:var(--mono);font-size:12px;color:var(--text)}
+  .depts .track{height:9px;background:var(--ink);border-radius:6px;overflow:hidden;display:flex}
+  .depts .track i{display:block;height:100%}
+  .depts .num{font-family:var(--mono);font-size:12px;text-align:right;color:var(--text)}
+  .depts .num small{display:block;font-size:10px;color:var(--faint)}
 </style>
 </head>
 <body>
@@ -80,10 +87,10 @@
 </div>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><span class="sq"></span>Q · Capital Board<span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn" href="agent-board.html">Agent</a><a class="vn on">Capital</a></span></div>
+    <div class="brand"><span class="sq"></span>Q · Capital Board<span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn" href="agent-board.html">Agent</a><a class="vn on">Capital</a><a class="vn" href="capital-central.html">Central</a></span></div>
     <div class="sig"><b>Jose Antonio Vilar</b> · <span class="org">QMetrika Labs</span></div>
   </header>
-  <p class="sub">Vista de acumulación (Capital de Tokens). Lee el mismo sustrato del tablero operativo —auditoría, ledger de coste, aprobaciones— como capital que se acumula. · <span style="color:var(--faint)">datos simulados</span></p>
+  <p class="sub">Vista de acumulación de <b>una unidad</b> (Capital de Tokens): lee su auditoría, su ledger de coste y sus aprobaciones como capital que se acumula. Es el pipeline real de captura del juicio humano (el par <b>{contexto → decisión}</b>). · Unidad: <b>genomica-lab</b> · <a href="capital-central.html">ver el Capital central de la flota →</a><br><span style="color:var(--faint)">modo demo (datos simulados) · listo para leer datos reales vía <span style="color:var(--teal)">analyze_decisions.py</span></span></p>
 
   <div class="kpis" id="kpis"></div>
 
@@ -100,6 +107,12 @@
         <div class="dlist" id="dlist"></div>
       </div>
     </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:16px">
+    <h3>Criterio humano por departamento <span class="hint">decisiones allow/deny por unidad</span></h3>
+    <div class="depts" id="depts"></div>
+    <div class="legend"><span><i style="background:var(--green)"></i>allow</span><span><i style="background:var(--red)"></i>deny</span></div>
   </div>
 
   <div class="panel chart" style="margin-bottom:16px">
@@ -121,7 +134,7 @@
     <div style="overflow-x:auto"><table class="audit" id="audit"></table></div>
   </div>
 
-  <p class="foot">fuente · audit.py (hash-chain) + cost.py (ledger) + decisiones del broker · verifica con <span style="color:var(--teal)">python3 mcp/audit.py verify</span></p>
+  <p class="foot">fuente · audit.py (hash-chain) + cost.py (ledger) + decisiones del broker · verifica con <span style="color:var(--teal)">python3 mcp/audit.py verify</span> · dataset de evals: <span style="color:var(--teal)">python3 scripts/analyze_decisions.py --jsonl</span></p>
 </div>
 <script>
 (function(){
@@ -133,8 +146,9 @@
   var COST30=417, TASKS=268, CPT=COST30/TASKS;
   var KPI=[
     {ac:"var(--teal)",l:"Coste por tarea",c:CPT,pre:"€",dec:2,sub:"€"+COST30+" ÷ "+TASKS+" tareas (30d)",tr:"▼ −12% · organización > router"},
-    {ac:"var(--gold)",l:"Criterio humano",c:1284,tr:"▲ +73 esta semana"},
-    {ac:"var(--teal)",l:"Datos para evals",c:8942,tr:"▲ +512 esta semana"},
+    {ac:"var(--gold)",l:"Criterio humano",c:1284,sub:"pares {contexto → decisión}",tr:"▲ +73 esta semana"},
+    {ac:"var(--teal)",l:"Datos para evals",c:8942,sub:"export JSONL (analyze_decisions)",tr:"▲ +512 esta semana"},
+    {ac:"var(--gold)",l:"Cobertura de contexto",c:82,suf:"%",sub:"con payload completo",tr:"▲ +9 pts / mes"},
     {ac:"var(--teal)",l:"Autonomía local",c:68,suf:"%",tr:"▲ +6 pts / mes"},
     {ac:"var(--teal)",l:"Coste fund. 30d",c:COST30,pre:"€",tr:"▼ −18% vs. mes ant."},
     {ac:"var(--gold)",l:"Valor capturado",c:320,suf:" h",tr:"▲ +40 h / mes"},
@@ -166,6 +180,16 @@
   document.getElementById('donut').innerHTML=seg+'<text x="66" y="62" text-anchor="middle" style="font-family:var(--display);font-size:22px;fill:var(--text)">'+tot.toLocaleString('es-ES')+'</text><text x="66" y="80" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--muted)">decisiones</text>';
   document.getElementById('dlist').innerHTML=DEC.map(function(d){return '<div class="d"><i style="background:'+d.c+'"></i>'+d.n+' <b>'+d.v.toLocaleString('es-ES')+'</b></div>';}).join("");
 
+  // criterio humano por departamento (espeja analyze_decisions.py: allow/deny por unit)
+  var DEPT=[{n:"Genómica",allow:214,deny:38},{n:"Terapéutica",allow:156,deny:61},
+            {n:"Publicación",allow:98,deny:7},{n:"QA",allow:132,deny:22}];
+  document.getElementById('depts').innerHTML=DEPT.map(function(d){
+    var tot=d.allow+d.deny,aw=Math.round(d.allow/tot*100);
+    return '<div class="r"><span class="nm">'+d.n+'</span>'
+      +'<span class="track"><i style="width:'+aw+'%;background:var(--green)"></i><i style="width:'+(100-aw)+'%;background:var(--red)"></i></span>'
+      +'<span class="num">'+tot+'<small>'+aw+'% allow · '+d.deny+' deny</small></span></div>';
+  }).join("");
+
   var W=1180,H=200,pB=24,pT=6,weeks=14;
   var data=Array.from({length:weeks},function(_,i){return {g:Math.round(28+i*3.6+(i%3)*4),t:Math.round(90+i*30+(i%2)*20)};});
   var maxV=Math.max.apply(null,data.map(function(d){return d.g+d.t/10;})),bw=(W)/weeks,out="";
@@ -176,7 +200,7 @@
   out+='<line x1="0" y1="'+(H-pB)+'" x2="'+W+'" y2="'+(H-pB)+'" stroke="rgba(236,231,220,.12)"/>';
   document.getElementById('chart').innerHTML=out;
 
-  var TOOLS=[["mcp__db__delete_rows","deny","operator","opus","€0.60"],["Write","allow","policy","gpt-4o","€0.05"],["mcp__deploy__prod","ask","quota","sonnet","€0.09"],["disable_account","allow","human","opus","€0.22"],["mcp__db__delete_rows","allow","policy","mistral-local","€0.00"],["Bash","ask","policy","gpt-4o","€0.04"],["write_docs","allow","policy","sonnet","€0.03"],["rotate_keys","deny","operator","opus","€0.31"]];
+  var TOOLS=[["mcp__db__delete_rows","deny","operator","opus","€0.60","Genómica"],["Write","allow","policy","gpt-4o","€0.05","Genómica"],["mcp__deploy__prod","ask","quota","sonnet","€0.09","Terapéutica"],["disable_account","allow","human","opus","€0.22","Terapéutica"],["mcp__db__delete_rows","allow","policy","mistral-local","€0.00","Publicación"],["Bash","ask","policy","gpt-4o","€0.04","QA"],["write_docs","allow","policy","sonnet","€0.03","Publicación"],["rotate_keys","deny","operator","opus","€0.31","Genómica"]];
   function h(){var s="";for(var i=0;i<8;i++)s+="0123456789abcdef"[Math.floor(Math.random()*16)];return s;}
   var fmtM=function(n){return n>=1e6?(n/1e6).toFixed(1)+"M":(n/1e3).toFixed(0)+"k";};
   var TW=[],weeks=14;
@@ -198,9 +222,9 @@
   document.getElementById('tokcap').textContent='Semana 1: '+s1+'% local → semana '+weeks+': '+sN+'% local. Cada punto que pasa a local es coste de API que dejas de pagar y capital que retienes.';
 
   var t=Math.floor(Date.now()/1000);
-  document.getElementById('audit').innerHTML='<tr><th>hora</th><th>tool</th><th>decisión</th><th>origen</th><th>modelo</th><th>coste</th><th>hash</th></tr>'+
+  document.getElementById('audit').innerHTML='<tr><th>hora</th><th>tool</th><th>unidad</th><th>decisión</th><th>origen</th><th>modelo</th><th>coste</th><th>hash</th></tr>'+
     TOOLS.map(function(r,i){var ts=new Date((t-i*137)*1000).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-      return '<tr><td>'+ts+'</td><td class="tool">'+r[0]+'</td><td><span class="tag '+r[1]+'">'+r[1]+'</span></td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="hash">'+h()+'</td></tr>';}).join("");
+      return '<tr><td>'+ts+'</td><td class="tool">'+r[0]+'</td><td>'+r[5]+'</td><td><span class="tag '+r[1]+'">'+r[1]+'</span></td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="hash">'+h()+'</td></tr>';}).join("");
 })();
 </script>
 </body>

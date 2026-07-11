@@ -145,27 +145,49 @@ criterio del modelo. Fail-closed por defecto.
 
 ### Auditoría (`mcp/audit.py`)
 Cadena hash-encadenada append-only. Cada entrada liga con la anterior. Verificable
-con `python3 mcp/audit.py verify`. Las decisiones del operador incluyen unit/profile
-para análisis por departamento.
+con `python3 mcp/audit.py verify`. Cada decisión del operador registra el par
+`{contexto, decisión_humana}` enriquecido con `unit`/`profile`/`kind`/`model`/`cost_eur`
+(análisis por departamento) y `deployment` (tenant, para federar).
+- `AGENT_BOARD_AUDIT_FULL_PAYLOAD=1` → guarda además el **payload completo** (dataset de
+  evals). El payload re-hashea al `payload_hash`: contexto verificable. Por defecto NO
+  (minimización de datos).
+
+### Federación → central (`scripts/`)
+Cada unidad es autónoma (su `policy.json`/`config.json`/cadena). Para consolidar sin
+acoplar:
+- `AGENT_BOARD_DEPLOYMENT=<unidad>` etiqueta cada decisión.
+- `scripts/forward_audit.py` reenvía la cadena a un central (`--to-dir` carpeta / `--to-url`
+  HTTP), **sin fusionar** cadenas (cada una re-verificable por separado).
+- `scripts/analyze_decisions.py <carpeta>` agrega por despliegue/unidad/agente/modelo/tool
+  y exporta el dataset `{contexto, decisión}` en JSONL.
+- El **Capital Board** es por unidad (`board/capital-board.html`) y hay un **Capital Central**
+  (`board/capital-central.html`) que agrega la flota. Sello global Merkle: opción futura
+  (ADR-0006).
 
 ---
 
 ## Tareas pendientes / Roadmap
 
+### Hecho recientemente (ya no es roadmap)
+- Auditoría del payload completo (`AGENT_BOARD_AUDIT_FULL_PAYLOAD`) — v0.18.0
+- Análisis de decisiones humanas por departamento + export JSONL — v0.19.0
+- Federación → central: tenant tag + `forward_audit.py` + analizador multi-log — v0.20.0
+- Capital Board por unidad + Capital Central (flota federada), ES/EN — v0.21.0
+
 ### Corto plazo
 - Mejorar documentación de perfiles en `examples/profiles/`
 - Tests de integración para `/api/purge-stale`
-- Documentar flujo de federación con ejemplo real
+- Que los Capital Boards lean datos REALES (JSONL/analyze_decisions) en vez de simulados
 
 ### Medio plazo
 - WebSocket para el tablero (reemplazar polling HTTP)
-- Dashboard de análisis de decisiones humanas (visualización)
+- Colector HTTP de referencia para `forward_audit.py --to-url`
 - SDK para TypeScript/Node (además de Python)
 
 ### Largo plazo
+- Sello de integridad GLOBAL de la flota (árbol de Merkle sobre las unidades, ADR-0006)
 - Políticas aprendidas del dataset de decisiones humanas
 - Marketplace de plantillas de dominio
-- Integración con sistemas de gestión de incidentes
 
 ---
 

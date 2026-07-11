@@ -151,6 +151,7 @@
       <div class="ctl">⚡€ <input type="range" id="wipcostf" min="0.5" max="8" step="0.5" value="1.5"><span class="val" id="wipcostfv">€1.5</span></div>
       <button class="btn ghost" id="swimbtn" title="Agrupar por unidad/departamento">▤ Carriles</button>
       <button class="btn ghost" id="pause">⏸ Pausar</button>
+      <button class="btn ghost" id="purge" title="Purgar tarjetas inactivas en Working">🧹 Purge</button>
       <button class="btn ghost" id="reset">↺ Reset</button>
     </div>
     <div class="sig" style="margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;white-space:nowrap"><b style="color:var(--text)">Jose Antonio Vilar</b> · <span style="color:#e0b049">QMetrika Labs</span></div>
@@ -558,6 +559,11 @@
   wipcostf.addEventListener("input",()=>{ cfg.wipCostFound=+wipcostf.value; document.getElementById("wipcostfv").textContent="€"+cfg.wipCostFound; render(); save(); });
   document.getElementById("pause").addEventListener("click",e=>{ paused=!paused; e.target.textContent=paused?"▶ Reanudar":"⏸ Pausar"; if(paused)stop();else start(); });
   document.getElementById("reset").addEventListener("click",async()=>{ stop(); await wipe(); state=freshState(); cfg=freshCfg(); simClock=0; syncControls(); seed(); render(); start(); });
+  document.getElementById("purge").addEventListener("click",async()=>{
+    if(!BROKER||!OP_TOKEN){ alert("Purge solo funciona en modo live con token de operador"); return; }
+    const r=await fetch("/api/purge-stale",{method:"POST",headers:{"Content-Type":"application/json","X-Operator-Token":OP_TOKEN},body:JSON.stringify({max_age_s:60})});
+    const d=await r.json(); if(d.count>0){ alert("Purgadas "+d.count+" tarjetas: "+d.purged.join(", ")); if(await pollLive()) render(); } else { alert("No hay tarjetas inactivas que purgar"); }
+  });
   (function(){ var sb=document.getElementById("swimbtn");
     if(!(PROF.units&&PROF.units.length)){ sb.style.display="none"; return; }
     sb.addEventListener("click",function(e){ swim=!swim; e.target.textContent=swim?"▥ Columnas":"▤ Carriles"; render(); });

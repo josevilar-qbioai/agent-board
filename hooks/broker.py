@@ -181,7 +181,8 @@ def new_card(sid, job="", kind="implementer", col="working", model="opus", last=
          # unit/profile: dimensión de departamento para el análisis por unidad de las
          # decisiones humanas (se propaga a la auditoría al decidir).
          "unit": unit, "profile": profile,
-         "reqId": None, "payloadHash": None, "note": "", "capped": False}
+         "reqId": None, "payloadHash": None, "note": "", "capped": False,
+         "created_at": time.time()}
     state["nextId"] += 1; state["order"] += 1; state["stats"]["spawned"] += 1
     state["agents"].append(a)
     return a
@@ -198,6 +199,7 @@ def on_event(d):
     elif ev == "PreToolUse" and card:
         card["last"] = "tool: " + str(d.get("tool_name") or "tool")
         card["tokens"] += 600; state["stats"]["tokens"] += 600
+        card["last_activity"] = time.time()
     elif ev == "Usage" and card:
         # uso REAL reportado por el orquestador (cualquier proveedor): tokens y modelo.
         # El tablero calcula el coste € a partir de tokens+modelo (mcp/models.json).
@@ -205,6 +207,7 @@ def on_event(d):
         card["tokens"] += tk; state["stats"]["tokens"] += tk
         if d.get("model"): card["model"] = d["model"]
         if d.get("action"): card["last"] = str(d["action"])[:90]
+        card["last_activity"] = time.time()
     elif ev == "Stop" and card and card["col"] != "needs":
         card["col"] = "done"; card["verdict"] = "ok"; card["last"] = "completado"
         state["stats"]["done"] += 1
@@ -304,6 +307,40 @@ def decision_status(req_id):
         rec["used"] = True; mark_dirty()      # one-time: el allow se consume al leerse
     return rec["decision"]
 
+def on_purge_stale(max_age_s=300):
+    """Elimina tarjetas en 'working' sin actividad en los últimos max_age_s segundos.
+    Las mueve a 'done' con verdict='stale'. Devuelve la lista de sids purgados.
+    Llamar DENTRO del lock.
+
+    Heurística: usa last_activity (si existe) > created_at > purga incondicional.
+    Nunca purga tarjetas con un gate pendiente (en 'needs' o con request pending)."""
+    now = time.time()
+    purged = []
+    for card in state["agents"]:
+        if card["col"] != "working":
+            continue
+        sid = card.get("sid", "")
+        # No purgar si hay un gate pendiente asociado
+        has_pending = any(r["sid"] == sid and r["decision"] == "pending"
+                          for r in requests.values())
+        if has_pending:
+            continue
+        # Determinar el último timestamp de actividad
+        last_ts = card.get("last_activity") or card.get("created_at") or 0
+        if last_ts and (now - last_ts) < max_age_s:
+            continue  # todavía activa
+        # Sin timestamp → tarjeta legacy sin marcas, purgar
+        card["col"] = "done"
+        card["verdict"] = "stale"
+        card["last"] = f"purgado (inactivo >{max_age_s}s)"
+        state["stats"]["done"] += 1
+        purged.append(sid)
+    if purged:
+        mark_dirty()
+        flush(force=True)
+    return purged
+
+
 def on_decide(req_id, decision, payload_hash=None):
     """Aplica una decision del operador, validando el binding (ADR-0007).
     Devuelve (codigo_http, cuerpo)."""
@@ -386,7 +423,7 @@ class H(BaseHTTPRequestHandler):
         except Exception: d = {}
         u = urlparse(self.path)
         # canal de operador: aprobar/resetear exige token (el agente no lo tiene)
-        if u.path in ("/api/decide", "/api/reset"):
+        if u.path in ("/api/decide", "/api/reset", "/api/purge-stale"):
             if self.headers.get("X-Operator-Token") != TOKEN:
                 self._send(403, {"error": "operator token required"}); return
         with lock:
@@ -402,6 +439,10 @@ class H(BaseHTTPRequestHandler):
                 if _quota: ledger = _quota.QuotaLedger()
                 flush(force=True)
                 self._send(200, {"ok": True}); return
+            if u.path == "/api/purge-stale":
+                max_age = int(d.get("max_age_s", 300))
+                purged = on_purge_stale(max_age)
+                self._send(200, {"ok": True, "purged": purged, "count": len(purged)}); return
         self._send(404, {"error": "not found"})
 
 if __name__ == "__main__":

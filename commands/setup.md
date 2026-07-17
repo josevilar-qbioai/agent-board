@@ -11,7 +11,7 @@ Sigue estos pasos:
 ## 1. Punto de partida
 Pregunta qué plantilla se acerca más a su caso y ofrécele las de `examples/profiles/`:
 - `dev` (desarrollo de software), `legal`, `finanzas`, `soporte-it`
-- `claude-science` (genómica, ya en config.json) o **empezar de cero**
+- `biocomputacion` (genómica, ya en config.json) o **empezar de cero**
 
 Lee la plantilla elegida de `examples/profiles/<nombre>.json` como base.
 

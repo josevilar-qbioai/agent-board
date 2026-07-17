@@ -10,7 +10,7 @@ Perfiles de proyecto listos para copiar. Cada `.json` es el valor que va bajo
 | `finanzas.json` | Finanzas | analista, riesgo, conciliaciones, informes, auditor |
 | `soporte-it.json` | Soporte IT | clasificador, diagnóstico, runbooks, KB, revisor de cierre |
 
-Además, `config.json` ya trae `default` y `claude-science` (genómica) de ejemplo.
+Además, `config.json` ya trae `default` y `biocomputacion` (genómica) de ejemplo.
 
 ## Cómo usarlo
 

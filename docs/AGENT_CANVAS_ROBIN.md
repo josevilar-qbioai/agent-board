@@ -1,6 +1,6 @@
 # Agent Canvas — Agent-Board × Robin Benchmark
 
-**Proyecto:** Q · Agent Board (perfil `claude-science`)
+**Proyecto:** Q · Agent Board (perfil `biocomputacion`)
 **Fecha:** 2026-07-10
 **Autor:** Jose Antonio Vilar — QMetrika Labs
 **Benchmark:** Robin (Nature 655, 496–505, julio 2026, doi:10.1038/s41586-026-10652-y)
@@ -11,14 +11,14 @@
 ## Contexto
 
 Este documento aplica el framework Agent Canvas a cada agente del perfil
-`claude-science` del Agent-Board, usando Robin como benchmark arquitectónico.
+`biocomputacion` del Agent-Board, usando Robin como benchmark arquitectónico.
 Robin es un sistema multi-agente publicado en Nature (julio 2026) que automatiza
 descubrimiento científico — propuso ripasudil como candidato terapéutico para
 degeneración macular seca (dAMD) y lo validó experimentalmente.
 
 ### Mapeo Robin → Agent-Board
 
-| Robin | Función | Agent-Board (claude-science) | Función |
+| Robin | Función | Agent-Board (biocomputacion) | Función |
 |-------|---------|------------------------------|---------|
 | **Crow** | Revisión de literatura concisa | **Analista de Genómica del Cáncer** + **Analista de Variantes Genómicas** | Curación de datos, inventario |
 | **Falcon** | Evaluación profunda de candidatos | **Reviewer** | Verificación adversarial |
@@ -433,7 +433,7 @@ las métricas de ablación propuestas son:
 
 1. **Formalizar prompts de rol** — Los archivos `agents/*.md` actuales son
    genéricos (auditor, implementer, verifier, documenter). Crear versiones
-   específicas para el perfil `claude-science` con el contexto biofísico,
+   específicas para el perfil `biocomputacion` con el contexto biofísico,
    los recursos concretos (energy.py, model.py) y las métricas de ablación.
 
 2. **Implementar test de ablación** — Para cada agente, crear un test que

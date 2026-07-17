@@ -1,7 +1,7 @@
 {
-  "project": "claude-science",
+  "project": "biocomputacion",
   "description": "Adapta este harness a tu proyecto editando este fichero.",
-  "active_profile": "claude-science",
+  "active_profile": "biocomputacion",
   "wip_limit": {
     "agents": 5,
     "cost_eur": 2.5,
@@ -71,8 +71,8 @@
         }
       ]
     },
-    "claude-science": {
-      "label": "Claude Science",
+    "biocomputacion": {
+      "label": "Biocomputación",
       "units": [
         "Genómica",
         "Terapéutica",
@@ -133,7 +133,7 @@
   },
   "notes": [
     "profiles: fuente de verdad de los AGENTES CONCRETOS del proyecto. Cada especialista: id, label, color, role (read | effect | verify | write), unit (departamento) y model por defecto (opcional). role = comportamiento de flujo: 'read' analiza sin efectos; 'effect' opera con efectos -> puerta humana -> review; 'verify' verificador adversarial; 'write' escribe entregables.",
-    "DISTRIBUCION POR UNIDADES/DEPARTAMENTOS: 'units' lista los departamentos. Cada departamento abre el tablero con su vista: board/agent-board.html?profile=claude-science&unit=Terapéutica (solo ve sus agentes). Sin ?unit ve todo el proyecto. Un proyecto = un profile; un departamento = un unit dentro del profile. Para proyectos muy distintos, crea otro profile.",
+    "DISTRIBUCION POR UNIDADES/DEPARTAMENTOS: 'units' lista los departamentos. Cada departamento abre el tablero con su vista: board/agent-board.html?profile=biocomputacion&unit=Terapéutica (solo ve sus agentes). Sin ?unit ve todo el proyecto. Un proyecto = un profile; un departamento = un unit dentro del profile. Para proyectos muy distintos, crea otro profile.",
     "active_profile: el profile por defecto del proyecto. En el tablero HTML se selecciona con ?profile=<nombre>; en modo en vivo, tu orquestador pasa el 'kind' (id del especialista) en board.start(kind=..., model=...) y el profile aporta color/label/unit.",
     "wip_limit: WIP multidimensional del tablero, medido en COSTE. { agents, cost_eur, foundational_cost_eur }: la promocion a Working exige pasar TODOS (el mas restrictivo manda). El coste sale de mcp/models.json.",
     "models.json (cost.py): precio €/1M tokens y clase (local|foundational) por modelo. Cuota de coste: amount_field='cost_eur' + match_class='foundational' en policy.json.",

@@ -191,7 +191,7 @@
       {id:"documenter",  label:"documenter",  color:"#6cc4ff",       role:"write",  unit:"Docs",       jobs:["Documentar la migración","Actualizar el CHANGELOG"]},
       {id:"verifier",    label:"verifier",    color:"var(--review)", role:"verify", unit:"QA"}
     ]},
-    "claude-science": { short:"Claude Science", label:"Claude Science", units:["Genómica","Terapéutica","Publicación","QA"], specialists:[
+    "biocomputacion": { short:"Biocomputación", label:"Biocomputación", units:["Genómica","Terapéutica","Publicación","QA"], specialists:[
       {id:"genomica",  label:"Analista de Genómica del Cáncer", color:"var(--opus)",   role:"read",   unit:"Genómica",    model:"mistral-local",    jobs:["Analizar mutaciones somáticas del panel","Cruzar con COSMIC y ClinVar","Priorizar genes driver"]},
       {id:"variantes", label:"Analista de Variantes Genómicas", color:"var(--sonnet)", role:"read",   unit:"Genómica",    model:"gemini-2.0-flash", jobs:["Anotar variantes con VEP","Filtrar por frecuencia poblacional","Clasificar patogenicidad (ACMG)"]},
       {id:"mrna",      label:"Diseñador de mRNA",               color:"var(--done)",   role:"effect", unit:"Terapéutica", model:"gpt-4o",           jobs:["Optimizar codones de la secuencia","Diseñar UTRs y estructura cap","Exportar construcción a síntesis"]},

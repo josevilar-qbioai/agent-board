@@ -175,7 +175,7 @@ unidades Genómica / Terapéutica / Publicación / QA.
 
 Distribución por departamentos: **un proyecto = un `profile`; un departamento = una
 `unit`**. En el tablero HTML seleccionas con `?profile=<nombre>` y, para la vista de un
-departamento, `?profile=claude-science&unit=Terapéutica` (solo ve sus agentes). El
+departamento, `?profile=biocomputacion&unit=Terapéutica` (solo ve sus agentes). El
 botón **"▤ Carriles"** agrupa el Kanban en *swimlanes* por unidad (todos los
 departamentos a la vez, cada uno su fila), para ver y gobernar el enjambre desde la
 estructura de la organización. En

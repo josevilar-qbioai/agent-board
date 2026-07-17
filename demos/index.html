@@ -6,20 +6,20 @@
 <title>Q · Agent Board — supervisión y gobernanza de agentes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0d1014; --panel:#151a21; --panel-2:#1a212b; --line:#222c38; --line-soft:#1b232e;
     --text:#e3e9f2; --muted:#8c99ab; --faint:#566173;
-    --teal:#33d1c9; --amber:#f2a73c; --indigo:#9a8cf2; --green:#5cc97e; --red:#f0596b; --gold:#e0b049;
-    --mono:"IBM Plex Mono",ui-monospace,monospace; --sans:"IBM Plex Sans",system-ui,sans-serif;
+    --teal:#D98A5E; --amber:#E8B04A; --indigo:#CE8FA6; --green:#93BA6C; --red:#E3705E; --gold:#e0b049;
+    --mono:"IBM Plex Mono",ui-monospace,monospace; --sans:"Space Grotesk",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.65;
     background-image:
-      radial-gradient(1100px 600px at 85% -8%, rgba(51,209,201,.07), transparent 60%),
-      radial-gradient(900px 520px at -8% 105%, rgba(154,140,242,.07), transparent 55%),
+      radial-gradient(1100px 600px at 85% -8%, rgba(217,138,94,.07), transparent 60%),
+      radial-gradient(900px 520px at -8% 105%, rgba(166,84,46,.07), transparent 55%),
       linear-gradient(var(--line-soft) 1px, transparent 1px),
       linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
     background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed;}
@@ -32,7 +32,7 @@
   p{color:var(--muted);font-size:16px;margin:0 0 16px}
   p b,strong{color:var(--text);font-weight:600}
   .lead{font-size:18px;color:var(--text)}
-  code{font-family:var(--mono);font-size:.9em;color:var(--teal);background:rgba(51,209,201,.08);padding:1px 6px;border-radius:5px}
+  code{font-family:var(--mono);font-size:.9em;color:var(--teal);background:rgba(217,138,94,.08);padding:1px 6px;border-radius:5px}
 
   /* hero */
   .hero{padding:84px 0 64px;text-align:center;border-bottom:1px solid var(--line-soft)}
@@ -49,9 +49,9 @@
   .cta-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:30px}
   .cta{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:14px;font-weight:500;
     text-decoration:none;padding:11px 20px;border-radius:10px;border:1px solid var(--line2,var(--line));transition:all .15s}
-  .cta.primary{background:linear-gradient(120deg,rgba(51,209,201,.16),rgba(154,140,242,.16));
+  .cta.primary{background:linear-gradient(120deg,rgba(217,138,94,.16),rgba(166,84,46,.16));
     border-color:color-mix(in srgb,var(--teal) 55%,transparent);color:var(--text)}
-  .cta.primary:hover{border-color:var(--teal);box-shadow:0 6px 26px rgba(51,209,201,.18);transform:translateY(-2px)}
+  .cta.primary:hover{border-color:var(--teal);box-shadow:0 6px 26px rgba(217,138,94,.18);transform:translateY(-2px)}
   .cta.ghost{background:rgba(255,255,255,.02);color:var(--muted)}
   .cta.ghost:hover{color:var(--text);border-color:var(--line)}
 
@@ -147,12 +147,13 @@
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="index.html" style="color:#33d1c9;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="index.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
+<a href="index.html" style="color:#D98A5E;text-decoration:none;font-weight:600">ES</a><span style="color:#566173"> · </span><a href="index.en.html" style="color:#8c99ab;text-decoration:none">EN</a>
 </div>
 
 <div class="hero">
   <div class="wrap">
     <div class="badge-top"><span class="dot"></span>supervisión y gobernanza de agentes · independiente del LLM</div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px"><a href="https://qmetrika.xyz" target="_blank" rel="noopener"><svg width="40" height="40" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="18" stroke="#e3e9f2" stroke-width="4.5"></circle><circle cx="41" cy="41" r="9.6" fill="#0d1014"></circle><circle cx="41" cy="41" r="7.4" fill="#e3e9f2"></circle><circle cx="41" cy="41" r="5.4" fill="#D98A5E"></circle></svg></a></div>
     <h1>Q · Agent Board</h1>
     <p class="sub">El <b>tablero Kanban para supervisar y gobernar agentes de IA en tiempo real</b>. Ves qué hace cada
       agente y las acciones irreversibles se detienen en tu puerta hasta que tú apruebas — sin depender de que el
@@ -324,7 +325,7 @@
       <a class="cta primary" href="board-demo.html">▶ Ver el demo del tablero</a>
       <a class="cta ghost" href="../board/capital-board.html">◆ Tablero de capital</a>
     </div>
-    <b style="color:var(--text)">Jose Antonio Vilar</b> · <span style="color:var(--gold)">QMetrika Labs</span><br>
+    <b style="color:var(--text)">Jose Antonio Vilar</b> · <a href="https://qmetrika.xyz" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">QMetrika Labs</a><br>
     agent-board · framework genérico de supervisión y gobernanza de agentes · MIT
   </div>
 </footer>

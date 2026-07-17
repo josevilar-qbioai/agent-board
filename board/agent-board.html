@@ -6,17 +6,17 @@
 <title>Q · Agent Board — plano de control de agentes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0d1014; --panel:#151a21; --panel-2:#1a212b; --col:#11161d;
     --line:#222c38; --line-soft:#1b232e;
     --text:#dbe3ee; --muted:#7c8a9d; --faint:#566173;
-    --queued:#6b7a90; --working:#33d1c9; --needs:#f2a73c; --review:#9a8cf2; --done:#5cc97e; --failed:#f0596b; --capped:#d9772e;
+    --queued:#9A9184; --working:#D98A5E; --needs:#E8B04A; --review:#CE8FA6; --done:#93BA6C; --failed:#E3705E; --capped:#d9772e;
     --opus:#e0b049; --sonnet:#74a4f7; --haiku:#8fc97a; --gpt:#19c37d; --gemini:#a78bfa; --local:#9aa5b1;
     --shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px -12px rgba(0,0,0,.6);
     --mono:"IBM Plex Mono",ui-monospace,monospace;
-    --sans:"IBM Plex Sans",system-ui,sans-serif;
+    --sans:"Space Grotesk",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
@@ -24,8 +24,8 @@
     background:var(--bg); color:var(--text); font-family:var(--sans);
     -webkit-font-smoothing:antialiased; overflow:hidden;
     background-image:
-      radial-gradient(1200px 600px at 80% -10%, rgba(51,209,201,.06), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, rgba(154,140,242,.06), transparent 55%),
+      radial-gradient(1200px 600px at 80% -10%, rgba(217,138,94,.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(166,84,46,.06), transparent 55%),
       linear-gradient(var(--line-soft) 1px, transparent 1px),
       linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
     background-size:auto,auto,44px 44px,44px 44px;
@@ -141,7 +141,7 @@
 <div class="loading" id="loading">cargando estado del tablero…</div>
 <div class="app" id="app" style="display:none">
   <header>
-    <div class="brand"><span class="dot"></span><h1>Q · Agent Board</h1><span class="feed-pill" id="feedpill">feed: simulado</span><span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn on">Agent</a><a class="vn" href="capital-board.html">Capital</a><a class="vn" href="capital-central.html">Central</a></span><span class="feed-pill" id="profpill" style="border-color:var(--line);color:var(--muted);background:transparent;margin-left:8px"></span></div>
+    <div class="brand"><a href="https://qmetrika.xyz" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.55rem;color:inherit;text-decoration:none"><svg width="22" height="22" viewBox="0 0 56 56" fill="none" style="flex-shrink:0"><circle cx="28" cy="28" r="18" stroke="#e3e9f2" stroke-width="4.5"></circle><circle cx="41" cy="41" r="9.6" fill="#0d1014"></circle><circle cx="41" cy="41" r="7.4" fill="#e3e9f2"></circle><circle cx="41" cy="41" r="5.4" fill="#D98A5E"></circle></svg><h1 style="margin:0">Q · Agent Board</h1></a><span class="feed-pill" id="feedpill">feed: simulado</span><span class="viewnav"><a class="vn" href="../demos/index.html">◆ Landing</a><a class="vn on">Agent</a><a class="vn" href="capital-board.html">Capital</a><a class="vn" href="capital-central.html">Central</a></span><span class="feed-pill" id="profpill" style="border-color:var(--line);color:var(--muted);background:transparent;margin-left:8px"></span></div>
     <div class="summary" id="summary"></div>
     <div class="controls">
       <span class="saved" id="saved">guardado ✓</span>

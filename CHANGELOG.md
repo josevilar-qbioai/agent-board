@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.22.0 — marca QMetrika (tema oscuro, acento terracota)
+- Rebrand visual de todos los tableros y demos (ES/EN): paleta "espectro cálido" con
+  acento **terracota** `#D98A5E`, tipografía **Space Grotesk** para titulares, halo de
+  fondo terracota, y **logo QMetrika** (círculos concéntricos) en cada wordmark.
+- Wordmarks y firmas **QMetrika Labs** enlazan a `https://qmetrika.xyz`.
+- Selector de idioma ES·EN en terracota. Tarjeta del demo más compacta.
+- Colores de proveedor (opus/sonnet/gpt/gemini/local) intactos: identifican modelos, no
+  son marca. Sistema documentado en `docs/BRAND.md`.
+- JS validado (node --check) en los 7 tableros con lógica; sin cambios funcionales.
+
 ## 0.21.0 — Capital Board por unidad + Capital Central (refleja el pipeline de captura)
 - Capital Board (unidad) enriquecido: nuevo KPI **Cobertura de contexto** (% con payload
   completo), panel **Criterio humano por departamento** (allow/deny por unidad), columna

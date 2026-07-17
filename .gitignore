@@ -38,3 +38,6 @@ demos/presentation.en.html
 
 # entregables sueltos (posts de blog, borradores) — no forman parte del proyecto
 blog-*.md
+
+# guion de rebrand (referencia local, no se versiona; el sistema vive en docs/BRAND.md)
+docs/REBRAND-QMetrika.md

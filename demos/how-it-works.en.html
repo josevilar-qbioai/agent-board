@@ -6,16 +6,16 @@
 <title>Q · Agent Board — how it works</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --ink:#0d1014; --ink-2:#151a21; --line:rgba(236,231,220,.10); --line-2:rgba(236,231,220,.18);
-    --gold:#e3b15a; --teal:#4fc5c0; --amber:#e0902e; --text:#ece7dc; --muted:#8b93a6; --faint:#566173;
+    --gold:#e3b15a; --teal:#D98A5E; --amber:#e0902e; --text:#ece7dc; --muted:#8b93a6; --faint:#566173;
     --display:'Fraunces',Georgia,serif; --body:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--ink);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh;
-    background-image:radial-gradient(60vw 45vw at 88% -8%,rgba(227,177,90,.07),transparent 60%),radial-gradient(50vw 45vw at 4% 106%,rgba(79,197,192,.07),transparent 62%);
+    background-image:radial-gradient(60vw 45vw at 88% -8%,rgba(227,177,90,.07),transparent 60%),radial-gradient(50vw 45vw at 4% 106%,rgba(217,138,94,.07),transparent 62%);
     padding:20px clamp(16px,4vw,34px) 48px}
   .wrap{max-width:860px;margin:0 auto}
   .top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
@@ -45,19 +45,19 @@
   .cd p b{color:var(--text);font-weight:500}
   .chips{margin-top:.5rem;display:flex;gap:6px;flex-wrap:wrap}
   .chip{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
-  code{font-family:var(--mono);font-size:.88em;color:var(--teal);background:rgba(79,197,192,.08);padding:1px 6px;border-radius:5px}
+  code{font-family:var(--mono);font-size:.88em;color:var(--teal);background:rgba(217,138,94,.08);padding:1px 6px;border-radius:5px}
   .foot{margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;gap:16px;flex-wrap:wrap}
   .foot a{color:var(--teal);text-decoration:none}
 </style>
 </head>
 <body>
 <div style="position:fixed;top:10px;right:14px;z-index:9999;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(13,16,20,.72);border:1px solid #222c38;border-radius:999px;padding:4px 12px;backdrop-filter:blur(6px)">
-<a href="como-funciona.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="how-it-works.en.html" style="color:#33d1c9;text-decoration:none;font-weight:600">EN</a>
+<a href="como-funciona.html" style="color:#8c99ab;text-decoration:none">ES</a><span style="color:#566173"> · </span><a href="how-it-works.en.html" style="color:#D98A5E;text-decoration:none;font-weight:600">EN</a>
 </div>
 <div class="wrap">
   <div class="top">
-    <div class="brand"><span class="sq"></span>Q · Agent Board</div>
-    <div class="sig">Jose Antonio Vilar · <span class="org">QMetrika Labs</span></div>
+    <div class="brand"><a href="https://qmetrika.xyz" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.55rem;color:inherit;text-decoration:none"><svg width="22" height="22" viewBox="0 0 56 56" fill="none" style="flex-shrink:0"><circle cx="28" cy="28" r="18" stroke="#e3e9f2" stroke-width="4.5"></circle><circle cx="41" cy="41" r="9.6" fill="#0d1014"></circle><circle cx="41" cy="41" r="7.4" fill="#e3e9f2"></circle><circle cx="41" cy="41" r="5.4" fill="#D98A5E"></circle></svg>Q · Agent Board</a></div>
+    <div class="sig">Jose Antonio Vilar · <a class="org" href="https://qmetrika.xyz" target="_blank" rel="noopener" style="text-decoration:none">QMetrika Labs</a></div>
   </div>
   <div class="eyebrow"><span class="dot"></span>how it works</div>
   <h1>From installing to <span class="a">governing</span></h1>
